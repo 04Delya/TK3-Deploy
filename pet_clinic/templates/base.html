@@ -5,22 +5,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Pet Clinic - 03{% endblock %}</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Lexend:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     fontFamily: {
                         'poppins': ['Poppins', 'sans-serif'],
+                        'lexend': ['Lexend', 'sans-serif'],
                     },
                     colors: {
-                        'primary': '#3b82f6',
-                        'blue1': '#1e40af',
-                        'blue4': '#60a5fa',
-                        'gray1': '#f3f4f6',
-                        'gray3': '#e5e7eb',
-                        'gray4': '#d1d5db',
-                        'zinc900': '#18181b',
+                        'Primary': '#3b82f6',
+                        'Blue1': '#1e40af',
+                        'Blue4': '#60a5fa',
+                        'Gray1': '#f3f4f6',
+                        'Gray3': '#e5e7eb',
+                        'Gray4': '#d1d5db',
+                        'Black': '#000000',
+                        'White': '#ffffff',
                     }
                 }
             }
@@ -28,65 +30,41 @@
     </script>
     {% block extra_head %}{% endblock %}
 </head>
-<body class="bg-gray4">
+<body class="bg-Gray4">
     <!-- Navbar -->
-    <div data-layer="NavBar" class="Navbar w-[1480px] h-36 relative rounded-[5px] border border-purple-500 overflow-hidden">
-        <div data-layer="Type=Default" class="TypeDefault w-[1440px] px-14 py-5 left-[20px] top-[20px] absolute bg-Blue1 inline-flex flex-col justify-start items-start gap-2.5 overflow-hidden">
-            <div data-layer="Frame 1000006096" class="Frame1000006096 self-stretch inline-flex justify-start items-center gap-[500px]">
-                <div data-layer="Frame 1" class="Frame1 w-48 h-16 flex justify-end items-center gap-2">
-                    <img data-layer="Logo_Basdat_03_v3 1" class="LogoBasdat03V31 size-12" src="https://placehold.co/50x50" />
-                    <div data-layer="Pet Clinic - 03" class="PetClinic03 justify-start text-White text-xl font-semibold font-['Poppins'] leading-7">Pet Clinic - 03</div>
-                </div>
-                <div data-layer="Frame 1000006087" class="Frame1000006087 w-[631px] flex justify-center items-center gap-10">
-                    <div data-layer="Lorem" class="Lorem text-center justify-center text-White text-xl font-semibold font-['Poppins'] leading-7">Lorem</div>
-                    <div data-layer="Lorem" class="Lorem text-center justify-center text-White text-xl font-semibold font-['Poppins'] leading-7">Lorem</div>
-                    <div data-layer="Lorem" class="Lorem text-center justify-center text-White text-xl font-semibold font-['Poppins'] leading-7">Lorem</div>
-                    <div data-layer="Lorem" class="Lorem text-center justify-center text-White text-xl font-semibold font-['Poppins'] leading-7">Lorem</div>
-                    <div data-layer="Account" class="Account size- flex justify-center items-center gap-3">
-                        <div data-layer="Welcome, Delya" class="WelcomeDelya text-right justify-start text-White text-xl font-semibold font-['Poppins'] leading-7">Welcome, Delya</div>
-                        <div data-layer="chevron-down" class="ChevronDown size-6 relative">
-                            <div data-layer="primary" class="Primary w-5 h-2 left-[2px] top-[8px] absolute bg-White"></div>
-                        </div>
-                    </div>
-                </div>
+    <nav class="w-full px-14 py-5 bg-Blue1">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <div class="flex items-center gap-2">
+                <img class="w-12 h-12" src="https://placehold.co/50x50" alt="Logo" />
+                <div class="text-White text-xl font-semibold font-['Poppins']">Pet Clinic - 03</div>
+            </div>
+            <div class="flex items-center gap-7">
+                <a href="#" class="text-White text-xl font-semibold font-['Poppins']">Login</a>
             </div>
         </div>
-    </div>
+    </nav>
 
     <!-- Main Content -->
-    <div class="container mx-auto">
+    <main class="w-full">
         {% block content %}{% endblock %}
-    </div>
+    </main>
 
     <!-- Footer -->
-    <div data-layer="Type=Default" class="TypeDefault w-[1440px] px-24 py-16 bg-Blue1 inline-flex flex-col justify-start items-start gap-2.5 overflow-hidden">
-        <div data-layer="Frame 1000006278" class="Frame1000006278 self-stretch inline-flex justify-between items-center">
-            <div data-layer="Frame 1000006277" class="Frame1000006277 size- flex justify-center items-center gap-3">
-                <div data-layer="Component 1" class="Component1 size-24 relative">
-                    <img data-layer="Logo_Basdat_03_v3 1" class="LogoBasdat03V31 size-24 left-0 top-0 absolute" src="https://placehold.co/100x100" />
-                </div>
-                <div data-layer="Pet Clinic - 03" class="PetClinic03 w-64 justify-center text-White text-4xl font-semibold font-['Poppins'] leading-10">Pet Clinic - 03</div>
+    <footer class="w-full px-24 py-16 bg-Blue1">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <img class="w-24 h-24" src="https://placehold.co/100x100" alt="Logo" />
+                <div class="text-White text-4xl font-semibold font-['Poppins']">Pet Clinic - 03</div>
             </div>
-            <div data-layer="Frame 65" class="Frame65 w-52 flex justify-start items-center gap-6">
-                <div data-layer="faceboook-circle" class="FaceboookCircle size-6 relative">
-                    <div data-layer="Vector" class="Vector size-5 left-[2.01px] top-[2px] absolute bg-White"></div>
-                </div>
-                <div data-layer="youtube" class="Youtube size-6 relative">
-                    <div data-layer="Vector" class="Vector w-5 h-3.5 left-[2px] top-[4.88px] absolute bg-White"></div>
-                </div>
-                <div data-layer="instagram" class="Instagram size-6 relative">
-                    <div data-layer="Vector" class="Vector size-4 left-[3px] top-[2.99px] absolute bg-White"></div>
-                </div>
-                <div data-layer="icons / bxl-linkedin" class="IconsBxlLinkedin size-6 relative overflow-hidden">
-                    <div data-layer="Vector" class="Vector size-1 left-[2.79px] top-[2.82px] absolute bg-White"></div>
-                    <div data-layer="Vector" class="Vector w-4 h-3 left-[3.09px] top-[8.55px] absolute bg-White"></div>
-                </div>
-                <div data-layer="Frame 9" class="Frame9 size-6 relative overflow-hidden">
-                    <div data-layer="Vector" class="Vector size-5 left-[2px] top-[3px] absolute bg-White"></div>
-                </div>
+            <div class="flex items-center gap-6">
+                <div class="w-6 h-6 bg-White"></div>
+                <div class="w-6 h-6 bg-White"></div>
+                <div class="w-6 h-6 bg-White"></div>
+                <div class="w-6 h-6 bg-White"></div>
+                <div class="w-6 h-6 bg-White"></div>
             </div>
         </div>
-    </div>
+    </footer>
 
     {% block extra_js %}{% endblock %}
 </body>
