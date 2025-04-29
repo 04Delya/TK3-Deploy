@@ -1,4 +1,5 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from django.views.decorators.http import require_POST
 
 # Create your views here.
 
@@ -41,3 +42,7 @@ def vaccination_update(request):
         'vaksin_list': vaksin_list,
         'selected_vaksin': selected_vaksin
     })
+
+@require_POST
+def vaccination_delete(request, no):
+    return redirect('vaccination_list')

@@ -5,9 +5,9 @@
 <div class="container mx-auto px-4 py-8">
   <div class="flex justify-between items-center mb-4">
     <h1 class="text-2xl font-bold">List Vaccination</h1>
-    <a href="{% url 'vaccination_create' %}"
-        class="px-6 py-3 bg-primary text-white font-medium rounded-xl outline outline-1 outline-blue1 hover:opacity-90 transition">
-        + Create New Vaccination
+    <a href="/vaccinations/create/"
+       class="px-6 py-3 bg-primary text-white font-medium rounded-xl outline outline-1 outline-blue1 hover:opacity-90 transition">
+      + Create New Vaccination
     </a>
   </div>
 
@@ -25,17 +25,47 @@
       <tbody class="divide-y divide-gray-200">
         {% for v in vaccinations %}
         <tr>
-          <td class="px-6 py-4 whitespace-nowrap">{{ v.no }}</td>
-          <td class="px-6 py-4 whitespace-nowrap">{{ v.kunjungan }}</td>
-          <td class="px-6 py-4 whitespace-nowrap">{{ v.tanggal }}</td>
-          <td class="px-6 py-4 whitespace-nowrap">{{ v.vaksin }}</td>
-          <td class="px-6 py-4 whitespace-nowrap space-x-2">
-            <button class="px-6 py-2 bg-secondary text-black font-medium rounded-xl outline outline-1 outline-blue1 hover:opacity-90 transition">
-                Update
+          <td class="px-6 py-4">{{ v.no }}</td>
+          <td class="px-6 py-4">{{ v.kunjungan }}</td>
+          <td class="px-6 py-4">{{ v.tanggal }}</td>
+          <td class="px-6 py-4">{{ v.vaksin }}</td>
+          <td class="px-6 py-4 space-x-2">
+          
+            <a href="/vaccinations/update/"
+               class="px-6 py-2 bg-secondary text-black font-medium rounded-xl outline outline-1 outline-blue1 hover:opacity-90 transition">
+              Update
+            </a>
+
+            <button onclick="document.getElementById('modal-delete-{{ v.no }}').classList.remove('hidden')" 
+                    class="px-6 py-2 bg-gray4 text-black font-medium rounded-xl outline outline-1 outline-gray2 hover:opacity-90 transition">
+              Delete
             </button>
-            <button class="px-6 py-2 bg-gray4 text-black font-medium rounded-xl outline outline-1 outline-gray2 hover:opacity-90 transition">
-                Delete
-            </button>
+
+            <!-- Modal Delete -->
+            <div id="modal-delete-{{ v.no }}" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40 hidden">
+              <div class="bg-white rounded-xl p-8 max-w-md w-full shadow-lg">
+                <h2 class="text-2xl font-bold text-red-600 mb-4">Delete Vaccination</h2>
+                <p class="text-lg text-black mb-6">
+                  Apakah kamu yakin ingin menghapus vaksinasi untuk Kunjungan
+                  <span class="font-semibold text-red-600">{{ v.kunjungan }}</span>
+                  dengan vaksin
+                  <span class="font-semibold text-red-600">{{ v.vaksin }}</span>?
+                </p>
+
+                <form method="get" action="/vaccinations/" class="flex justify-end gap-4">
+                  <button type="button"
+                          onclick="document.getElementById('modal-delete-{{ v.no }}').classList.add('hidden')"
+                          class="px-6 py-2 rounded-xl bg-blue4 text-black font-medium outline outline-1 outline-primary hover:opacity-90">
+                    Cancel
+                  </button>
+                  <button type="submit"
+                          class="px-6 py-2 rounded-xl bg-red-500 text-white font-medium hover:bg-red-600">
+                    Confirm
+                  </button>
+                </form>
+              </div>
+            </div>
+
           </td>
         </tr>
         {% endfor %}
