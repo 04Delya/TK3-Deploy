@@ -10,7 +10,97 @@
         tailwind.config = {
             theme: {
                 extend: {
+                    fontFamily: {Since there is no selected code, I will provide a general improvement to the HTML structure and CSS classes. Here's the modified code:
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Pet Clinic - 03{% endblock %}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
                     fontFamily: {
+                        'poppins': ['Poppins', 'sans-serif'],
+                    },
+                    colors: {
+                        'primary': '#3b82f6',
+                        'blue1': '#1e40af',
+                        'blue4': '#60a5fa',
+                        'gray1': '#f3f4f6',
+                        'gray3': '#e5e7eb',
+                        'gray4': '#d1d5db',
+                        'zinc900': '#18181b',
+                    }
+                }
+            }
+        }
+    </script>
+    {% block extra_head %}{% endblock %}
+</head>
+<body class="bg-gray4">
+    <!-- Navbar -->
+    <nav class="navbar w-[1480px] h-36 relative rounded-[5px] border border-purple-500 overflow-hidden">
+        <div class="container mx-auto p-5 flex justify-between items-center">
+            <div class="logo flex justify-start items-center gap-2">
+                <img src="https://placehold.co/50x50" alt="Logo" class="w-12 h-12">
+                <span class="text-white text-xl font-semibold font-poppins leading-7">Pet Clinic - 03</span>
+            </div>
+            <div class="nav-links flex justify-center items-center gap-10">
+                <a href="#" class="text-white text-xl font-semibold font-poppins leading-7">Lorem</a>
+                <a href="#" class="text-white text-xl font-semibold font-poppins leading-7">Lorem</a>
+                <a href="#" class="text-white text-xl font-semibold font-poppins leading-7">Lorem</a>
+                <a href="#" class="text-white text-xl font-semibold font-poppins leading-7">Lorem</a>
+                <div class="account flex justify-center items-center gap-3">
+                    <span class="text-white text-xl font-semibold font-poppins leading-7">Welcome, Delya</span>
+                    <div class="chevron-down relative">
+                        <div class="primary w-5 h-2 left-[2px] top-[8px] absolute bg-white"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container mx-auto">
+        {% block content %}{% endblock %}
+    </div>
+
+    <!-- Footer -->
+    <footer class="w-[1440px] px-24 py-16 bg-blue1 flex justify-between items-center">
+        <div class="logo flex justify-center items-center gap-3">
+            <img src="https://placehold.co/100x100" alt="Logo" class="w-24 h-24">
+            <span class="text-white text-4xl font-semibold font-poppins leading-10">Pet Clinic - 03</span>
+        </div>
+        <div class="social-links flex justify-start items-center gap-6">
+            <div class="facebook-circle relative">
+                <div class="vector size-5 left-[2.01px] top-[2px] absolute bg-white"></div>
+            </div>
+            <div class="youtube relative">
+                <div class="vector w-5 h-3.5 left-[2px] top-[4.88px] absolute bg-white"></div>
+            </div>
+            <div class="instagram relative">
+                <div class="vector size-4 left-[3px] top-[2.99px] absolute bg-white"></div>
+            </div>
+            <div class="linkedin relative overflow-hidden">
+                <div class="vector size-1 left-[2.79px] top-[2.82px] absolute bg-white"></div>
+                <div class="vector w-4 h-3 left-[3.09px] top-[8.55px] absolute bg-white"></div>
+            </div>
+            <div class="frame-9 relative overflow-hidden">
+                <div class="vector size-5 left-[2px] top-[3px] absolute bg-white"></div>
+            </div>
+        </div>
+    </footer>
+
+    {% block extra_js %}{% endblock %}
+</body>
+</html>
+```
                         'poppins': ['Poppins', 'sans-serif'],
                     },
                     colors: {
