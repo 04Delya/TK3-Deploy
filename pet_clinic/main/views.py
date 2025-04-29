@@ -26,3 +26,13 @@ def dashboard(request):
           ],
       }
       return render(request, "dashboard_pengguna.html", context)
+
+def update_profile(request):
+    if request.method == "POST":
+        return redirect("dashboard")
+    return render(request, "update_profile.html")
+
+def update_password(request):
+    if request.method == "POST":
+        return redirect("dashboard")
+    return render(request, "update_password.html")
