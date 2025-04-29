@@ -19,3 +19,4 @@ urlpatterns = [
     path('rekammedis/notfound/', views.notfound_rekammedis_view, name='notfound_rekammedis'),
     path('rekammedis/view/', views.rekammedis_view, name='rekammedis'),
 ]
+# buat push main
