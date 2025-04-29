@@ -39,7 +39,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'main',
-    'hijau'
+    'hijau',
+    'vaccinations',
+    'vaccines',
+    'client_pet',
 ]
 
 MIDDLEWARE = [
