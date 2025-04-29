@@ -1,16 +1,16 @@
-<div data-layer="NavBar" class="Navbar w-full px-14 py-5 bg-slate-500 flex flex-col justify-start items-start gap-2.5 overflow-hidden">
-    <div class="w-full flex justify-between items-center">
-      <!-- Logo dan Judul -->
-      <div class="flex items-center gap-3">
-        <img src="{% static 'images/logo.png' %}" alt="Logo" class="w-12 h-12" />
-        <div class="text-slate-50 text-xl font-semibold font-['Poppins'] leading-7">Pet Clinic - 03</div>
-      </div>
-  
-      <!-- Tombol Login dan Register -->
-      <div class="flex items-center gap-7">
-        <a href="{% url 'login' %}" class="text-slate-50 text-xl font-semibold font-['Poppins'] leading-7 hover:underline">Login</a>
-        <a href="{% url 'register' %}" class="text-slate-50 text-xl font-semibold font-['Poppins'] leading-7 hover:underline">Register</a>
-      </div>
+{% load static %}
+<div class="Navbar w-full px-14 py-5 bg-slate-500 flex flex-col justify-start items-start gap-2.5 overflow-hidden">
+  <div class="w-full flex justify-between items-center">
+    <!-- Logo dan Judul -->
+    <div class="flex items-center gap-3">
+      <img src="{% static 'images/logo.png' %}" alt="Logo" class="w-12 h-12" />
+      <div class="text-slate-50 text-xl font-semibold font-['Poppins'] leading-7">Pet Clinic - 03</div>
+    </div>
+
+    <!-- Tombol Login dan Register -->
+    <div class="flex items-center gap-7">
+      <a href="#" class="text-slate-50 text-xl font-semibold font-['Poppins'] leading-7 hover:underline">Login</a>
+      <a href="#" class="text-slate-50 text-xl font-semibold font-['Poppins'] leading-7 hover:underline">Register</a>
     </div>
   </div>
-  
+</div>
