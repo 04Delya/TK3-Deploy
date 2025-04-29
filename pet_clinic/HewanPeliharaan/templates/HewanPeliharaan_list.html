@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <div class="flex justify-between items-center mb-8">
+        <h1 class="text-3xl font-bold text-Blue1">Daftar Hewan Peliharaan</h1>
+        <a href="{% url 'hewan:create' %}" class="px-6 py-2 bg-Primary text-White rounded-lg hover:bg-Blue1 transition-colors">
+            Tambah Hewan
+        </a>
+    </div>
+    
+    <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+        <table class="min-w-full">
+            <thead class="bg-Blue1 text-White">
+                <tr>
+                    <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">ID</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Nama</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Jenis</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Tanggal Lahir</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Pemilik</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Action</th>
+                </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+                {% for hewan in hewan_list %}
+                <tr>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ hewan.id }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ hewan.nama }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ hewan.jenis_hewan.nama }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ hewan.tanggal_lahir|date:"d-m-Y" }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ hewan.pemilik.nama }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                        <div class="flex space-x-2">
+                            <a href="{% url 'hewan:update' hewan.id %}" class="text-Primary hover:text-Blue1">Update</a>
+                            <span class="delete-check" data-id="{{ hewan.id }}">
+                                {% if hewan.can_delete %}
+                                <a href="{% url 'hewan:delete' hewan.id %}" class="text-red-600 hover:text-red-900">Delete</a>
+                                {% else %}
+                                <span class="text-gray-400 cursor-not-allowed" title="Tidak dapat dihapus karena memiliki kunjungan aktif">Delete</span>
+                                {% endif %}
+                            </span>
+                        </div>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="6" class="px-6 py-4 text-center text-sm text-gray-500">
+                        Belum ada data hewan peliharaan.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
