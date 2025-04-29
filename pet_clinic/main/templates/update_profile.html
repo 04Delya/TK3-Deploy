@@ -21,7 +21,6 @@
       <div>
         <label for="middle_name" class="block text-xl font-medium text-black mb-2">Nama Tengah</label>
         <input id="middle_name" name="middle_name" type="text" value="{{ middle_name }}"
-               required
                class="w-full bg-white p-3 rounded-lg text-black font-medium text-lg focus:outline-none"/>
       </div>
 
@@ -35,11 +34,12 @@
 
       <!-- Tombol Aksi -->
       <div class="flex justify-end space-x-4 pt-4">
-        <!-- Kembali ke dashboard -->
-        <a href="{% url 'dashboard' %}"
-           class="px-6 py-3 bg-blue4 text-black font-medium rounded-xl outline outline-1 outline-primary hover:opacity-90 transition">
+        <!-- Cancel pakai history.back() -->
+        <button type="button"
+                onclick="history.back()"
+                class="px-6 py-3 bg-blue4 text-black font-medium rounded-xl outline outline-1 outline-primary hover:opacity-90 transition">
           Cancel
-        </a>
+        </button>
 
         <!-- Simpan perubahan -->
         <button type="submit"
