@@ -11,3 +11,7 @@ class JenisHewan(models.Model):
         
     class Meta:
         ordering = ['id']  # Order by ID in ascending order
+
+# class Pet(models.Model):
+#     name = models.CharField(max_length=100)
+#     photo = models.ImageField(upload_to='pet_photos/', blank=True, null=True)
