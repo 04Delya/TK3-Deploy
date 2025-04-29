@@ -24,6 +24,7 @@ urlpatterns = [
     path('', include('main.urls')),
     path('hijau/', include('hijau.urls')),
     path('accounts/', include('django.contrib.auth.urls')),
+    path('vaccinations/', include('vaccinations.urls')), 
 ]
 
 if settings.DEBUG:
