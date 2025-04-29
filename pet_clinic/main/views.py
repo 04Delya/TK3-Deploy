@@ -5,13 +5,24 @@ from django.shortcuts import render, redirect
 def landing_page(request):
      return render(request, 'landingpage.html')
 
-
-# def pet_create(request):
-#     if request.method == 'POST':
-#         form = PetForm(request.POST, request.FILES)
-#         if form.is_valid():
-#             form.save()
-#             return redirect('pet_list')
-#     else:
-#         form = PetForm()
-#     return render(request, 'main/pet_form.html', {'form': form})
+def dashboard(request):
+      context = {
+          "user_type": "dokter",         
+          "identity":  "CSEGE02070-001",
+          "email":     "doc@example.com",
+          "name":      "drh. Maya Nanda",       
+          "nama_depan": "Maya", "nama_tengah": "", "nama_belakang": "Nanda",
+          "tgl_daftar": "24 April 2025",
+          "tgl_akhir":  "—",                   
+          "alamat":    "Jl. Margonda, Depok",
+          "telepon":   "0812-3456-7890",
+          "sertifikat": [
+              {"no": 1, "kode": "VAK/045", "nama": "Sertifikat Organisasi"},
+              {"no": 2, "kode": "VAK/046", "nama": "Sertifikat Organisasi"},
+          ],
+          "jadwal": [
+              {"no": 1, "hari": "Jumat", "mulai": "13.00", "selesai": "16.30"},
+              {"no": 2, "hari": "Senin", "mulai": "09.00", "selesai": "12.00"},
+          ],
+      }
+      return render(request, "dashboard_pengguna.html", context)
