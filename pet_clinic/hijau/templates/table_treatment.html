@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>List Treatments</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-orange-50 font-[Poppins]">
+
+  <!-- Navbar -->
+  <div class="w-full bg-slate-500 flex items-center justify-between px-14 py-5">
+    <div class="flex items-center gap-3">
+      <img src="https://placehold.co/50x50" alt="Logo" class="w-12 h-12"/>
+      <span class="text-white text-xl font-semibold">Pet Clinic - 03</span>
+    </div>
+    <div class="flex gap-6 text-white text-xl font-semibold">
+      <a href="#">Login</a>
+      <a href="#">Register</a>
+    </div>
+  </div>
+
+  <!-- Main Card -->
+  <div class="mt-10 px-10">
+    <div class="bg-orange-50 border-[10px] border-slate-400 rounded-[65px] p-10 shadow-md relative overflow-hidden" style="background-image: url('https://placehold.co/1440x1440'); background-size: cover; background-blend-mode: lighten; background-repeat: no-repeat; opacity: 1;">
+      
+      <h2 class="text-3xl font-semibold text-center mb-8">List Treatments</h2>
+      
+      <div class="overflow-auto rounded-lg">
+        <table class="min-w-full text-sm text-left border border-zinc-400">
+          <thead class="bg-white text-black font-semibold">
+            <tr>
+              <th class="border border-zinc-400 px-4 py-2">No</th>
+              <th class="border border-zinc-400 px-4 py-2">Kunjungan</th>
+              <th class="border border-zinc-400 px-4 py-2">ID Klien</th>
+              <th class="border border-zinc-400 px-4 py-2">Nama Hewan</th>
+              <th class="border border-zinc-400 px-4 py-2">Perawat Hewan</th>
+              <th class="border border-zinc-400 px-4 py-2">Dokter Hewan</th>
+              <th class="border border-zinc-400 px-4 py-2">Front Desk Officer</th>
+              <th class="border border-zinc-400 px-4 py-2">Jenis Perawatan</th>
+              <th class="border border-zinc-400 px-4 py-2">Catatan Medis</th>
+              <th class="border border-zinc-400 px-4 py-2 text-center">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="bg-orange-50">
+              <td class="border border-zinc-400 px-4 py-2">1</td>
+              <td class="border border-zinc-400 px-4 py-2">KJN001</td>
+              <td class="border border-zinc-400 px-4 py-2">FD0123</td>
+              <td class="border border-zinc-400 px-4 py-2">Snowy</td>
+              <td class="border border-zinc-400 px-4 py-2">Joko</td>
+              <td class="border border-zinc-400 px-4 py-2">Dr. Rizki</td>
+              <td class="border border-zinc-400 px-4 py-2">Tina</td>
+              <td class="border border-zinc-400 px-4 py-2">TRM001 - Dental Care</td>
+              <td class="border border-zinc-400 px-4 py-2">Oke</td>
+              <td class="border border-zinc-400 px-4 py-2 flex gap-2 justify-center">
+                <button class="px-3 py-1 bg-sky-200 rounded-xl text-xs font-medium border border-slate-500">Update</button>
+                <button class="px-3 py-1 bg-stone-200 rounded-xl text-xs font-medium border border-slate-500">Delete</button>
+              </td>
+            </tr>
+            <!-- Tambahkan baris lain sesuai kebutuhan -->
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Tombol Create New Treatment -->
+      <div class="flex justify-end mt-8">
+        <button class="flex items-center gap-2 bg-slate-400 text-white px-6 py-3 rounded-2xl outline outline-1 outline-slate-500">
+          <span class="text-lg font-medium">+ Create New Treatment</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="bg-slate-500 text-white mt-20 px-24 py-10">
+    <div class="flex justify-between items-center">
+      <div class="flex items-center gap-3">
+        <img src="https://placehold.co/100x100" alt="Logo" class="w-24 h-24">
+        <div class="text-4xl font-semibold">Pet Clinic - 03</div>
+      </div>
+      <div class="flex gap-6">
+        <div class="w-6 h-6 bg-white rounded-full"></div>
+        <div class="w-6 h-6 bg-white rounded-full"></div>
+        <div class="w-6 h-6 bg-white rounded-full"></div>
+        <div class="w-6 h-6 bg-white rounded-full"></div>
+        <div class="w-6 h-6 bg-white rounded-full"></div>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>
