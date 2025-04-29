@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'hijau',
     'vaccinations',
     'vaccines',
+    'client_pet',
 ]
 
 MIDDLEWARE = [
