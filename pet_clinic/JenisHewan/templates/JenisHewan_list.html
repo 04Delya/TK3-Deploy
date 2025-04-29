@@ -5,8 +5,8 @@
     <div class="flex justify-between items-center mb-8">
         <h1 class="text-3xl font-bold text-Blue1">Daftar Jenis Hewan</h1>
         {% if is_frontdesk %}
-        <a href="{% url 'jenis_hewan_create' %}" class="px-6 py-2 bg-Primary text-White rounded-lg hover:bg-Blue1 transition-colors">
-            Create
+        <a href="{% url 'jenis:create' %}" class="px-6 py-2 bg-Primary text-White rounded-lg hover:bg-Blue1 transition-colors">
+            Tambah Jenis
         </a>
         {% endif %}
     </div>
@@ -30,9 +30,8 @@
                     {% if is_frontdesk %}
                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                         <div class="flex space-x-2">
-                            <a href="{% url 'jenis_hewan_update' jenis.id %}" class="text-Primary hover:text-Blue1">Update</a>
+                            <a href="{% url 'jenis:update' jenis.id %}" class="text-Primary hover:text-Blue1">Update</a>
                             <span class="delete-check" data-id="{{ jenis.id }}">
-                                <!-- The delete button will be appended here via JavaScript -->
                                 <span class="loading">Checking...</span>
                             </span>
                         </div>
@@ -64,10 +63,16 @@
                     el.querySelector('.loading').remove();
                     if (data.can_delete) {
                         const deleteLink = document.createElement('a');
-                        deleteLink.href = `/jenis-hewan/${id}/delete/`;
-                        deleteLink.classList.add('text-red-600', 'hover:text-red-900', 'ml-2');
+                        deleteLink.href = `{% url 'jenis:delete' '00000000-0000-0000-0000-000000000000' %}`.replace('00000000-0000-0000-0000-000000000000', id);
+                        deleteLink.classList.add('text-red-600', 'hover:text-red-900');
                         deleteLink.textContent = 'Delete';
                         el.appendChild(deleteLink);
+                    } else {
+                        const notAllowed = document.createElement('span');
+                        notAllowed.classList.add('text-gray-400', 'cursor-not-allowed');
+                        notAllowed.title = "Tidak dapat dihapus karena sedang digunakan";
+                        notAllowed.textContent = 'Delete';
+                        el.appendChild(notAllowed);
                     }
                 });
         });
