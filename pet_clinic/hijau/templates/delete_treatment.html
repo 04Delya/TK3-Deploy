@@ -1,18 +1,34 @@
-<div data-layer="Pop-up Delete Treatment" class="PopUpDeleteTreatment w-[789px] h-[464px] relative bg-stone-100 rounded-[58px] overflow-hidden">
-    <div data-layer="Apakah kamu yakin untuk menghapus perawatan untuk kunjungan KJN001 dengan perawatan TRM001?" class="ApakahKamuYakinUntukMenghapusPerawatanUntukKunjunganKjn001DenganPerawatanTrm001 w-[685px] left-[52px] top-[256px] absolute justify-center"><span class="text-black text-2xl font-medium font-['Poppins'] leading-loose">Apakah kamu yakin untuk menghapus perawatan untuk kunjungan </span><span class="text-red-600 text-2xl font-medium font-['Poppins'] leading-loose">KJN001</span><span class="text-black text-2xl font-medium font-['Poppins'] leading-loose"> dengan perawatan </span><span class="text-red-600 text-2xl font-medium font-['Poppins'] leading-loose">TRM001</span><span class="text-black text-2xl font-medium font-['Poppins'] leading-loose">?</span></div>
-    <div data-layer="Button" class="Button w-52 h-11 px-10 py-4 left-[527px] top-[392px] absolute bg-red-600 rounded-[20px] outline outline-1 outline-offset-[-1px] outline-slate-500 inline-flex justify-center items-center gap-2">
-      <div data-layer="Confirm Deletion" class="ConfirmDeletion text-center justify-start text-slate-50 text-xl font-medium font-['Poppins'] leading-7">Confirm Deletion</div>
-    </div>
-    <div data-layer="Button" class="Button w-32 h-11 px-10 py-4 left-[388px] top-[392px] absolute bg-orange-50 rounded-[20px] outline outline-1 outline-offset-[-1px] outline-slate-500 inline-flex justify-center items-center gap-2">
-      <div data-layer="Cancel" class="Cancel text-center justify-start text-slate-400 text-xl font-medium font-['Poppins'] leading-7">Cancel</div>
-    </div>
-    <div data-layer="Delete Treatment" class="DeleteTreatment w-[609px] h-20 left-[95px] top-[107px] absolute text-center justify-center text-zinc-900 text-5xl font-bold font-['Poppins'] leading-[48px]">Delete Treatment</div>
-    <img data-layer="paw_pattern_blue_547792-removebg-preview 1" class="PawPatternBlue547792RemovebgPreview1 w-[1208px] h-[1192px] left-[-204px] top-0 absolute opacity-10 shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] border border-black" src="https://placehold.co/1208x1192" />
-    <div data-layer="li:x-circle" class="LiXCircle w-12 h-12 left-[713px] top-[28px] absolute">
-      <div data-layer="li:x-circle" class="LiXCircle w-12 h-12 left-0 top-0 absolute overflow-hidden">
-        <div data-layer="Vector" class="Vector w-12 h-12 left-[2.17px] top-[2.17px] absolute bg-black"></div>
-        <div data-layer="Vector" class="Vector w-4 h-4 left-[17.33px] top-[17.33px] absolute bg-black"></div>
-        <div data-layer="Vector" class="Vector w-4 h-4 left-[17.33px] top-[17.33px] absolute bg-black"></div>
-      </div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Delete Treatment</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-800 flex items-center justify-center min-h-screen">
+
+  <div class="w-[400px] bg-stone-100 rounded-[40px] p-6 relative shadow-md" style="background-image: url('https://placehold.co/1208x1192'); background-size: cover; background-repeat: no-repeat; background-blend-mode: lighten;">
+
+    <!-- Tombol close -->
+    <button class="absolute top-4 right-4 text-black text-2xl font-bold">×</button>
+
+    <!-- Judul -->
+    <h1 class="text-2xl font-bold text-center mb-4 text-zinc-900 font-['Poppins']">Delete Treatment</h1>
+
+    <!-- Pesan Konfirmasi -->
+    <p class="text-center text-lg font-medium text-black font-['Poppins'] leading-relaxed px-2">
+      Apakah kamu yakin untuk menghapus Perawatan untuk Kunjungan
+      <span class="text-red-600 font-semibold">KJN001</span> dengan Perawatan
+      <span class="text-red-600 font-semibold">TRM001</span>?
+    </p>
+
+    <!-- Tombol -->
+    <div class="flex justify-center gap-4 mt-8">
+      <button class="bg-blue-100 text-slate-600 px-5 py-2 rounded-xl text-sm font-medium border border-slate-400">Cancel</button>
+      <button class="bg-red-600 text-white px-5 py-2 rounded-xl text-sm font-medium">Confirm Deletion</button>
     </div>
   </div>
+
+</body>
+</html>
