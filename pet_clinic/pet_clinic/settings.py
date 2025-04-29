@@ -43,7 +43,7 @@ INSTALLED_APPS = [
     'biru',
     'HewanPeliharaan',
     'JenisHewan',
-    'Pengguna',,
+    'Pengguna',
     'vaccinations',
     'vaccines',
     'client_pet',
