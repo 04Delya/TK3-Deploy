@@ -8,7 +8,12 @@ VACCINES = [
 ]
 
 def vaccine_list(request):
-    return render(request, 'vaccines_list.html', {'vaccines': VACCINES})
+    q = request.GET.get("q", "").lower()
+    if q:
+        data = [v for v in VACCINES if q in v["name"].lower()]
+    else:
+        data = VACCINES
+    return render(request, "vaccines_list.html", {"vaccines": data})
 
 
 def vaccine_create(request):
