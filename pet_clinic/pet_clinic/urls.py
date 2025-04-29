@@ -42,6 +42,7 @@ urlpatterns = [
     path('vaccinations/', include('vaccinations.urls')), 
     path('vaccines/', include('vaccines.urls')), 
     path("client-pet/", include("client_pet.urls")),
+    path('biru/', include('biru.urls')),
     path("main/", include("main.urls")),
 ]
 

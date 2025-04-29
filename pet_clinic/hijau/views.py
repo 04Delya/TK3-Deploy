@@ -20,6 +20,30 @@ def update_kunjungan_view(request):
 
 def delete_kunjungan_view(request):
     return render(request, 'delete_kunjungan.html')
+<<<<<<< HEAD
+from django.shortcuts import render
+from django.http import HttpResponse
+
+def treatment_views(request, action):
+    if action == 'create':
+        return render(request, 'create_treatment.html')
+    elif action == 'update':
+        return render(request, 'update_treatment.html')
+    elif action == 'delete':
+        return render(request, 'delete_treatment.html')
+    else:
+        return HttpResponse('Invalid action')
+
+def kunjungan_views(request, action):
+    if action == 'create':
+        return render(request, 'create_kunjungan.html')
+    elif action == 'update':
+        return render(request, 'update_kunjungan.html')
+    elif action == 'delete':
+        return render(request, 'delete_kunjungan.html')
+    else:
+        return HttpResponse('Invalid action')
+=======
 
 def table_kunjungan_view(request):
     return render(request, 'table_kunjungan.html')
@@ -35,3 +59,4 @@ def notfound_rekammedis_view(request):
 
 def rekammedis_view(request):
     return render(request, 'rekammedis.html')
+>>>>>>> 55d954e38e3445886d13073a07d4836f2bd71c64

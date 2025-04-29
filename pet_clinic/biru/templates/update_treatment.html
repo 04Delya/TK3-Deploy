@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Update Treatment Type</title>
+  <style>
+    body {
+      margin: 0;
+      background: #222;
+      font-family: Poppins, sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+
+    .modal {
+      position: relative;
+      width: 722px;
+      background: #FBF9F1;
+      border-radius: 24px;
+      padding: 36px 55px 40px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+      overflow: hidden;
+    }
+
+    /* faint background pattern */
+    .modal::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: url('https://placehold.co/1355x1355') no-repeat bottom right;
+      background-size: cover;
+      opacity: 0.08;
+      transform: rotate(180deg);
+      pointer-events: none;
+    }
+
+    .modal > * {
+      position: relative; /* sit above pseudo-bg */
+    }
+
+    .modal .close {
+      position: absolute;
+      top: 20px; right: 20px;
+      width: 24px; height: 24px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 24px;
+      line-height: 1;
+    }
+
+    .modal h2 {
+      margin: 0 0 32px;
+      font-size: 36px;
+      font-weight: 700;
+      color: #000;
+    }
+
+    .field {
+      margin-bottom: 24px;
+    }
+    .field:last-of-type {
+      margin-bottom: 40px;
+    }
+
+    .field label {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 24px;
+      font-weight: 500;
+      color: #000;
+    }
+
+    .field input {
+      width: 100%;
+      height: 48px;
+      padding: 0 16px;
+      font-size: 18px;
+      color: #000;
+      background: #D9D9D9;
+      border: none;
+      border-radius: 8px;
+      box-sizing: border-box;
+    }
+
+    .actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 12px;
+    }
+
+    .btn {
+      min-width: 150px;
+      height: 48px;
+      padding: 0 24px;
+      font-size: 16px;
+      font-weight: 500;
+      border-radius: 24px;
+      border: none;
+      cursor: pointer;
+    }
+
+    .btn.cancel {
+      background: #C6E7FF;
+      border: 1px solid #6FA6D0;
+      color: #000;
+    }
+
+    .btn.update {
+      background: #6FA6D0;
+      border: 1px solid #547792;
+      color: #F6F8FF;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="modal">
+    <button class="close" aria-label="Close">×</button>
+    <h2>Update Treatment Type</h2>
+
+    <div class="field">
+      <label for="kode">Kode Perawatan</label>
+      <input id="kode" type="text" value="TRM001" />
+    </div>
+
+    <div class="field">
+      <label for="nama">Nama Perawatan</label>
+      <input id="nama" type="text" value="Dental Care" />
+    </div>
+
+    <div class="field">
+      <label for="biaya">Biaya</label>
+      <input id="biaya" type="text" value="Rp300.000" />
+    </div>
+
+    <div class="actions">
+      <button class="btn cancel">Cancel</button>
+      <button class="btn update">Update</button>
+    </div>
+  </div>
+
+</body>
+</html>
