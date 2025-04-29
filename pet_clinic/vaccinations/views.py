@@ -17,9 +17,9 @@ def vaccination_list(request):
 def vaccination_create(request):
     kunjungan_list = ['KJN001', 'KJN002', 'KJN003']
     vaksin_list = [
-        'VAK001 - Vaksin Rabies [100]',
-        'VAK002 - Vaksin Flu Musiman [200]',
-        'VAK003 - Vaksin Parvovirus [300]',
+        'VAK001 - Vaksin Rabies [30]',
+        'VAK002 - Vaksin Flu Musiman [50]',
+        'VAK003 - Vaksin Parvovirus [25]',
     ]
     return render(request, 'create_vac.html', {
         'kunjungan_list': kunjungan_list,
@@ -30,12 +30,12 @@ def vaccination_update(request):
     kunjungan = "KJN001"
 
     vaksin_list = [
-        "VAK001 - Vaksin Rabies [100]",
-        "VAK002 - Vaksin Flu Musiman [200]",
+        "VAK001 - Vaksin Rabies [30]",
+        "VAK002 - Vaksin Flu Musiman [50]",
         "VAK003 - Vaksin Parvovirus [0]"
     ]
 
-    selected_vaksin = "VAK001 - Vaksin Rabies [100]"
+    selected_vaksin = "VAK001 - Vaksin Rabies [30]"
 
     return render(request, 'update_vac.html', {
         'kunjungan': kunjungan,

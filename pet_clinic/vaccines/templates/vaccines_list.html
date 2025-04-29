@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+{% block title %}Manajemen Data & Stok Vaksin{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+  <div class="flex justify-between items-center mb-4">
+    <h1 class="text-2xl font-bold">List Vaccines</h1>
+    <a href="/vaccines/create/"
+      class="px-6 py-3 bg-primary text-white font-medium rounded-xl outline outline-1 outline-blue1 hover:opacity-90 transition">
+      + Add New Vaccine
+    </a>
+  </div>
+
+  <div class="overflow-x-auto bg-white shadow rounded-lg">
+    <table class="min-w-full divide-y divide-gray-200">
+      <thead class="bg-gray-50">
+        <tr>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">No</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">ID Vaksin</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Nama Vaksin</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Harga</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Stok</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Action</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-gray-200">
+        {% for v in vaccines %}
+        <tr>
+          <td class="px-6 py-4">{{ forloop.counter }}</td>
+          <td class="px-6 py-4">{{ v.id }}</td>
+          <td class="px-6 py-4">{{ v.name }}</td>
+          <td class="px-6 py-4">Rp{{ v.price }}</td>
+          <td class="px-6 py-4">{{ v.stock }}</td>
+          <td class="px-6 py-4 space-x-2">
+            <!-- Update Stock (Blue 1) -->
+              <a href="/vaccines/update-stock/"
+              class="px-6 py-2 bg-blue1 text-white font-medium rounded-xl hover:opacity-90 transition">
+              Update Stock
+            </a>
+            
+            <a href="/vaccines/update/"
+              class="px-6 py-2 bg-secondary text-black font-medium rounded-xl outline outline-1 outline-blue1 hover:opacity-90 transition">
+              Update
+            </a>
+
+            <button onclick="document.getElementById('modal-delete-{{ v.id }}').classList.remove('hidden')"
+              class="px-6 py-2 bg-gray4 text-black font-medium rounded-xl outline outline-1 outline-gray2 hover:opacity-90 transition">
+              Delete
+            </button>
+
+            <!-- Modal Delete -->
+            <div id="modal-delete-{{ v.id }}" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40 hidden">
+              <div class="bg-white rounded-xl p-8 max-w-md w-full shadow-lg">
+                <h2 class="text-2xl font-bold text-red-600 mb-4">Delete Vaccine</h2>
+                <p class="text-lg text-black mb-6">
+                  Apakah kamu yakin ingin menghapus vaksin <span class="font-semibold text-red-600">{{ v.name }}</span> ({{ v.id }})?
+                </p>
+
+                <form method="get" action="/vaccines/" class="flex justify-end gap-4">
+                  <button type="button"
+                          onclick="document.getElementById('modal-delete-{{ v.id }}').classList.add('hidden')"
+                          class="px-6 py-2 rounded-xl bg-blue4 text-black font-medium outline outline-1 outline-primary hover:opacity-90">
+                    Cancel
+                  </button>
+                  <button type="submit"
+                          class="px-6 py-2 rounded-xl bg-red-500 text-white font-medium hover:bg-red-600">
+                    Confirm Deletion
+                  </button>
+                </form>
+              </div>
+            </div>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}
