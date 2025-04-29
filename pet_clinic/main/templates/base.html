@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en" class="antialiased">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  {% block meta %}{% endblock %}
+  <title>{% block title %}Pet Clinic – 03{% endblock %}</title>
+
+  <!-- Tailwind + Font Poppins -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#6FA6D0',
+            secondary: '#AFCDE5',
+            blue1: '#547792',
+            blue2: '#94B4C1',
+            blue3: '#94B7D2',
+            blue4: '#C6E7FF',
+            blue5: '#D4F6FF',
+            white: '#F6F8FF',
+            black: '#000000',
+            gray1: '#F1F0E8',
+            gray2: '#E5E1DA',
+            gray3: '#F7EEDE',
+            gray4: '#BBBBBB',
+          },
+          fontFamily: {
+            'poppins': ['Poppins', 'sans-serif'],
+          },
+        },
+      },
+      variants: {
+        extend: { fill: ['responsive','hover','focus'] }
+      },
+    };
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  {% block extra_head %}{% endblock %}
+</head>
+
+<body class="min-h-screen flex flex-col font-poppins text-zinc-900 antialiased">
+  {% include "navbar.html" %}
+
+  <!-- Bungkus konten dengan bg-gray3 -->
+  <div class="flex-1 bg-gray3">
+    <main>
+      {% block content %}{% endblock %}
+    </main>
+  </div>
+
+  <footer class="bg-blue1 py-4 text-center text-white">
+    <span class="font-semibold">Pet Clinic - 03</span>
+  </footer>
+
+  {% block scripts %}{% endblock %}
+</body>
+</html>

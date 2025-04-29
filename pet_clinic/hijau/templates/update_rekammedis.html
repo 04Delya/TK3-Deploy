@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Update Rekam Medis</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+    }
+  </style>
+</head>
+<body class="bg-gray-800 flex items-center justify-center min-h-screen">
+
+  <div class="w-[360px] bg-stone-100 rounded-3xl p-6 relative shadow-md" 
+       style="background-image: url('https://placehold.co/718x718'); background-size: cover; background-repeat: no-repeat; background-position: center; background-blend-mode: lighten;">
+    
+    <!-- Tombol X -->
+    <button class="absolute top-4 right-4 text-black text-2xl font-bold">&times;</button>
+
+    <!-- Judul -->
+    <h1 class="text-xl font-bold text-black text-left mb-6">Update Rekam Medis</h1>
+
+    <!-- Suhu Tubuh -->
+    <label class="block mb-1 text-black text-base font-semibold">Suhu Tubuh</label>
+    <input type="text" placeholder="Contoh: 27°C" class="w-full bg-zinc-300 rounded-lg px-4 py-2 mb-4 text-black text-sm" />
+
+    <!-- Berat Badan -->
+    <label class="block mb-1 text-black text-base font-semibold">Berat Badan</label>
+    <input type="text" placeholder="Contoh: 27 kg" class="w-full bg-zinc-300 rounded-lg px-4 py-2 mb-4 text-black text-sm" />
+
+    <!-- Catatan Medis -->
+    <label class="block mb-1 text-black text-base font-semibold">Catatan Medis</label>
+    <textarea rows="3" placeholder="Masukkan catatan medis..." class="w-full bg-zinc-300 rounded-lg px-4 py-2 mb-6 text-black text-sm resize-none"></textarea>
+
+    <!-- Buttons -->
+    <div class="flex justify-end gap-3">
+      <button class="bg-sky-200 text-black px-6 py-2 rounded-2xl text-sm font-medium outline outline-1 outline-slate-400 hover:bg-sky-300">Cancel</button>
+      <button class="bg-slate-400 text-white px-6 py-2 rounded-2xl text-sm font-medium outline outline-1 outline-slate-500 hover:bg-slate-500">Update</button>
+    </div>
+  </div>
+
+</body>
+</html>
