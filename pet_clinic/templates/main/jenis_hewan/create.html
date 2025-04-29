@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <h1 class="text-3xl font-bold text-Blue1 mb-8">Create Jenis Hewan</h1>
+    
+    <div class="bg-white rounded-lg shadow-lg p-6">
+        <form method="POST" action="{% url 'jenis_hewan_create' %}">
+            {% csrf_token %}
+            
+            <div class="mb-6">
+                <label for="nama" class="block text-gray-700 text-sm font-bold mb-2">Nama Jenis:</label>
+                <input type="text" id="nama" name="nama" required 
+                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    placeholder="Masukkan nama jenis hewan">
+            </div>
+            
+            <div class="flex items-center justify-between">
+                <button type="submit" class="bg-Primary hover:bg-Blue1 text-White font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                    Simpan
+                </button>
+                <a href="{% url 'jenis_hewan_list' %}" class="inline-block align-baseline font-bold text-sm text-Blue1 hover:text-Primary">
+                    Kembali
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

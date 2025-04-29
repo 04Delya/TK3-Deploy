@@ -9,4 +9,11 @@ urlpatterns = [
     path('register/frontdesk/', views.register_frontdesk, name='register_frontdesk'),
     path('register/vet/', views.register_vet, name='register_vet'),
     path('register/nurse/', views.register_nurse, name='register_nurse'),
-] 
+    
+    # Jenis Hewan URLs
+    path('jenis-hewan/', views.jenis_hewan_list, name='jenis_hewan_list'),
+    path('jenis-hewan/create/', views.jenis_hewan_create, name='jenis_hewan_create'),
+    path('jenis-hewan/<uuid:id>/update/', views.jenis_hewan_update, name='jenis_hewan_update'),
+    path('jenis-hewan/<uuid:id>/delete/', views.jenis_hewan_delete, name='jenis_hewan_delete'),
+    path('jenis-hewan/<uuid:id>/check-can-delete/', views.check_can_delete_jenis_hewan, name='check_can_delete_jenis_hewan'),
+]
