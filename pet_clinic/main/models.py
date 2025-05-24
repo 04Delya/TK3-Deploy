@@ -145,6 +145,41 @@ class Hewan(models.Model):
         managed = False
         unique_together = (('nama', 'no_identitas_klien'),)
 
+# ================= KUNJUNGAN =================
+class Kunjungan(models.Model):
+    id_kunjungan = models.UUIDField(primary_key=True)  # 👈 WAJIB pakai ini!
+    nama_hewan = models.CharField(max_length=50)
+    no_identitas_klien = models.UUIDField()
+    no_front_desk = models.UUIDField()
+    no_perawat_hewan = models.UUIDField()
+    no_dokter_hewan = models.UUIDField()
+    kode_vaksin = models.CharField(max_length=6, null=True, blank=True)
+    tipe_kunjungan = models.CharField(max_length=10)
+    timestamp_awal = models.DateTimeField()
+    timestamp_akhir = models.DateTimeField(null=True, blank=True)
+    suhu = models.IntegerField(null=True, blank=True)
+    berat_badan = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
+
+    class Meta:
+        db_table = 'pet_clinic"."KUNJUNGAN'
+        managed = False
+
+# ================= KUNJUNGAN_KEPERAWATAN =================
+class KunjunganKeperawatan(models.Model):
+    id_kunjungan = models.UUIDField()
+    nama_hewan = models.CharField(max_length=50)
+    no_identitas_klien = models.UUIDField()
+    no_front_desk = models.UUIDField()
+    no_perawat_hewan = models.UUIDField()
+    no_dokter_hewan = models.UUIDField()
+    kode_perawatan = models.CharField(max_length=10, primary_key=True)
+    catatan = models.TextField(null=True, blank=True)
+
+    class Meta:
+        db_table = 'pet_clinic"."KUNJUNGAN_KEPERAWATAN'
+        managed = False
+        unique_together = ("id_kunjungan", "nama_hewan", "no_identitas_klien", "no_front_desk", "no_perawat_hewan", "no_dokter_hewan", "kode_perawatan")
+
 # ================= REGISTER ADMIN =================
 admin.site.register(User)
 admin.site.register(Pegawai)
@@ -160,3 +195,5 @@ admin.site.register(Vaksin)
 admin.site.register(Perawatan)
 admin.site.register(JenisHewan)
 admin.site.register(Hewan)
+admin.site.register(Kunjungan)
+admin.site.register(KunjunganKeperawatan)
