@@ -134,7 +134,7 @@ class JenisHewan(models.Model):
 
 # ================= HEWAN =================
 class Hewan(models.Model):
-    nama = models.CharField(max_length=50)
+    nama = models.CharField(max_length=50, primary_key=True)
     no_identitas_klien = models.UUIDField()
     tanggal_lahir = models.DateField()
     id_jenis = models.UUIDField()
