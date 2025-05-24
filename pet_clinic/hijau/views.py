@@ -1,5 +1,7 @@
 from django.shortcuts import render
+from django.http import HttpResponse
 
+# Treatment views
 def create_treatment_view(request):
     return render(request, 'create_treatment.html')
 
@@ -11,18 +13,6 @@ def delete_treatment_view(request):
 
 def table_treatment_view(request):
     return render(request, 'table_treatment.html')
-# 
-def create_kunjungan_view(request):
-    return render(request, 'create_kunjungan.html')
-
-def update_kunjungan_view(request):
-    return render(request, 'update_kunjungan.html')
-
-def delete_kunjungan_view(request):
-    return render(request, 'delete_kunjungan.html')
-<<<<<<< HEAD
-from django.shortcuts import render
-from django.http import HttpResponse
 
 def treatment_views(request, action):
     if action == 'create':
@@ -34,6 +24,19 @@ def treatment_views(request, action):
     else:
         return HttpResponse('Invalid action')
 
+# Kunjungan views
+def create_kunjungan_view(request):
+    return render(request, 'create_kunjungan.html')
+
+def update_kunjungan_view(request):
+    return render(request, 'update_kunjungan.html')
+
+def delete_kunjungan_view(request):
+    return render(request, 'delete_kunjungan.html')
+
+def table_kunjungan_view(request):
+    return render(request, 'table_kunjungan.html')
+
 def kunjungan_views(request, action):
     if action == 'create':
         return render(request, 'create_kunjungan.html')
@@ -43,11 +46,8 @@ def kunjungan_views(request, action):
         return render(request, 'delete_kunjungan.html')
     else:
         return HttpResponse('Invalid action')
-=======
 
-def table_kunjungan_view(request):
-    return render(request, 'table_kunjungan.html')
-# 
+# Rekam Medis views
 def create_rekammedis_view(request):
     return render(request, 'create_rekammedis.html')
 
@@ -59,4 +59,3 @@ def notfound_rekammedis_view(request):
 
 def rekammedis_view(request):
     return render(request, 'rekammedis.html')
->>>>>>> 55d954e38e3445886d13073a07d4836f2bd71c64
