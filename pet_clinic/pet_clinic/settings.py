@@ -40,9 +40,13 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'main',
     'hijau',
+    'biru',
     'HewanPeliharaan',
     'JenisHewan',
     'Pengguna',
+    'vaccinations',
+    'vaccines',
+    'client_pet',
 ]
 
 MIDDLEWARE = [
@@ -89,11 +93,17 @@ WSGI_APPLICATION = 'pet_clinic.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'postgres',
+        'USER': 'postgres.owqvarxnrapljqejlypk',
+        'PASSWORD': 'KopiSusuForji',
+        'HOST': 'aws-0-ap-southeast-1.pooler.supabase.com',
+        'PORT': '5432',
+        'OPTIONS': {
+            'sslmode': 'require',
+        },
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators

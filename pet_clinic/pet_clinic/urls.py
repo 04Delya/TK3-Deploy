@@ -39,6 +39,11 @@ urlpatterns = [
     path('hewan/', include('HewanPeliharaan.urls', namespace='hewan')),
     path('hijau/', include('hijau.urls')),
     path('accounts/', include('django.contrib.auth.urls')),
+    path('vaccinations/', include('vaccinations.urls')), 
+    path('vaccines/', include('vaccines.urls')), 
+    path("client-pet/", include("client_pet.urls")),
+    path('biru/', include('biru.urls')),
+    path("main/", include("main.urls")),
 ]
 
 if settings.DEBUG:
