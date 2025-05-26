@@ -1,5 +1,8 @@
 from django.shortcuts import render
+from django.http import HttpResponse
+from main.models import Hewan, Klien, Perawatan, Kunjungan, TenagaMedis, DokterHewan, PerawatHewan, FrontDesk, Pegawai, KunjunganKeperawatan
 
+# Treatment views
 def create_treatment_view(request):
     return render(request, 'create_treatment.html')
 
@@ -10,8 +13,40 @@ def delete_treatment_view(request):
     return render(request, 'delete_treatment.html')
 
 def table_treatment_view(request):
-    return render(request, 'table_treatment.html')
-# 
+    records = KunjunganKeperawatan.objects.all()
+    data = []
+
+    for i, record in enumerate(records):
+        try:
+            perawatan = Perawatan.objects.get(kode_perawatan=record.kode_perawatan)
+        except Perawatan.DoesNotExist:
+            perawatan = None
+
+        data.append({
+            "no": i + 1,
+            "kode_kunjungan": record.id_kunjungan,
+            "id_klien": record.no_identitas_klien,
+            "nama_hewan": record.nama_hewan,
+            "perawat": record.no_perawat_hewan,
+            "dokter": record.no_dokter_hewan,
+            "frontdesk": record.no_front_desk,
+            "jenis_perawatan": f"{perawatan.kode_perawatan} - {perawatan.nama_perawatan}" if perawatan else "-",
+            "catatan_medis": record.catatan or "-",
+        })
+
+    return render(request, 'table_treatment.html', {'treatment_list': data})
+
+def treatment_views(request, action):
+    if action == 'create':
+        return render(request, 'create_treatment.html')
+    elif action == 'update':
+        return render(request, 'update_treatment.html')
+    elif action == 'delete':
+        return render(request, 'delete_treatment.html')
+    else:
+        return HttpResponse('Invalid action')
+
+# Kunjungan views
 def create_kunjungan_view(request):
     return render(request, 'create_kunjungan.html')
 
@@ -23,7 +58,18 @@ def delete_kunjungan_view(request):
 
 def table_kunjungan_view(request):
     return render(request, 'table_kunjungan.html')
-# 
+
+def kunjungan_views(request, action):
+    if action == 'create':
+        return render(request, 'create_kunjungan.html')
+    elif action == 'update':
+        return render(request, 'update_kunjungan.html')
+    elif action == 'delete':
+        return render(request, 'delete_kunjungan.html')
+    else:
+        return HttpResponse('Invalid action')
+
+# Rekam Medis views
 def create_rekammedis_view(request):
     return render(request, 'create_rekammedis.html')
 

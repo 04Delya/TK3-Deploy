@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Delete Prescription</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Poppins, sans-serif;
+      background-color: #FBF9F1;
+    }
+
+    .popup-container {
+      width: 580px;
+      height: 332px;
+      position: relative;
+      background: #FBF9F1;
+      border-radius: 24px;
+      padding: 20px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .popup-container img {
+      width: 718px;
+      height: 718px;
+      position: absolute;
+      top: -226px;
+      left: -0.5px;
+      opacity: 0.08;
+      transform: rotate(180deg);
+    }
+
+    .popup-header {
+      font-size: 36px;
+      font-weight: 700;
+      margin-bottom: 20px;
+      color: black;
+    }
+
+    .popup-header span {
+      font-size: 36px;
+      font-weight: 700;
+    }
+
+    .popup-content {
+      font-size: 24px;
+      line-height: 32px;
+      color: black;
+    }
+
+    .popup-content span {
+      color: #FF0000;
+      font-weight: 500;
+    }
+
+    .button-container {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 20px;
+    }
+
+    .button {
+      width: 150px;
+      padding: 12px;
+      border-radius: 20px;
+      font-size: 16px;
+      font-weight: 500;
+      text-align: center;
+      cursor: pointer;
+    }
+
+    .button.cancel {
+      background-color: #C6E7FF;
+      color: black;
+      border: none;
+    }
+
+    .button.confirm {
+      background-color: #FF0000;
+      color: white;
+      border: none;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="popup-container">
+    <div class="popup-header">
+      Delete Prescription
+    </div>
+
+    <div class="popup-content">
+      Apakah kamu yakin untuk menghapus Prescription untuk Jenis Perawatan 
+      <span>TRM001</span> dengan Obat <span>MED001</span>?
+    </div>
+
+    <div class="button-container">
+      <button class="button cancel">Cancel</button>
+      <button class="button confirm">Confirm Deletion</button>
+    </div>
+  </div>
+
+</body>
+</html>

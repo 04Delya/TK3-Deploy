@@ -1,7 +1,31 @@
+from django.shortcuts import redirect, render
 
+# Create your views here.
+
+def landing_page(request):
+    return render(request, 'main/landing_page.html')
+
+def login(request):
+    return render(request, 'main/login.html')
 
 def landing_page(request):
     return render(request, 'landingpage.html')
+
+
+def dashboard(request):
+    # For demonstration purposes, redirect to perawat dashboard
+    # In a real application, you would determine the user type from the session/authentication
+    # and redirect accordingly
+    user_type = request.GET.get('type', 'klien')  # Default to klien if no type specified
+    
+    if user_type == 'perawat':
+        return redirect('dashboard_perawat')
+    elif user_type == 'dokter':
+        return redirect('dashboard_dokterhewan')
+    elif user_type == 'fdo':
+        return redirect('dashboard_frontdesk')
+    else:
+        return redirect('dashboard_klien')
 
 
 def update_profile(request):

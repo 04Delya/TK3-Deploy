@@ -24,9 +24,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-9-u))p3us(pw&&1#9%t5*+fkhf*1*a+o%@k5h10hx!6*4%xl28'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['petclinic-kelompok3-basdat-e-genap2425.pages.dev', '*.petclinic-kelompok3-basdat-e-genap2425.pages.dev', 'localhost', '127.0.0.1']
 
 
 # Application definition
@@ -40,9 +40,10 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'main',
     'hijau',
+    'biru',
     'HewanPeliharaan',
     'JenisHewan',
-    'Pengguna',,
+    'Pengguna',
     'vaccinations',
     'vaccines',
     'client_pet',
@@ -92,11 +93,17 @@ WSGI_APPLICATION = 'pet_clinic.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'postgres',
+        'USER': 'postgres.owqvarxnrapljqejlypk',
+        'PASSWORD': 'KopiSusuForji',
+        'HOST': 'aws-0-ap-southeast-1.pooler.supabase.com',
+        'PORT': '5432',
+        'OPTIONS': {
+            'sslmode': 'require',
+        },
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators

@@ -43,23 +43,25 @@
             </tr>
           </thead>
           <tbody>
-            <tr class="bg-orange-50">
-              <td class="border border-zinc-400 px-4 py-2">1</td>
-              <td class="border border-zinc-400 px-4 py-2">KJN001</td>
-              <td class="border border-zinc-400 px-4 py-2">FD0123</td>
-              <td class="border border-zinc-400 px-4 py-2">Snowy</td>
-              <td class="border border-zinc-400 px-4 py-2">Joko</td>
-              <td class="border border-zinc-400 px-4 py-2">Dr. Rizki</td>
-              <td class="border border-zinc-400 px-4 py-2">Tina</td>
-              <td class="border border-zinc-400 px-4 py-2">TRM001 - Dental Care</td>
-              <td class="border border-zinc-400 px-4 py-2">Oke</td>
-              <td class="border border-zinc-400 px-4 py-2 flex gap-2 justify-center">
-                <button class="px-3 py-1 bg-sky-200 rounded-xl text-xs font-medium border border-slate-500">Update</button>
-                <button class="px-3 py-1 bg-stone-200 rounded-xl text-xs font-medium border border-slate-500">Delete</button>
-              </td>
-            </tr>
-            <!-- Tambahkan baris lain sesuai kebutuhan -->
-          </tbody>
+  {% for item in treatment_list %}
+  <tr class="bg-orange-50">
+    <td class="border border-zinc-400 px-4 py-2">{{ item.no }}</td>
+    <td class="border border-zinc-400 px-4 py-2">{{ item.kode_kunjungan }}</td>
+    <td class="border border-zinc-400 px-4 py-2">{{ item.id_klien }}</td>
+    <td class="border border-zinc-400 px-4 py-2">{{ item.nama_hewan }}</td>
+    <td class="border border-zinc-400 px-4 py-2">{{ item.perawat }}</td>
+    <td class="border border-zinc-400 px-4 py-2">{{ item.dokter }}</td>
+    <td class="border border-zinc-400 px-4 py-2">{{ item.frontdesk }}</td>
+    <td class="border border-zinc-400 px-4 py-2">{{ item.jenis_perawatan }}</td>
+    <td class="border border-zinc-400 px-4 py-2">{{ item.catatan_medis }}</td>
+    <td class="border border-zinc-400 px-4 py-2 flex gap-2 justify-center">
+      <button class="px-3 py-1 bg-sky-200 rounded-xl text-xs font-medium border border-slate-500">Update</button>
+      <button class="px-3 py-1 bg-stone-200 rounded-xl text-xs font-medium border border-slate-500">Delete</button>
+    </td>
+  </tr>
+  {% endfor %}
+</tbody>
+
         </table>
       </div>
 
