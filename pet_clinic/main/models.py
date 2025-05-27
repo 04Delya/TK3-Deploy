@@ -159,6 +159,7 @@ class Kunjungan(models.Model):
     timestamp_akhir = models.DateTimeField(null=True, blank=True)
     suhu = models.IntegerField(null=True, blank=True)
     berat_badan = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
+    catatan = models.TextField(null=True, blank=True)
 
     class Meta:
         db_table = 'pet_clinic"."KUNJUNGAN'
@@ -173,7 +174,6 @@ class KunjunganKeperawatan(models.Model):
     no_perawat_hewan = models.UUIDField()
     no_dokter_hewan = models.UUIDField()
     kode_perawatan = models.CharField(max_length=10, primary_key=True)
-    catatan = models.TextField(null=True, blank=True)
 
     class Meta:
         db_table = 'pet_clinic"."KUNJUNGAN_KEPERAWATAN'
