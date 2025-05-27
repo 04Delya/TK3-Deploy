@@ -38,7 +38,7 @@ urlpatterns = [
     path('pengguna/', include('Pengguna.urls', namespace='pengguna')),
     path('jenis-hewan/', include('JenisHewan.urls', namespace='jenis')),
     path('hewan/', include('HewanPeliharaan.urls', namespace='hewan')),
-    path('hijau/', include('hijau.urls')),
+    path('hijau/', include(('hijau.urls', 'hijau'), namespace='hijau')),
     path('accounts/', include('django.contrib.auth.urls')),
     path('vaccinations/', include('vaccinations.urls')), 
     path('vaccines/', include('vaccines.urls')), 

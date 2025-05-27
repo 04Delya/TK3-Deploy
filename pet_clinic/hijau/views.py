@@ -1,10 +1,43 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from main.models import Hewan, Klien, Perawatan, Kunjungan, TenagaMedis, DokterHewan, PerawatHewan, FrontDesk, Pegawai, KunjunganKeperawatan
 
 # Treatment views
 def create_treatment_view(request):
-    return render(request, 'create_treatment.html')
+    if request.method == "POST":
+        id_kunjungan = request.POST.get("id_kunjungan")
+        kode_perawatan = request.POST.get("kode_perawatan")
+        catatan = request.POST.get("catatan")
+
+        try:
+            # Update catatan ke tabel KUNJUNGAN
+            kunjungan = Kunjungan.objects.get(id_kunjungan=id_kunjungan)
+            kunjungan.catatan = catatan
+            kunjungan.save()
+
+            # Tambah ke tabel KUNJUNGAN_KEPERAWATAN
+            KunjunganKeperawatan.objects.create(
+                id_kunjungan = kunjungan.id_kunjungan,
+                nama_hewan = kunjungan.nama_hewan,
+                no_identitas_klien = kunjungan.no_identitas_klien,
+                no_front_desk = kunjungan.no_front_desk,
+                no_perawat_hewan = kunjungan.no_perawat_hewan,
+                no_dokter_hewan = kunjungan.no_dokter_hewan,
+                kode_perawatan = kode_perawatan,
+            )
+            return redirect('hijau:table_treatment')
+        except Exception as e:
+            return render(request, 'create_treatment.html', {
+                'kunjungan_list': Kunjungan.objects.all(),
+                'perawatan_list': Perawatan.objects.all(),
+                'error': str(e),
+            })
+
+    # GET request — tampilkan form kosong
+    return render(request, 'create_treatment.html', {
+        'kunjungan_list': Kunjungan.objects.all(),
+        'perawatan_list': Perawatan.objects.all(),
+    })
 
 def update_treatment_view(request):
     return render(request, 'update_treatment.html')

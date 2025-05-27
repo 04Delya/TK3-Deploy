@@ -1,49 +1,55 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Create New Treatment</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-800 flex items-center justify-center min-h-screen">
 
-  <div class="w-[400px] bg-stone-100 rounded-[40px] p-6 relative shadow-md" style="background-image: url('https://placehold.co/1208x1480'); background-size: cover; background-repeat: no-repeat; background-blend-mode: lighten;">
+  <form method="POST" class="w-[400px] bg-stone-100 rounded-[40px] p-6 relative shadow-md"
+        style="background-image: url('https://placehold.co/1208x1480'); background-size: cover; background-repeat: no-repeat; background-blend-mode: lighten;">
+    {% csrf_token %}
 
     <!-- Close button -->
-    <button class="absolute top-4 right-4 text-black text-2xl font-bold">×</button>
+    <a href="{% url 'hijau:table_treatment' %}" class="absolute top-4 right-4 text-black text-2xl font-bold">×</a>
 
     <!-- Title -->
     <h1 class="text-2xl font-bold text-center mb-6 text-zinc-900 font-['Poppins']">Create New Treatment</h1>
 
     <!-- Dropdown: Kunjungan -->
     <label class="block mb-1 text-black text-sm font-medium font-['Poppins']">Kunjungan</label>
-    <select class="w-full bg-zinc-300 rounded-lg px-3 py-2 mb-4 text-black font-['Poppins']">
-      <option disabled selected>Kunjungan</option>
-      <option>KJN001</option>
-      <option>KJN002</option>
-      <option>KJN003</option>
+    <select name="id_kunjungan" class="w-full bg-zinc-300 rounded-lg px-3 py-2 mb-4 text-black font-['Poppins']" required>
+      <option disabled selected>-- Pilih Kunjungan --</option>
+      {% for k in kunjungan_list %}
+        <option value="{{ k.id_kunjungan }}">{{ k.id_kunjungan }}</option>
+      {% endfor %}
     </select>
 
     <!-- Dropdown: Jenis Perawatan -->
     <label class="block mb-1 text-black text-sm font-medium font-['Poppins']">Jenis Perawatan</label>
-    <select class="w-full bg-zinc-300 rounded-lg px-3 py-2 mb-4 text-black font-['Poppins']">
-      <option disabled selected>Jenis Perawatan</option>
-      <option>TRM001 - Dental Care</option>
-      <option>TRM002 - Parasite Control</option>
-      <option>TRM003 - Flea Treatment</option>
+    <select name="kode_perawatan" class="w-full bg-zinc-300 rounded-lg px-3 py-2 mb-4 text-black font-['Poppins']" required>
+      <option disabled selected>-- Pilih Perawatan --</option>
+      {% for p in perawatan_list %}
+        <option value="{{ p.kode_perawatan }}">{{ p.kode_perawatan }} - {{ p.nama_perawatan }}</option>
+      {% endfor %}
     </select>
 
     <!-- Catatan Medis -->
     <label class="block mb-1 text-black text-sm font-medium font-['Poppins']">Catatan Medis</label>
-    <input type="text" placeholder="Masukkan catatan..." class="w-full bg-zinc-300 rounded-lg px-3 py-2 mb-6 text-black font-['Poppins']"/>
+    <input name="catatan" type="text" placeholder="Masukkan catatan..." class="w-full bg-zinc-300 rounded-lg px-3 py-2 mb-6 text-black font-['Poppins']"/>
 
     <!-- Buttons -->
     <div class="flex justify-end gap-3">
-      <button class="bg-blue-100 text-slate-600 px-4 py-2 rounded-xl text-sm font-medium border border-slate-400">Cancel</button>
-      <button class="bg-blue-400 text-white px-4 py-2 rounded-xl text-sm font-medium">Create</button>
+      <a href="{% url 'hijau:table_treatment' %}" class="bg-blue-100 text-slate-600 px-4 py-2 rounded-xl text-sm font-medium border border-slate-400">Cancel</a>
+      <button type="submit" class="bg-blue-400 text-white px-4 py-2 rounded-xl text-sm font-medium">Create</button>
     </div>
-  </div>
+
+    {% if error %}
+      <p class="text-red-500 text-sm mt-4 text-center">{{ error }}</p>
+    {% endif %}
+  </form>
 
 </body>
 </html>

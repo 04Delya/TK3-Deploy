@@ -65,12 +65,15 @@
         </table>
       </div>
 
-      <!-- Tombol Create New Treatment -->
-      <div class="flex justify-end mt-8">
-        <button class="flex items-center gap-2 bg-slate-400 text-white px-6 py-3 rounded-2xl outline outline-1 outline-slate-500">
-          <span class="text-lg font-medium">+ Create New Treatment</span>
-        </button>
-      </div>
+     <!-- Tombol Create New Treatment -->
+<div class="flex justify-end mt-8">
+  <a href="{% url 'hijau:create_treatment' %}">
+    <button class="flex items-center gap-2 bg-slate-400 text-white px-6 py-3 rounded-2xl outline outline-1 outline-slate-500">
+      <span class="text-lg font-medium">+ Create New Treatment</span>
+    </button>
+  </a>
+</div>
+
     </div>
   </div>
 
