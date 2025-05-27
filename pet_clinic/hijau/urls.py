@@ -2,7 +2,7 @@ from django.urls import path, include
 from . import views
 
 app_name = 'hijau'
-
+# force push
 urlpatterns = [
     path('treatment/create/', views.create_treatment_view, name='create_treatment'),
     path('treatment/update/', views.update_treatment_view, name='update_treatment'),
