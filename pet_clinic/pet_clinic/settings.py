@@ -24,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-9-u))p3us(pw&&1#9%t5*+fkhf*1*a+o%@k5h10hx!6*4%xl28'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['petclinic-kelompok3-basdat-e-genap2425.pages.dev', '*.petclinic-kelompok3-basdat-e-genap2425.pages.dev', 'localhost', '127.0.0.1']
 

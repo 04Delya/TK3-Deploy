@@ -6,7 +6,12 @@ def landing_page(request):
     return render(request, 'main/landing_page.html')
 
 def login(request):
-    return render(request, 'main/login.html')
+    if request.method == "POST":
+        # Ambil role dari form
+        role = request.POST.get('role', 'klien')
+        request.session['role'] = role  # Simpan ke session
+        return redirect('dashboard')
+    return render(request, 'login.html')
 
 def landing_page(request):
     return render(request, 'landingpage.html')

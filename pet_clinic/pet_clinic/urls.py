@@ -25,6 +25,7 @@ from Pengguna.views import (
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('', include('main.urls')),
     path('', landing_page, name='landing_page'),
     # Direct registration URLs
     path('register/', register_selection, name='register'),

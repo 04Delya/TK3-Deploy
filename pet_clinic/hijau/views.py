@@ -22,6 +22,19 @@ def table_treatment_view(request):
         except Perawatan.DoesNotExist:
             perawatan = None
 
+        try:
+            kunjungan = Kunjungan.objects.get(
+                id_kunjungan=record.id_kunjungan,
+                nama_hewan=record.nama_hewan,
+                no_identitas_klien=record.no_identitas_klien,
+                no_front_desk=record.no_front_desk,
+                no_perawat_hewan=record.no_perawat_hewan,
+                no_dokter_hewan=record.no_dokter_hewan,
+            )
+            catatan = kunjungan.catatan
+        except Kunjungan.DoesNotExist:
+            catatan = "-"
+
         data.append({
             "no": i + 1,
             "kode_kunjungan": record.id_kunjungan,
@@ -31,7 +44,7 @@ def table_treatment_view(request):
             "dokter": record.no_dokter_hewan,
             "frontdesk": record.no_front_desk,
             "jenis_perawatan": f"{perawatan.kode_perawatan} - {perawatan.nama_perawatan}" if perawatan else "-",
-            "catatan_medis": record.catatan or "-",
+            "catatan_medis": catatan or "-",
         })
 
     return render(request, 'table_treatment.html', {'treatment_list': data})
