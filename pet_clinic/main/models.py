@@ -147,7 +147,7 @@ class Hewan(models.Model):
 
 # ================= KUNJUNGAN =================
 class Kunjungan(models.Model):
-    id_kunjungan = models.UUIDField(primary_key=True)  # 👈 WAJIB pakai ini!
+    id_kunjungan = models.UUIDField(primary_key=True)  
     nama_hewan = models.CharField(max_length=50)
     no_identitas_klien = models.UUIDField()
     no_front_desk = models.UUIDField()
@@ -159,7 +159,7 @@ class Kunjungan(models.Model):
     timestamp_akhir = models.DateTimeField(null=True, blank=True)
     suhu = models.IntegerField(null=True, blank=True)
     berat_badan = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
-    catatan = models.TextField(null=True, blank=True)
+    catatan = models.TextField(null=True, blank=True) # buat commit
 
     class Meta:
         db_table = 'pet_clinic"."KUNJUNGAN'
