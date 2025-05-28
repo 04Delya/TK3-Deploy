@@ -1,21 +1,8 @@
 from django.shortcuts import redirect, render
 
 # Create your views here.
-
 def landing_page(request):
-    return render(request, 'main/landing_page.html')
-
-def login(request):
-    if request.method == "POST":
-        # Ambil role dari form
-        role = request.POST.get('role', 'klien')
-        request.session['role'] = role  # Simpan ke session
-        return redirect('dashboard')
-    return render(request, 'login.html')
-
-def landing_page(request):
-    return render(request, 'landingpage.html')
-
+    return render(request, 'landing_page.html')
 
 def dashboard(request):
     # For demonstration purposes, redirect to perawat dashboard
