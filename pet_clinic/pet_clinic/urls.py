@@ -31,7 +31,6 @@ urlpatterns = [
     path('vaccines/', include('vaccines.urls')), 
     path("client-pet/", include("client_pet.urls")),
     path('biru/', include('biru.urls')),
-    path("main/", include("main.urls")),
 ]
 
 if settings.DEBUG:
