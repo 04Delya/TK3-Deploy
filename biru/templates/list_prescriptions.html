@@ -1,188 +1,56 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Pet Clinic - List Prescriptions</title>
-  <style>
-    body {
-      margin: 0;
-      font-family: Poppins, sans-serif;
-      background-color: #FBF9F1;
-    }
+{% extends "base.html" %}
+{% load static %}
+{% load humanize %}  {# Tambahkan ini #}
 
-    .header {
-      background-color: #547792;
-      color: #F6F8FF;
-      padding: 20px 50px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
+{% block title %}List Prescriptions - Pet Clinic{% endblock %}
 
-    .header .logo {
-      display: flex;
-      align-items: center;
-    }
+{% block content %}
+<section class="bg-[#FBF9F1] min-h-screen py-10 px-6 lg:px-14">
+  <div class="max-w-5xl mx-auto">
+    <h2 class="text-center text-3xl font-semibold font-poppins mb-8">List Prescriptions</h2>
 
-    .header .logo img {
-      width: 50px;
-      height: 50px;
-    }
-
-    .header .logo div {
-      margin-left: 10px;
-      font-size: 20px;
-      font-weight: 600;
-    }
-
-    .header .nav {
-      display: flex;
-      gap: 20px;
-    }
-
-    .header .nav div {
-      font-size: 20px;
-      font-weight: 600;
-      cursor: pointer;
-    }
-
-    .content {
-      width: 80%;
-      margin: 40px auto;
-      background-color: #FBF9F1;
-      padding: 20px;
-      border-radius: 20px;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    }
-
-    .content .title {
-      font-size: 29px;
-      font-weight: 600;
-      color: black;
-      text-align: center;
-      margin-bottom: 20px;
-    }
-
-    .content table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-bottom: 20px;
-    }
-
-    .content table th, .content table td {
-      text-align: center;
-      padding: 10px;
-      border: 1px solid #B9B9B9;
-    }
-
-    .content table th {
-      font-size: 18px;
-      font-weight: 600;
-      color: black;
-    }
-
-    .content table td {
-      font-size: 16px;
-      font-weight: 500;
-      color: black;
-    }
-
-    .content .action-button {
-      background-color: #E5E1DA;
-      padding: 8px 16px;
-      font-size: 12px;
-      font-weight: 500;
-      color: black;
-      border-radius: 12px;
-      cursor: pointer;
-      text-align: center;
-    }
-
-    .content .create-button {
-      display: block;
-      width: 100%;
-      padding: 15px;
-      background-color: #6FA6D0;
-      color: #F6F8FF;
-      font-size: 15px;
-      font-weight: 500;
-      border-radius: 19px;
-      border: none;
-      text-align: center;
-      cursor: pointer;
-    }
-
-    .footer {
-      background-color: #547792;
-      color: #F6F8FF;
-      padding: 20px;
-      text-align: center;
-    }
-
-  </style>
-</head>
-<body>
-
-  <!-- Header -->
-  <div class="header">
-    <div class="logo">
-      <img src="https://placehold.co/50x50" alt="Logo">
-      <div>Pet Clinic - 03</div>
+    {% if prescriptions %}
+    <div class="overflow-x-auto">
+      <table class="min-w-full border-collapse border border-gray-300 text-center font-poppins">
+        <thead>
+          <tr class="bg-gray-300">
+            <th class="border border-gray-300 px-4 py-3">No</th>
+            <th class="border border-gray-300 px-4 py-3">Jenis Perawatan</th>
+            <th class="border border-gray-300 px-4 py-3">Obat</th>
+            <th class="border border-gray-300 px-4 py-3">Kuantitas Obat</th>
+            <th class="border border-gray-300 px-4 py-3">Total Harga</th>
+            <th class="border border-gray-300 px-4 py-3">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for prescription in prescriptions %}
+          <tr class="hover:bg-gray-100">
+            <td class="border border-gray-300 px-4 py-3">{{ forloop.counter }}</td>
+            <td class="border border-gray-300 px-4 py-3">{{ prescription.treatment.kode_perawatan }} - {{ prescription.treatment.nama_perawatan }}</td>
+            <td class="border border-gray-300 px-4 py-3">{{ prescription.medicine.kode }} - {{ prescription.medicine.nama }}</td>
+            <td class="border border-gray-300 px-4 py-3">{{ prescription.quantity }}</td>
+            <td class="border border-gray-300 px-4 py-3">
+              Rp{{ prescription.medicine.harga|intcomma }}
+            </td>
+            <td class="border border-gray-300 px-4 py-3">
+              <a href="{% url 'biru:delete_prescriptions' prescription.treatment.kode_perawatan prescription.medicine.kode %}" 
+                class="inline-block px-3 py-1 bg-red-600 text-white rounded-md text-sm font-medium hover:bg-red-700 transition">
+                Delete
+              </a>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
     </div>
-    <div class="nav">
-      <div>Login</div>
-      <div>Register</div>
-    </div>
-  </div>
+    {% else %}
+      <p class="text-center text-lg font-poppins text-gray-600">No prescriptions available.</p>
+    {% endif %}
 
-  <!-- Content -->
-  <div class="content">
-    <div class="title">List Prescriptions</div>
-    <table>
-      <thead>
-        <tr>
-          <th>No</th>
-          <th>Jenis Perawatan</th>
-          <th>Obat</th>
-          <th>Kuantitas Obat</th>
-          <th>Total Harga</th>
-          <th>Action</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>1</td>
-          <td>TRM001 - Dental Care</td>
-          <td>MED001 - Penicillin</td>
-          <td>3</td>
-          <td>Rp900.000</td>
-          <td><button class="action-button">Delete</button></td>
-        </tr>
-        <tr>
-          <td>2</td>
-          <td>TRM002 - Parasite Control</td>
-          <td>MED002 - Aminophyllin</td>
-          <td>4</td>
-          <td>Rp800.000</td>
-          <td><button class="action-button">Delete</button></td>
-        </tr>
-        <tr>
-          <td>3</td>
-          <td>TRM003 - Flea Treatment</td>
-          <td>MED003 - Amitraz</td>
-          <td>2</td>
-          <td>Rp700.000</td>
-          <td><button class="action-button">Delete</button></td>
-        </tr>
-      </tbody>
-    </table>
-    <button class="create-button">Create New Prescription</button>
+    <a href="{% url 'biru:create_prescriptions' %}"
+       class="block w-max mx-auto mt-8 px-6 py-3 bg-[#6FA6D0] text-white rounded-xl font-medium hover:bg-[#5d95bb] transition">
+      Create New Prescription
+    </a>
   </div>
-
-  <!-- Footer -->
-  <div class="footer">
-    <p>&copy; 2025 Pet Clinic. All Rights Reserved.</p>
-  </div>
-
-</body>
-</html>
+</section>
+{% endblock %}

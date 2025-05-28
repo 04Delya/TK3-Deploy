@@ -1,172 +1,69 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pet Clinic - List Medicines</title>
-    <style>
-        body {
-            font-family: Poppins, sans-serif;
-            background-color: #FBF9F1;
-            margin: 0;
-            padding: 0;
-        }
-        .header {
-            background-color: #547792;
-            padding: 20px;
-            color: white;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .header img {
-            width: 50px;
-            height: 50px;
-            margin-right: 10px;
-        }
-        .header div {
-            font-size: 20px;
-            font-weight: 600;
-        }
-        .search-bar {
-            width: 400px;
-            height: 40px;
-            background-color: #D9D9D9;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            padding-left: 10px;
-        }
-        .search-bar input {
-            border: none;
-            background-color: transparent;
-            width: 90%;
-            padding: 10px;
-            font-size: 14px;
-        }
-        .medicine-table {
-            width: 100%;
-            margin-top: 40px;
-            border-collapse: collapse;
-        }
-        .medicine-table th, .medicine-table td {
-            padding: 15px;
-            border: 1px solid #B9B9B9;
-            text-align: center;
-        }
-        .medicine-table th {
-            background-color: #D9D9D9;
-        }
-        .action-btns {
-            display: flex;
-            gap: 10px;
-        }
-        .btn {
-            padding: 8px 16px;
-            border-radius: 16px;
-            font-size: 14px;
-            font-weight: 500;
-            cursor: pointer;
-        }
-        .btn-update {
-            background-color: #547792;
-            color: white;
-            border: none;
-        }
-        .btn-delete {
-            background-color: #E5E1DA;
-            color: black;
-            border: none;
-        }
-        .add-btn {
-            background-color: #6FA6D0;
-            color: white;
-            padding: 10px 20px;
-            border-radius: 16px;
-            margin-top: 20px;
-            display: block;
-            text-align: center;
-        }
-    </style>
-</head>
-<body>
+{% extends "base.html" %}
+{% load static %}
 
-<div class="header">
-    <div>
-        <img src="https://placehold.co/50x50" alt="Logo">
-        Pet Clinic - 03
-    </div>
-    <div>
-        <span>Login</span> | <span>Register</span>
-    </div>
-</div>
+{% block title %}List Medicines - Pet Clinic{% endblock %}
 
-<div style="padding: 20px;">
-    <div class="search-bar">
-        <input type="text" placeholder="Search Medicine Name">
+{% block content %}
+<section class="bg-[#FBF9F1] min-h-screen py-10 px-6 lg:px-14">
+  <div class="max-w-7xl mx-auto">
+    <div class="mb-6 max-w-md mx-auto">
+      <input type="text" placeholder="Search Medicine Name" class="w-full h-10 px-3 rounded-lg bg-gray-300 focus:outline-none" />
     </div>
 
-    <h2 style="text-align: center; margin-top: 20px;">List Medicines</h2>
+    <h2 class="text-center text-3xl font-semibold font-poppins mb-8">List Medicines</h2>
 
-    <table class="medicine-table">
+    {% if obat_list %}
+    <div class="overflow-x-auto">
+      <table class="w-full min-w-[900px] border-collapse border border-gray-300 text-center font-poppins">
         <thead>
-            <tr>
-                <th>No</th>
-                <th>Nama Obat</th>
-                <th>Harga Satuan</th>
-                <th>Stok</th>
-                <th>Dosis</th>
-                <th>Action</th>
-            </tr>
+          <tr class="bg-gray-300">
+            <th class="border border-gray-300 px-4 py-3">No</th>
+            <th class="border border-gray-300 px-4 py-3">Kode Obat</th>
+            <th class="border border-gray-300 px-4 py-3">Nama Obat</th>
+            <th class="border border-gray-300 px-4 py-3">Harga Satuan</th>
+            <th class="border border-gray-300 px-4 py-3">Stok</th>
+            <th class="border border-gray-300 px-4 py-3">Dosis</th>
+            <th class="border border-gray-300 px-4 py-3">Action</th>
+          </tr>
         </thead>
         <tbody>
-            <tr>
-                <td>1</td>
-                <td>Penicillin</td>
-                <td>Rp50.000</td>
-                <td>100</td>
-                <td>0.1ml/kg BB</td>
-                <td>
-                    <div class="action-btns">
-                        <button class="btn btn-update">Update Stock</button>
-                        <button class="btn btn-update">Update</button>
-                        <button class="btn btn-delete">Delete</button>
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <td>2</td>
-                <td>Penicillin</td>
-                <td>Rp50.000</td>
-                <td>200</td>
-                <td>0.2ml/kg BB</td>
-                <td>
-                    <div class="action-btns">
-                        <button class="btn btn-update">Update Stock</button>
-                        <button class="btn btn-update">Update</button>
-                        <button class="btn btn-delete">Delete</button>
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <td>3</td>
-                <td>Amitraz</td>
-                <td>Rp50.000</td>
-                <td>300</td>
-                <td>0.3ml/kg BB</td>
-                <td>
-                    <div class="action-btns">
-                        <button class="btn btn-update">Update Stock</button>
-                        <button class="btn btn-update">Update</button>
-                        <button class="btn btn-delete">Delete</button>
-                    </div>
-                </td>
-            </tr>
+          {% for obat in obat_list %}
+          <tr class="hover:bg-gray-100">
+            <td class="border border-gray-300 px-4 py-3">{{ forloop.counter }}</td>
+            <td class="border border-gray-300 px-4 py-3">{{ obat.kode }}</td>
+            <td class="border border-gray-300 px-4 py-3">{{ obat.nama }}</td>
+            <td class="border border-gray-300 px-4 py-3">Rp{{ obat.harga }}</td>
+            <td class="border border-gray-300 px-4 py-3">{{ obat.stok }}</td>
+            <td class="border border-gray-300 px-4 py-3">{{ obat.dosis }}</td>
+            <td class="border border-gray-300 px-4 py-3">
+              <div class="flex flex-wrap gap-2 justify-center">
+                <a href="{% url 'biru:update_stock_medicine' obat.kode %}"
+                   class="bg-[#547792] hover:bg-[#446377] transition text-white px-3 py-1 rounded-md text-sm font-medium">
+                   Update Stock
+                </a>
+                <a href="{% url 'biru:update_medicine' obat.kode %}"
+                   class="bg-[#547792] hover:bg-[#446377] transition text-white px-3 py-1 rounded-md text-sm font-medium">
+                   Update
+                </a>
+                <a href="{% url 'biru:delete_medicine' obat.kode %}"
+                   class="bg-gray-200 hover:bg-gray-300 transition text-black px-3 py-1 rounded-md text-sm font-medium">
+                   Delete
+                </a>
+              </div>
+            </td>
+          </tr>
+          {% endfor %}
         </tbody>
-    </table>
+      </table>
+    </div>
+    {% else %}
+      <p class="text-center text-lg font-poppins text-gray-600">No medicines available.</p>
+    {% endif %}
 
-    <a href="#" class="add-btn">Add New Medicine</a>
-</div>
-
-</body>
-</html>
+    <a href="{% url 'biru:create_medicine' %}"
+       class="block w-max mx-auto mt-8 px-6 py-3 bg-[#6FA6D0] text-white rounded-xl font-medium hover:bg-[#5d95bb] transition">
+      Add New Medicine
+    </a>
+  </div>
+</section>
+{% endblock %}

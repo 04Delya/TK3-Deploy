@@ -1,52 +1,54 @@
-<div style="width: 580px; height: 606px; position: relative; background: #FBF9F1; overflow: hidden; border-radius: 24px">
-   <div style="width: 514px; left: 33px; top: 29px; position: absolute; flex-direction: column; justify-content: flex-start; align-items: flex-end; gap: 24px; display: inline-flex">
-     <div style="align-self: stretch; flex-direction: column; justify-content: flex-start; align-items: center; gap: 28px; display: flex">
-       <div style="width: 516px; height: 64px; flex-direction: column; justify-content: flex-start; align-items: flex-end; display: flex">
-         <div style="width: 24px; height: 24px; position: relative; overflow: hidden">
-           <div style="width: 12px; height: 12px; left: 6px; top: 6px; position: absolute; outline: 2px black solid; outline-offset: -1px"></div>
-         </div>
-         <div style="align-self: stretch; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 24px; display: flex">
-           <div style="align-self: stretch; flex-direction: column; justify-content: flex-start; align-items: flex-end; gap: 20px; display: flex">
-             <div style="align-self: stretch; flex-direction: column; justify-content: flex-start; align-items: flex-end; gap: 24px; display: flex">
-               <div style="align-self: stretch; justify-content: flex-start; align-items: flex-start; gap: 16px; display: inline-flex">
-                 <div style="flex: 1 1 0; flex-direction: column; justify-content: center; align-items: flex-start; gap: 28px; display: inline-flex">
-                   <div style="align-self: stretch; color: black; font-size: 36px; font-family: Poppins; font-weight: 700; line-height: 40px; word-wrap: break-word">Update Medicine</div>
-                 </div>
-               </div>
-             </div>
-           </div>
-         </div>
-       </div>
-       <!-- Input fields for Medicine Details -->
-       <div style="width: 514px; height: 75px; position: relative">
-         <div style="width: 514px; left: 0px; top: 0px; position: absolute; justify-content: center; display: flex; flex-direction: column; color: black; font-size: 24px; font-family: Poppins; font-weight: 500; line-height: 32px; word-wrap: break-word">Kode Obat</div>
-         <div style="width: 514px; height: 43px; left: 0px; top: 32px; position: absolute; background: #D9D9D9; border-radius: 8px"></div>
-       </div>
-       <div style="width: 514px; height: 75px; position: relative">
-         <div style="width: 514px; left: 0px; top: 0px; position: absolute; justify-content: center; display: flex; flex-direction: column; color: black; font-size: 24px; font-family: Poppins; font-weight: 500; line-height: 32px; word-wrap: break-word">Nama Obat</div>
-         <div style="width: 514px; height: 43px; left: 0px; top: 32px; position: absolute; background: #D9D9D9; border-radius: 8px"></div>
-       </div>
-       <div style="width: 514px; height: 75px; position: relative">
-         <div style="width: 514px; left: 0px; top: 0px; position: absolute; justify-content: center; display: flex; flex-direction: column; color: black; font-size: 24px; font-family: Poppins; font-weight: 500; line-height: 32px; word-wrap: break-word">Harga Satuan</div>
-         <div style="width: 514px; height: 43px; left: 0px; top: 32px; position: absolute; background: #D9D9D9; border-radius: 8px"></div>
-       </div>
-       <div style="width: 514px; height: 75px; position: relative">
-         <div style="width: 514px; left: 0px; top: 0px; position: absolute; justify-content: center; display: flex; flex-direction: column; color: black; font-size: 24px; font-family: Poppins; font-weight: 500; line-height: 32px; word-wrap: break-word">Dosis</div>
-         <div style="width: 514px; height: 43px; left: 0px; top: 32px; position: absolute; background: #D9D9D9; border-radius: 8px"></div>
-       </div>
-     </div>
-     <!-- Buttons -->
-     <div style="align-self: stretch; justify-content: flex-end; align-items: center; gap: 12px; display: inline-flex">
-       <div style="width: 150px; padding-left: 34px; padding-right: 34px; padding-top: 12px; padding-bottom: 12px; background: #C6E7FF; overflow: hidden; border-radius: 20px; outline: 1px #6FA6D0 solid; outline-offset: -1px; flex-direction: column; justify-content: flex-start; align-items: center; gap: 10px; display: inline-flex">
-         <div style="align-self: stretch; justify-content: center; align-items: center; gap: 8px; display: inline-flex">
-           <div style="flex: 1 1 0; height: 24px; text-align: center; color: black; font-size: 16px; font-family: Poppins; font-weight: 500; line-height: 24px; word-wrap: break-word">Cancel</div>
-         </div>
-       </div>
-       <div style="width: 150px; padding-left: 34px; padding-right: 34px; padding-top: 12px; padding-bottom: 12px; background: #6FA6D0; overflow: hidden; border-radius: 20px; outline: 1px #547792 solid; outline-offset: -1px; flex-direction: column; justify-content: flex-start; align-items: center; gap: 10px; display: inline-flex">
-         <div style="align-self: stretch; justify-content: center; align-items: center; gap: 8px; display: inline-flex">
-           <div style="flex: 1 1 0; height: 24px; text-align: center; color: white; font-size: 16px; font-family: Poppins; font-weight: 500; line-height: 24px; word-wrap: break-word">Update</div>
-         </div>
-       </div>
-     </div>
-   </div>
- </div>
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Update Medicine - Pet Clinic{% endblock %}
+
+{% block content %}
+<section class="py-20 bg-[#FBF9F1] min-h-screen flex items-center">
+  <div class="container mx-auto px-6 lg:px-14">
+    <div style="border-radius: 24px; padding: 30px; background: #FBF9F1; max-width: 580px; margin: 0 auto;box-shadow: 0 0 15px rgba(0,0,0,0.1); overflow: hidden;">
+      <div class="text-center font-poppins font-bold text-[36px] mb-10 text-black">
+        Update Medicine
+      </div>
+
+      <form method="POST" action="{% url 'biru:update_medicine' obat.kode %}">
+        {% csrf_token %}
+        <input type="hidden" name="kode" value="{{ obat.kode }}" />
+
+        <div class="mb-5 w-full">
+          <label class="block text-[24px] font-medium text-black mb-2" for="nama">Nama</label>
+          <input id="nama" name="nama" type="text" placeholder="Enter Medicine Name"
+            style="width: 100%; padding: 12px; background: #D9D9D9; border-radius: 8px; font-size: 16px;" value="{{ obat.nama }}" required />
+        </div>
+
+        <div class="mb-5 w-full">
+          <label class="block text-[24px] font-medium text-black mb-2" for="harga">Harga Satuan</label>
+          <input id="harga" name="harga" type="number" placeholder="Enter Price"
+            style="width: 100%; padding: 12px; background: #D9D9D9; border-radius: 8px; font-size: 16px;" value="{{ obat.harga }}" required />
+        </div>
+
+        <div class="mb-5 w-full">
+          <label class="block text-[24px] font-medium text-black mb-2" for="dosis">Dosis</label>
+          <input id="dosis" name="dosis" type="text" placeholder="Enter Dosage"
+            style="width: 100%; padding: 12px; background: #D9D9D9; border-radius: 8px; font-size: 16px;" value="{{ obat.dosis }}" required />
+        </div>
+
+        <div class="mb-8 w-full">
+          <label class="block text-[24px] font-medium text-black mb-2" for="stok">Stok</label>
+          <input id="stok" name="stok" type="number" placeholder="Enter Stock"
+            style="width: 100%; padding: 12px; background: #D9D9D9; border-radius: 8px; font-size: 16px;" value="{{ obat.stok }}" required />
+        </div>
+
+        <div class="flex justify-between items-center">
+          <a href="{% url 'biru:list_medicine' %}" style="width: 150px; padding: 12px 34px; background: #C6E7FF; border-radius: 20px; font-size: 16px; font-weight: 500; color: black; display: inline-block; text-align: center; text-decoration: none;">
+            Cancel
+          </a>
+          <button type="submit" style="width: 150px; padding: 12px 34px; background: #6FA6D0; border-radius: 20px; font-size: 16px; font-weight: 500; color: white; border: none; cursor: pointer;">
+            Update
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+{% endblock %}
