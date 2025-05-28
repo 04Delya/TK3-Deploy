@@ -1,71 +1,95 @@
 {% load static %}
 <nav class="bg-blue1 text-white sticky top-0 z-50 shadow-md">
   <div class="container mx-auto px-6 py-4 flex items-center justify-between">
-    <a href="{% url 'landing_page' %}" class="flex items-center gap-2">
+    <!-- Logo & Title -->
+    <a href="{% url 'main:landing_page' %}" class="flex items-center gap-2">
       <img src="{% static 'images/Logo_Basdat_03.svg' %}" alt="Logo" class="w-8 h-8"/>
       <span class="text-xl font-semibold">Pet Clinic – 03</span>
     </a>
 
-    <button class="lg:hidden focus:outline-none" data-toggle="mobileMenu" aria-label="Toggle menu">
-      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none"
-           viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round"
-           stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
-    </button>
+    <!-- Desktop Menu -->
+    <div class="hidden lg:flex space-x-6 items-center">
+      {% if request.session.user_email %}
+        {% if request.session.role == 'individu' or request.session.role == 'perusahaan' %}
+          <a href="{% url 'main:dashboard_klien' %}" class="hover:text-gray-300">Dashboard</a>
+          <a href="{% url 'hewan:kelola_hewan' %}" class="hover:text-gray-300">Kelola Hewan Peliharaan</a>
+          <a href="{% url 'hijau:table_kunjungan' %}" class="hover:text-gray-300">Daftar Kunjungan</a>
+          <a href="{% url 'vaccinations:table' %}" class="hover:text-gray-300">Daftar Vaksinasi</a>
 
-    <div class="hidden lg:flex space-x-6">
-      {% if request.user.is_authenticated %}
-        {% if request.session.role == "klien" %}
-          <a href="{% url 'dashboard_klien' %}" class="hover:text-gray4">Dashboard</a>
-          <a href="{% url 'kelola_hewan' %}" class="hover:text-gray4">Kelola Hewan Peliharaan</a>
-          <a class="hover:text-gray4">Daftar Kunjungan</a> {# Optional TK4 #}
-          <a href="{% url 'vaksin_list' %}" class="hover:text-gray4">Daftar Vaksinasi</a>
+        {% elif request.session.role == 'frontdesk' %}
+          <a href="{% url 'main:dashboard_frontdesk' %}" class="hover:text-gray-300">Dashboard</a>
+          <a href="{% url 'jenis:jenis_list' %}" class="hover:text-gray-300">Kelola Jenis Hewan</a>
+          <a href="{% url 'hewan:kelola_hewan' %}" class="hover:text-gray-300">Kelola Hewan Peliharaan</a>
+          <a href="{% url 'hijau:table_kunjungan' %}" class="hover:text-gray-300">Kelola Kunjungan</a>
+          <a href="{% url 'main:klien_list' %}" class="hover:text-gray-300">Daftar Klien</a>
 
-        {% elif request.session.role == "fd" %}
-          <a href="{% url 'dashboard_frontdesk' %}" class="hover:text-gray4">Dashboard</a>
-          <a href="{% url 'jenis_hewan' %}" class="hover:text-gray4">Kelola Jenis Hewan</a>
-          <a href="{% url 'kelola_hewan' %}" class="hover:text-gray4">Kelola Hewan Peliharaan</a>
-          <a href="{% url 'table_kunjungan' %}" class="hover:text-gray4">Kelola Kunjungan</a>
-          <a href="{% url 'klien_list' %}" class="hover:text-gray4">Daftar Klien</a>
+        {% elif request.session.role == 'dokter' %}
+          <a href="{% url 'main:dashboard_dokterhewan' %}" class="hover:text-gray-300">Dashboard</a>
+          <a href="{% url 'jenis:jenis_list' %}" class="hover:text-gray-300">Daftar Jenis Hewan</a>
+          <a href="{% url 'hijau:table_treatment' %}" class="hover:text-gray-300">Perawatan Hewan</a>
+          <a href="{% url 'hijau:table_kunjungan' %}" class="hover:text-gray-300">Daftar Kunjungan</a>
+          <a href="#">Manajemen Obat</a>
+          <a href="#">Jenis Perawatan</a>
+          <a href="#">Pemberian Obat</a>
+          <a href="#">Vaksinasi Hewan</a>
 
-        {% elif request.session.role == "dokter" %}
-          <a href="{% url 'dashboard_dokterhewan' %}" class="hover:text-gray4">Dashboard</a>
-          <a href="{% url 'jenis_hewan' %}" class="hover:text-gray4">Daftar Jenis Hewan</a>
-          <a href="{% url 'table_treatment' %}" class="hover:text-gray4">Perawatan Hewan</a>
-          <a class="hover:text-gray4">Daftar Kunjungan</a> {# Optional TK4 #}
-          <a href="{% url 'obat_list' %}" class="hover:text-gray4">Manajemen Obat</a>
-          <a href="#" class="hover:text-gray4">Manajemen Jenis Perawatan</a>
-          <a href="#" class="hover:text-gray4">Manajemen Pemberian Obat</a>
-          <a href="#" class="hover:text-gray4">Manajemen Vaksinasi Hewan</a>
-
-        {% elif request.session.role == "perawat" %}
-          <a href="{% url 'dashboard_perawat' %}" class="hover:text-gray4">Dashboard</a>
-          <a href="{% url 'obat_list' %}" class="hover:text-gray4">Manajemen Obat</a>
-          <a href="#" class="hover:text-gray4">Manajemen Jenis Perawatan</a>
-          <a href="#" class="hover:text-gray4">Manajemen Vaksin</a>
-          <a href="#" class="hover:text-gray4">Logout</a>
-
+        {% elif request.session.role == 'perawat' %}
+          <a href="{% url 'main:dashboard_perawat' %}" class="hover:text-gray-300">Dashboard</a>
+          <a href="#">Manajemen Obat</a>
+          <a href="#">Jenis Perawatan</a>
+          <a href="#">Manajemen Vaksin</a>
         {% endif %}
-        <a href="{% url 'logout' %}" class="hover:text-gray4">Logout</a>
-
+        <a href="{% url 'authentication:logout' %}" class="hover:text-red-400 font-semibold">Logout</a>
       {% else %}
-        <a href="{% url 'login' %}" class="hover:text-gray4">Login</a>
-        <a href="{% url 'register' %}" class="hover:text-gray4">Registrasi</a>
+        <a href="{% url 'authentication:login' %}" class="hover:text-gray4">Login</a>
+        <a href="{% url 'authentication:register' %}" class="hover:text-gray4">Register</a>
       {% endif %}
     </div>
   </div>
 
-  <div id="mobileMenu" class="hidden lg:hidden bg-blue1 px-6 py-2 space-y-2">
-    {% if request.user.is_authenticated %}
-      <a href="#" class="block hover:text-gray4">Test</a>
+  <!-- Mobile Menu -->
+  <div id="mobileMenu" class="hidden lg:hidden bg-blue1 px-6 py-4 space-y-2">
+    {% if request.session.user_email %}
+      {% if request.session.role == 'individu' or request.session.role == 'perusahaan' %}
+        <a href="{% url 'main:dashboard_klien' %}" class="block text-white">Dashboard</a>
+        <a href="{% url 'hewan:kelola_hewan' %}" class="block text-white">Kelola Hewan</a>
+        <a href="{% url 'hijau:table_kunjungan' %}" class="block text-white">Kunjungan</a>
+        <a href="{% url 'vaccinations:table' %}" class="block text-white">Vaksinasi</a>
+
+      {% elif request.session.role == 'frontdesk' %}
+        <a href="{% url 'main:dashboard_frontdesk' %}" class="block text-white">Dashboard</a>
+        <a href="{% url 'jenis:jenis_list' %}" class="block text-white">Jenis Hewan</a>
+        <a href="{% url 'hewan:kelola_hewan' %}" class="block text-white">Hewan</a>
+        <a href="{% url 'hijau:table_kunjungan' %}" class="block text-white">Kunjungan</a>
+        <a href="{% url 'main:klien_list' %}" class="block text-white">Klien</a>
+
+      {% elif request.session.role == 'dokter' %}
+        <a href="{% url 'main:dashboard_dokterhewan' %}" class="block text-white">Dashboard</a>
+        <a href="{% url 'jenis:jenis_list' %}" class="block text-white">Jenis Hewan</a>
+        <a href="{% url 'hijau:table_treatment' %}" class="block text-white">Perawatan</a>
+        <a href="{% url 'hijau:table_kunjungan' %}" class="block text-white">Kunjungan</a>
+        <a href="#" class="block text-white">Manajemen Obat</a>
+        <a href="#" class="block text-white">Jenis Perawatan</a>
+        <a href="#" class="block text-white">Pemberian Obat</a>
+        <a href="#" class="block text-white">Vaksinasi</a>
+
+      {% elif request.session.role == 'perawat' %}
+        <a href="{% url 'main:dashboard_perawat' %}" class="block text-white">Dashboard</a>
+        <a href="#" class="block text-white">Manajemen Obat</a>
+        <a href="#" class="block text-white">Jenis Perawatan</a>
+        <a href="#" class="block text-white">Vaksinasi</a>
+      {% endif %}
+      <a href="{% url 'authentication:logout' %}" class="block text-red-400 font-semibold">Logout</a>
     {% else %}
-      <a href="{% url 'login' %}" class="block hover:text-gray4">Login</a>
-      <a href="{% url 'register' %}" class="block hover:text-gray4">Registrasi</a>
+      <a href="{% url 'authentication:login' %}" class="block text-white">Login</a>
+      <a href="{% url 'authentication:register' %}" class="block text-white">Register</a>
     {% endif %}
   </div>
 
   <script>
-    document.querySelector('[data-toggle="mobileMenu"]').addEventListener('click', () => {
-      document.getElementById('mobileMenu').classList.toggle('hidden');
-    });
+    document.querySelector('[data-toggle="mobileMenu"]')
+      .addEventListener('click', () => {
+        document.getElementById('mobileMenu').classList.toggle('hidden');
+      });
   </script>
 </nav>

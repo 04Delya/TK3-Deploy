@@ -11,7 +11,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ('JenisHewan', '0001_initial'),
-        ('Pengguna', '0001_initial'),
+        # ('Pengguna', '0001_initial'),
     ]
 
     operations = [

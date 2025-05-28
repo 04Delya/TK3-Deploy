@@ -1,9 +1,17 @@
 from django.db import models
 import uuid
-from Pengguna.models import Klien
+# from Pengguna.models import Klien
 from JenisHewan.models import JenisHewan
 
 # Create your models here.
+class Klien(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    nama = models.CharField(max_length=100)
+    jenis = models.CharField(max_length=20, choices=[('individual', 'Individual'), ('company', 'Company')], default='individual')
+    
+    def __str__(self):
+        return f"{self.nama} ({self.get_jenis_display()})"
+    
 class Hewan(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     pemilik = models.ForeignKey(Klien, on_delete=models.CASCADE, related_name='hewan')

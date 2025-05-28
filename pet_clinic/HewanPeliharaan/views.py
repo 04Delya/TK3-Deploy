@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.http import JsonResponse
 from .models import Hewan
 from JenisHewan.models import JenisHewan
-from Pengguna.models import Klien
+# from Pengguna.models import Klien
 from django.contrib import messages
 
 # Hewan (Pet) views

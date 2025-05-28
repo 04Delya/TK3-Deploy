@@ -6,31 +6,31 @@
     
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
         <!-- Individual Client -->
-        <a href="{% url 'register_individual' %}" class="block p-6 bg-white rounded-lg shadow-lg hover:shadow-xl transition-shadow">
+        <a href="{% url 'authentication:register_individual' %}" class="block p-6 bg-white rounded-lg shadow-lg hover:shadow-xl transition-shadow">
             <h2 class="text-xl font-semibold mb-3 text-Primary">Individual Client</h2>
             <p class="text-gray-600">Register as an individual pet owner</p>
         </a>
 
         <!-- Company Client -->
-        <a href="{% url 'register_company' %}" class="block p-6 bg-white rounded-lg shadow-lg hover:shadow-xl transition-shadow">
+        <a href="{% url 'authentication:register_company' %}" class="block p-6 bg-white rounded-lg shadow-lg hover:shadow-xl transition-shadow">
             <h2 class="text-xl font-semibold mb-3 text-Primary">Company Client</h2>
             <p class="text-gray-600">Register as a company or organization</p>
         </a>
 
         <!-- Front-Desk Officer -->
-        <a href="{% url 'register_frontdesk' %}" class="block p-6 bg-white rounded-lg shadow-lg hover:shadow-xl transition-shadow">
+        <a href="{% url 'authentication:register_frontdesk' %}" class="block p-6 bg-white rounded-lg shadow-lg hover:shadow-xl transition-shadow">
             <h2 class="text-xl font-semibold mb-3 text-Primary">Front-Desk Officer</h2>
             <p class="text-gray-600">Register as clinic staff</p>
         </a>
 
         <!-- Veterinarian -->
-        <a href="{% url 'register_vet' %}" class="block p-6 bg-white rounded-lg shadow-lg hover:shadow-xl transition-shadow">
+        <a href="{% url 'authentication:register_vet' %}" class="block p-6 bg-white rounded-lg shadow-lg hover:shadow-xl transition-shadow">
             <h2 class="text-xl font-semibold mb-3 text-Primary">Veterinarian</h2>
             <p class="text-gray-600">Register as a veterinary doctor</p>
         </a>
 
         <!-- Veterinary Nurse -->
-        <a href="{% url 'register_nurse' %}" class="block p-6 bg-white rounded-lg shadow-lg hover:shadow-xl transition-shadow">
+        <a href="{% url 'authentication:register_nurse' %}" class="block p-6 bg-white rounded-lg shadow-lg hover:shadow-xl transition-shadow">
             <h2 class="text-xl font-semibold mb-3 text-Primary">Veterinary Nurse</h2>
             <p class="text-gray-600">Register as a veterinary nurse</p>
         </a>

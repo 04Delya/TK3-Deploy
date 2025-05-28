@@ -1,21 +1,8 @@
 from django.shortcuts import redirect, render
 
 # Create your views here.
-
 def landing_page(request):
-    return render(request, 'main/landing_page.html')
-
-def login(request):
-    if request.method == "POST":
-        # Ambil role dari form
-        role = request.POST.get('role', 'klien')
-        request.session['role'] = role  # Simpan ke session
-        return redirect('dashboard')
-    return render(request, 'login.html')
-
-def landing_page(request):
-    return render(request, 'landingpage.html')
-
+    return render(request, 'landing_page.html')
 
 def dashboard(request):
     # For demonstration purposes, redirect to perawat dashboard
@@ -24,25 +11,25 @@ def dashboard(request):
     user_type = request.GET.get('type', 'klien')  # Default to klien if no type specified
     
     if user_type == 'perawat':
-        return redirect('dashboard_perawat')
+        return redirect('main:dashboard_perawat')
     elif user_type == 'dokter':
-        return redirect('dashboard_dokterhewan')
+        return redirect('main:dashboard_dokterhewan')
     elif user_type == 'fdo':
-        return redirect('dashboard_frontdesk')
+        return redirect('main:dashboard_frontdesk')
     else:
-        return redirect('dashboard_klien')
+        return redirect('main:dashboard_klien')
 
 
 def update_profile(request):
     if request.method == "POST":
-        return redirect('dashboard_klien')
-    return render(request, 'update_profile.html')
+        return redirect('main:dashboard_klien')
+    return render(request, 'main:update_profile.html')
 
 
 def update_password(request):
     if request.method == "POST":
-        return redirect('dashboard_klien')
-    return render(request, 'update_password.html')
+        return redirect('main:dashboard_klien')
+    return render(request, 'main:update_password.html')
 
 
 def dashboard_klien(request):

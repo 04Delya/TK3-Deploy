@@ -12,9 +12,12 @@
         <!-- Kunjungan -->
         <div>
           <label for="kunjungan" class="block text-xl font-medium text-black mb-2">Kunjungan</label>
-          <select id="kunjungan" name="kunjungan" class="w-full bg-gray1 p-3 rounded-lg text-black font-medium text-lg focus:outline-none">
-            {% for kunjungan in kunjungan_list %}
-              <option value="{{ kunjungan }}">{{ kunjungan }}</option>
+          <select id="kunjungan" name="kunjungan"
+            class="w-full bg-gray1 p-3 rounded-lg text-black font-medium text-lg focus:outline-none">
+            {% for k in kunjungan_list %}
+              <option value="{{ k.id_kunjungan }}">
+                {{ k.id_kunjungan }} - {{ k.nama_hewan }} ({{ k.timestamp_awal|date:"d F Y" }})
+              </option>
             {% endfor %}
           </select>
         </div>
@@ -31,7 +34,7 @@
   
         <!-- Tombol Aksi -->
         <div class="flex justify-end space-x-4 pt-4">
-          <a href="{% url 'vaccination_list' %}" class="px-6 py-3 bg-blue4 text-black font-medium rounded-xl outline outline-1 outline-primary hover:opacity-90 transition">Cancel</a>
+          <a href="{% url 'vaccinations:vaccination_list' %}" class="px-6 py-3 bg-blue4 text-black font-medium rounded-xl outline outline-1 outline-primary hover:opacity-90 transition">Cancel</a>
           <button type="submit" class="px-6 py-3 bg-primary text-white font-medium rounded-xl outline outline-1 outline-blue1 hover:opacity-90 transition">Create</button>
         </div>
       </form>
