@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.db import connection
-from main.models import User, Klien, Individu, Perusahaan, Pegawai, FrontDesk, TenagaMedis, DokterHewan, PerawatHewan
+from main.models import User, Pegawai, TenagaMedis, DokterHewan, PerawatHewan, FrontDesk, Klien, Individu, Perusahaan
 import uuid
 from datetime import date
 from main.models import User, DokterHewan, TenagaMedis, Pegawai
@@ -16,18 +16,47 @@ def login_view(request):
             if user.password == password:
                 request.session['user_email'] = email
 
-                # Ambil role dokter & simpan ke sesi
+                # CEK apakah PEGAWAI (dokter, perawat, atau frontdesk)
                 pegawai = Pegawai.objects.filter(email_user=email).first()
                 if pegawai:
+                    request.session['pegawai_id'] = str(pegawai.no_pegawai)
+
+                    # Dokter
                     tenaga = TenagaMedis.objects.filter(no_pegawai=pegawai.no_pegawai).first()
                     if tenaga:
                         dokter = DokterHewan.objects.filter(no_tenaga_medis=tenaga.no_tenaga_medis).first()
                         if dokter:
-                            request.session['dokter_id'] = str(dokter.no_dokter_hewan)
                             request.session['role'] = 'dokter'
-                            return redirect('main:landing_page')  # langsung ke landing_page
+                            request.session['no_dokter_hewan'] = str(dokter.no_dokter_hewan)
+                            return redirect('main:landing_page')
 
-                messages.error(request, "Anda bukan dokter hewan.")
+                        perawat = PerawatHewan.objects.filter(no_tenaga_medis=tenaga.no_tenaga_medis).first()
+                        if perawat:
+                            request.session['role'] = 'perawat'
+                            request.session['no_perawat_hewan'] = str(perawat.no_perawat_hewan)
+                            return redirect('main:landing_page')
+
+                    # Frontdesk
+                    frontdesk = FrontDesk.objects.filter(no_pegawai=pegawai.no_pegawai).first()
+                    if frontdesk:
+                        request.session['role'] = 'frontdesk'
+                        request.session['no_front_desk'] = str(frontdesk.no_front_desk)
+                        return redirect('main:landing_page')
+
+                # CEK apakah KLIEN (individu atau perusahaan)
+                klien = Klien.objects.filter(email=email).first()
+                if klien:
+                    request.session['klien_id'] = str(klien.no_identitas)
+
+                    if Individu.objects.filter(no_identitas_klien=klien.no_identitas).exists():
+                        request.session['role'] = 'individu'
+                        return redirect('main:landing_page')
+
+                    if Perusahaan.objects.filter(no_identitas_klien=klien.no_identitas).exists():
+                        request.session['role'] = 'perusahaan'
+                        return redirect('main:landing_page')
+
+                messages.error(request, 'Akun tidak memiliki role yang valid.')
             else:
                 messages.error(request, 'Password salah.')
         except User.DoesNotExist:

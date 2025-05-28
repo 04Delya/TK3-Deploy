@@ -1,19 +1,44 @@
 from django.shortcuts import render, redirect
 from django.views.decorators.http import require_POST
+from main.models import Vaksin, PerawatHewan, Kunjungan
 
-VACCINES = [
-    {'id': 'VAK001', 'name': 'Vaksin Rabies',      'price': '250000', 'stock': 30},
-    {'id': 'VAK002', 'name': 'Vaksin Flu Musiman', 'price': '200000', 'stock': 50},
-    {'id': 'VAK003', 'name': 'Vaksin Parvovirus',  'price': '300000', 'stock': 25},
-]
+# VACCINES = [
+#     {'id': 'VAK001', 'name': 'Vaksin Rabies',      'price': '250000', 'stock': 30},
+#     {'id': 'VAK002', 'name': 'Vaksin Flu Musiman', 'price': '200000', 'stock': 50},
+#     {'id': 'VAK003', 'name': 'Vaksin Parvovirus',  'price': '300000', 'stock': 25},
+# ]
+
+# def vaccine_list(request):
+#     q = request.GET.get("q", "").lower()
+#     if q:
+#         data = [v for v in VACCINES if q in v["name"].lower()]
+#     else:
+#         data = VACCINES
+#     return render(request, "vaccines_list.html", {"vaccines": data})
+from django.shortcuts import render, redirect
+from django.urls import reverse
+from main.models import Vaksin, Kunjungan, PerawatHewan
 
 def vaccine_list(request):
+    no_tenaga_medis = request.session.get('no_tenaga_medis')
+
+    if not no_tenaga_medis or not PerawatHewan.objects.filter(no_tenaga_medis=no_tenaga_medis).exists():
+        return redirect('authentication:login')  # ← sesuai nama di urls.py kamu
+
     q = request.GET.get("q", "").lower()
     if q:
-        data = [v for v in VACCINES if q in v["name"].lower()]
+        vaccines = Vaksin.objects.filter(nama__icontains=q)
     else:
-        data = VACCINES
-    return render(request, "vaccines_list.html", {"vaccines": data})
+        vaccines = Vaksin.objects.all()
+
+    vaccines = vaccines.order_by('-kode')
+
+    used_vaksin_kodes = set(Kunjungan.objects.exclude(kode_vaksin=None).values_list('kode_vaksin', flat=True))
+    for v in vaccines:
+        v.pernah_dipakai = v.kode in used_vaksin_kodes
+
+    return render(request, "vaccines_list.html", {"vaccines": vaccines})
+
 
 
 def vaccine_create(request):
