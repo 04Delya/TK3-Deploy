@@ -4,48 +4,55 @@
 {% block title %}Create New Medicine - Pet Clinic{% endblock %}
 
 {% block content %}
-  <section class="py-20 bg-[#FBF9F1] min-h-screen flex items-center">
-    <div class="container mx-auto px-6 lg:px-14">
-      <div style="border-radius: 24px; padding: 30px; background: #FBF9F1; max-width: 580px; margin: 0 auto; overflow: hidden;">
-        <div class="text-center font-poppins font-bold text-[36px] mb-10 text-black">
-          Create New Medicine
+<section class="py-20 bg-[#FBF9F1] min-h-screen flex items-center">
+  <div class="container mx-auto px-6 lg:px-14">
+    <div style="border-radius: 24px; padding: 30px; background: #FBF9F1; max-width: 580px; margin: 0 auto; overflow: hidden; box-shadow: 0 0 15px rgba(0,0,0,0.1);">
+      <div class="text-center font-poppins font-bold text-[36px] mb-10 text-black">
+        Create New Medicine
+      </div>
+
+      <form method="POST" action="{% url 'biru:create_medicine' %}">
+        {% csrf_token %}
+        <div class="mb-5 w-full">
+          <label class="block text-[24px] font-medium text-black mb-2" for="kode">Kode Obat</label>
+          <input id="kode" name="kode" type="text" placeholder="Enter Medicine Code"
+            style="width: 100%; padding: 12px; background: #D9D9D9; border-radius: 8px; font-size: 16px;" required />
         </div>
 
-        <form>
-          <div class="mb-5 w-full">
-            <label class="block text-[24px] font-medium text-black mb-2" for="medicine-name">Nama</label>
-            <input id="medicine-name" type="text" placeholder="Enter Medicine Name"
-              style="width: 100%; padding: 12px; background: #D9D9D9; border-radius: 8px; font-size: 16px;" />
-          </div>
+        <div class="mb-5 w-full">
+          <label class="block text-[24px] font-medium text-black mb-2" for="nama">Nama</label>
+          <input id="nama" name="nama" type="text" placeholder="Enter Medicine Name"
+            style="width: 100%; padding: 12px; background: #D9D9D9; border-radius: 8px; font-size: 16px;" required />
+        </div>
 
-          <div class="mb-5 w-full">
-            <label class="block text-[24px] font-medium text-black mb-2" for="price">Harga Satuan</label>
-            <input id="price" type="text" placeholder="Enter Price"
-              style="width: 100%; padding: 12px; background: #D9D9D9; border-radius: 8px; font-size: 16px;" />
-          </div>
+        <div class="mb-5 w-full">
+          <label class="block text-[24px] font-medium text-black mb-2" for="harga">Harga Satuan</label>
+          <input id="harga" name="harga" type="number" placeholder="Enter Price"
+            style="width: 100%; padding: 12px; background: #D9D9D9; border-radius: 8px; font-size: 16px;" required />
+        </div>
 
-          <div class="mb-5 w-full">
-            <label class="block text-[24px] font-medium text-black mb-2" for="dosage">Dosis</label>
-            <input id="dosage" type="text" placeholder="Enter Dosage"
-              style="width: 100%; padding: 12px; background: #D9D9D9; border-radius: 8px; font-size: 16px;" />
-          </div>
+        <div class="mb-5 w-full">
+          <label class="block text-[24px] font-medium text-black mb-2" for="dosis">Dosis</label>
+          <input id="dosis" name="dosis" type="text" placeholder="Enter Dosage"
+            style="width: 100%; padding: 12px; background: #D9D9D9; border-radius: 8px; font-size: 16px;" required />
+        </div>
 
-          <div class="mb-8 w-full">
-            <label class="block text-[24px] font-medium text-black mb-2" for="initial-stock">Stok Awal</label>
-            <input id="initial-stock" type="number" placeholder="Enter Initial Stock"
-              style="width: 100%; padding: 12px; background: #D9D9D9; border-radius: 8px; font-size: 16px;" />
-          </div>
+        <div class="mb-8 w-full">
+          <label class="block text-[24px] font-medium text-black mb-2" for="stok">Stok Awal</label>
+          <input id="stok" name="stok" type="number" placeholder="Enter Initial Stock"
+            style="width: 100%; padding: 12px; background: #D9D9D9; border-radius: 8px; font-size: 16px;" required />
+        </div>
 
-          <div class="flex justify-between items-center">
-            <button type="button" style="width: 150px; padding: 12px 34px; background: #C6E7FF; border-radius: 20px; font-size: 16px; font-weight: 500; color: black; border: none; cursor: pointer;">
-              Cancel
-            </button>
-            <button type="submit" style="width: 150px; padding: 12px 34px; background: #6FA6D0; border-radius: 20px; font-size: 16px; font-weight: 500; color: white; border: none; cursor: pointer;">
-              Create
-            </button>
-          </div>
-        </form>
-      </div>
+        <div class="flex justify-between items-center">
+          <a href="{% url 'biru:list_medicine' %}" style="width: 150px; padding: 12px 34px; background: #C6E7FF; border-radius: 20px; font-size: 16px; font-weight: 500; color: black; display: inline-block; text-align: center; text-decoration: none;">
+            Cancel
+          </a>
+          <button type="submit" style="width: 150px; padding: 12px 34px; background: #6FA6D0; border-radius: 20px; font-size: 16px; font-weight: 500; color: white; border: none; cursor: pointer;">
+            Create
+          </button>
+        </div>
+      </form>
     </div>
-  </section>
+  </div>
+</section>
 {% endblock %}

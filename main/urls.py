@@ -12,4 +12,5 @@ urlpatterns = [
     path('dashboard/fdo/', views.dashboard_frontdesk, name='dashboard_frontdesk'),
     path('dashboard/dokter/', views.dashboard_dokterhewan, name='dashboard_dokterhewan'),
     path('dashboard/perawat/', views.dashboard_perawat, name='dashboard_perawat'),
+    
 ]
