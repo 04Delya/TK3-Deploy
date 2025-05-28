@@ -63,8 +63,12 @@ def vaccination_create(request):
         kunjungan_id = request.POST.get('kunjungan')
         vaksin_id = request.POST.get('vaksin')
 
-        kunjungan = get_object_or_404(Kunjungan, id_kunjungan=kunjungan_id)
-        vaksin = get_object_or_404(Vaksin, kode=vaksin_id)
+        try:
+            kunjungan = Kunjungan.objects.get(id_kunjungan=kunjungan_id)
+            vaksin = Vaksin.objects.get(kode=vaksin_id)
+        except (Kunjungan.DoesNotExist, Vaksin.DoesNotExist):
+            messages.error(request, 'Data tidak ditemukan.')
+            return redirect('vaccinations:vaccination_create')
 
         if kunjungan.timestamp_akhir:
             messages.error(request, 'Kunjungan sudah selesai.')
@@ -73,7 +77,6 @@ def vaccination_create(request):
         elif vaksin.stok <= 0:
             messages.error(request, 'Stok vaksin yang dipilih sudah habis.')
         else:
-            # Simpan vaksin ke kunjungan (pakai raw SQL karena managed = False)
             with connection.cursor() as cursor:
                 cursor.execute("""
                     UPDATE "pet_clinic"."KUNJUNGAN"
@@ -90,15 +93,12 @@ def vaccination_create(request):
             messages.success(request, 'Vaksinasi berhasil dicatat.')
             return redirect('vaccinations:vaccination_list')
 
-    # FILTER hanya kunjungan terbuka oleh dokter login
-    # kunjungan_list = Kunjungan.objects.filter(
-    #     kode_vaksin__isnull=True,
-    #     timestamp_akhir__isnull=True,
-    #     no_dokter_hewan=dokter_id
-    # )
-    kunjungan_list = Kunjungan.objects.filter()
+    kunjungan_list = Kunjungan.objects.filter(
+        # timestamp_akhir__isnull=True,
+        # kode_vaksin__isnull=True,
+        # no_dokter_hewan=dokter_id
+    )
 
-    # FILTER hanya vaksin yang stok-nya masih ada
     vaksin_list = Vaksin.objects.filter(stok__gt=0)
 
     return render(request, 'create_vac.html', {
@@ -106,55 +106,105 @@ def vaccination_create(request):
         'vaksin_list': vaksin_list,
     })
 
-def vaccination_update(request):
-    kunjungan = Kunjungan.objects.filter(kode_vaksin__isnull=False).first()
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib import messages
+from django.db import connection
+from main.models import Kunjungan, Vaksin
 
-    if not kunjungan:
-        messages.error(request, 'Tidak ada kunjungan yang bisa diperbarui.')
-        return redirect('vaccination_list')
+def vaccination_update(request, no):
+    try:
+        kunjungan = Kunjungan.objects.get(id_kunjungan=no)
+    except Kunjungan.DoesNotExist:
+        messages.error(request, 'Kunjungan tidak ditemukan.')
+        return redirect('vaccinations:vaccination_list')
+
+    # Cek apakah kunjungan sudah divaksin
+    if not kunjungan.kode_vaksin:
+        messages.error(request, 'Kunjungan ini belum divaksin.')
+        return redirect('vaccinations:vaccination_list')
 
     if request.method == 'POST':
-        vaksin_baru = get_object_or_404(Vaksin, kode=request.POST.get('vaksin'))
+        kode_vaksin_baru = request.POST.get('vaksin')
+        vaksin_baru = get_object_or_404(Vaksin, kode=kode_vaksin_baru)
         vaksin_lama = get_object_or_404(Vaksin, kode=kunjungan.kode_vaksin)
+
+        if vaksin_baru.kode == vaksin_lama.kode:
+            messages.info(request, 'Vaksin tidak berubah.')
+            return redirect('vaccinations:vaccination_list')
 
         if vaksin_baru.stok <= 0:
             messages.error(request, 'Stok vaksin baru habis.')
-        else:
-            vaksin_lama.stok += 1
-            vaksin_baru.stok -= 1
-            kunjungan.kode_vaksin = vaksin_baru.kode
-            vaksin_lama.save()
-            vaksin_baru.save()
-            kunjungan.save()
-            messages.success(request, 'Vaksinasi berhasil diubah.')
-            return redirect('vaccination_list')
+            return redirect('vaccinations:vaccination_update', no=kunjungan.id_kunjungan)
+
+        # Jalankan update dengan raw SQL (karena managed=False)
+        with connection.cursor() as cursor:
+            # Tambahkan stok vaksin lama
+            cursor.execute("""
+                UPDATE "pet_clinic"."VAKSIN"
+                SET stok = stok + 1
+                WHERE kode = %s
+            """, [vaksin_lama.kode])
+
+            # Kurangi stok vaksin baru
+            cursor.execute("""
+                UPDATE "pet_clinic"."VAKSIN"
+                SET stok = stok - 1
+                WHERE kode = %s
+            """, [vaksin_baru.kode])
+
+            # Update kunjungan dengan vaksin baru
+            cursor.execute("""
+                UPDATE "pet_clinic"."KUNJUNGAN"
+                SET kode_vaksin = %s
+                WHERE id_kunjungan = %s
+            """, [vaksin_baru.kode, kunjungan.id_kunjungan])
+
+        messages.success(request, 'Vaksinasi berhasil diperbarui.')
+        return redirect('vaccinations:vaccination_list')
 
     vaksin_list = Vaksin.objects.all()
-    selected_vaksin = f"{kunjungan.kode_vaksin} - {Vaksin.objects.get(kode=kunjungan.kode_vaksin).nama} [{Vaksin.objects.get(kode=kunjungan.kode_vaksin).stok}]"
 
     return render(request, 'update_vac.html', {
-        'kunjungan': kunjungan.id_kunjungan,
-        'vaksin_list': [f"{v.kode} - {v.nama} [{v.stok}]" for v in vaksin_list],
-        'selected_vaksin': selected_vaksin
+        'kunjungan': kunjungan,       
+        'vaksin_list': vaksin_list,
     })
+
 
 @require_POST
 def vaccination_delete(request, no):
-    kunjungan = get_object_or_404(Kunjungan, id_kunjungan=no)
+    try:
+        kunjungan = Kunjungan.objects.get(id_kunjungan=no)
+    except Kunjungan.DoesNotExist:
+        messages.error(request, 'Kunjungan tidak ditemukan.')
+        return redirect('vaccinations:vaccination_list')
 
     if not kunjungan.kode_vaksin:
         messages.error(request, 'Kunjungan ini belum divaksin.')
-        return redirect('vaccination_list')
+        return redirect('vaccinations:vaccination_list')
 
-    vaksin = get_object_or_404(Vaksin, kode=kunjungan.kode_vaksin)
-    vaksin.stok += 1
-    vaksin.save()
+    try:
+        vaksin = Vaksin.objects.get(kode=kunjungan.kode_vaksin)
+    except Vaksin.DoesNotExist:
+        messages.error(request, 'Vaksin tidak ditemukan.')
+        return redirect('vaccinations:vaccination_list')
 
-    kunjungan.kode_vaksin = None
-    kunjungan.save()
+    with connection.cursor() as cursor:
+        # Tambah stok vaksin kembali
+        cursor.execute("""
+            UPDATE "pet_clinic"."VAKSIN"
+            SET stok = stok + 1
+            WHERE kode = %s
+        """, [vaksin.kode])
+
+        # Hapus vaksin dari kunjungan
+        cursor.execute("""
+            UPDATE "pet_clinic"."KUNJUNGAN"
+            SET kode_vaksin = NULL
+            WHERE id_kunjungan = %s
+        """, [kunjungan.id_kunjungan])
 
     messages.success(request, 'Vaksinasi berhasil dihapus.')
-    return redirect('vaccination_list')
+    return redirect('vaccinations:vaccination_list')
 
 def vaccination_history(request):
     pet_filter = request.GET.get('pet', '')

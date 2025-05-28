@@ -27,7 +27,7 @@ urlpatterns = [
     path('jenis-hewan/', include('JenisHewan.urls', namespace='jenis')),
     path('hewan/', include('HewanPeliharaan.urls', namespace='hewan')),
     path('hijau/', include('hijau.urls')),
-    path('vaccinations/', include('vaccinations.urls')), 
+    path('vaccinations/', include('vaccinations.urls', namespace='vaccinations')), 
     path('vaccines/', include('vaccines.urls')), 
     path("client-pet/", include("client_pet.urls")),
     path('biru/', include('biru.urls')),
