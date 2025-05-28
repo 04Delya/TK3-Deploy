@@ -16,14 +16,15 @@ def login_view(request):
             if user.password == password:
                 request.session['user_email'] = email
 
-                # CEK apakah PEGAWAI (dokter, perawat, atau frontdesk)
+                # PEGAWAI ROLE
                 pegawai = Pegawai.objects.filter(email_user=email).first()
                 if pegawai:
                     request.session['pegawai_id'] = str(pegawai.no_pegawai)
 
-                    # Dokter
                     tenaga = TenagaMedis.objects.filter(no_pegawai=pegawai.no_pegawai).first()
                     if tenaga:
+                        request.session['no_tenaga_medis'] = str(tenaga.no_tenaga_medis)
+
                         dokter = DokterHewan.objects.filter(no_tenaga_medis=tenaga.no_tenaga_medis).first()
                         if dokter:
                             request.session['role'] = 'dokter'
@@ -36,14 +37,13 @@ def login_view(request):
                             request.session['no_perawat_hewan'] = str(perawat.no_perawat_hewan)
                             return redirect('main:landing_page')
 
-                    # Frontdesk
                     frontdesk = FrontDesk.objects.filter(no_pegawai=pegawai.no_pegawai).first()
                     if frontdesk:
                         request.session['role'] = 'frontdesk'
                         request.session['no_front_desk'] = str(frontdesk.no_front_desk)
                         return redirect('main:landing_page')
 
-                # CEK apakah KLIEN (individu atau perusahaan)
+                # KLIEN ROLE
                 klien = Klien.objects.filter(email=email).first()
                 if klien:
                     request.session['klien_id'] = str(klien.no_identitas)
@@ -61,9 +61,7 @@ def login_view(request):
                 messages.error(request, 'Password salah.')
         except User.DoesNotExist:
             messages.error(request, 'Email tidak ditemukan.')
-
     return render(request, 'login.html')
-
 
 # def login_view(request):
 #     if request.method == 'POST':
