@@ -44,6 +44,24 @@
 <body class="min-h-screen flex flex-col font-poppins text-zinc-900 antialiased">
   {% include "navbar.html" %}
 
+  <!-- Pesan Notifikasi -->
+  <div class="container mx-auto max-w-3xl px-6 mt-6">
+    {% if messages %}
+      {% for message in messages %}
+        <div
+          role="alert"
+          class="mb-4 px-4 py-3 rounded
+            {% if message.tags == 'error' %}bg-red-200 text-red-800
+            {% elif message.tags == 'success' %}bg-green-200 text-green-800
+            {% elif message.tags == 'warning' %}bg-yellow-200 text-yellow-800
+            {% else %}bg-blue-200 text-blue-800{% endif %}"
+        >
+          {{ message }}
+        </div>
+      {% endfor %}
+    {% endif %}
+  </div>
+
   <!-- Bungkus konten dengan bg-gray3 -->
   <div class="flex-1 bg-gray3">
     <main>
