@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% load static %}
+{% load humanize %}  {# Tambahkan ini #}
+
+{% block title %}List Prescriptions - Pet Clinic{% endblock %}
+
+{% block content %}
+<section class="bg-[#FBF9F1] min-h-screen py-10 px-6 lg:px-14">
+  <div class="max-w-5xl mx-auto">
+    <h2 class="text-center text-3xl font-semibold font-poppins mb-8">List Prescriptions</h2>
+
+    {% if prescriptions %}
+    <div class="overflow-x-auto">
+      <table class="min-w-full border-collapse border border-gray-300 text-center font-poppins">
+        <thead>
+          <tr class="bg-gray-300">
+            <th class="border border-gray-300 px-4 py-3">No</th>
+            <th class="border border-gray-300 px-4 py-3">Jenis Perawatan</th>
+            <th class="border border-gray-300 px-4 py-3">Obat</th>
+            <th class="border border-gray-300 px-4 py-3">Kuantitas Obat</th>
+            <th class="border border-gray-300 px-4 py-3">Total Harga</th>
+            <th class="border border-gray-300 px-4 py-3">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for prescription in prescriptions %}
+          <tr class="hover:bg-gray-100">
+            <td class="border border-gray-300 px-4 py-3">{{ forloop.counter }}</td>
+            <td class="border border-gray-300 px-4 py-3">{{ prescription.treatment.kode_perawatan }} - {{ prescription.treatment.nama_perawatan }}</td>
+            <td class="border border-gray-300 px-4 py-3">{{ prescription.medicine.kode }} - {{ prescription.medicine.nama }}</td>
+            <td class="border border-gray-300 px-4 py-3">{{ prescription.quantity }}</td>
+            <td class="border border-gray-300 px-4 py-3">
+              Rp{{ prescription.medicine.harga|intcomma }}
+            </td>
+            <td class="border border-gray-300 px-4 py-3">
+              <a href="{% url 'biru:delete_prescriptions' prescription.treatment.kode_perawatan prescription.medicine.kode %}" 
+                class="inline-block px-3 py-1 bg-red-600 text-white rounded-md text-sm font-medium hover:bg-red-700 transition">
+                Delete
+              </a>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+      <p class="text-center text-lg font-poppins text-gray-600">No prescriptions available.</p>
+    {% endif %}
+
+    <a href="{% url 'biru:create_prescriptions' %}"
+       class="block w-max mx-auto mt-8 px-6 py-3 bg-[#6FA6D0] text-white rounded-xl font-medium hover:bg-[#5d95bb] transition">
+      Create New Prescription
+    </a>
+  </div>
+</section>
+{% endblock %}

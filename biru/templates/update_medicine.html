@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Update Medicine - Pet Clinic{% endblock %}
+
+{% block content %}
+<section class="py-20 bg-[#FBF9F1] min-h-screen flex items-center">
+  <div class="container mx-auto px-6 lg:px-14">
+    <div style="border-radius: 24px; padding: 30px; background: #FBF9F1; max-width: 580px; margin: 0 auto;box-shadow: 0 0 15px rgba(0,0,0,0.1); overflow: hidden;">
+      <div class="text-center font-poppins font-bold text-[36px] mb-10 text-black">
+        Update Medicine
+      </div>
+
+      <form method="POST" action="{% url 'biru:update_medicine' obat.kode %}">
+        {% csrf_token %}
+        <input type="hidden" name="kode" value="{{ obat.kode }}" />
+
+        <div class="mb-5 w-full">
+          <label class="block text-[24px] font-medium text-black mb-2" for="nama">Nama</label>
+          <input id="nama" name="nama" type="text" placeholder="Enter Medicine Name"
+            style="width: 100%; padding: 12px; background: #D9D9D9; border-radius: 8px; font-size: 16px;" value="{{ obat.nama }}" required />
+        </div>
+
+        <div class="mb-5 w-full">
+          <label class="block text-[24px] font-medium text-black mb-2" for="harga">Harga Satuan</label>
+          <input id="harga" name="harga" type="number" placeholder="Enter Price"
+            style="width: 100%; padding: 12px; background: #D9D9D9; border-radius: 8px; font-size: 16px;" value="{{ obat.harga }}" required />
+        </div>
+
+        <div class="mb-5 w-full">
+          <label class="block text-[24px] font-medium text-black mb-2" for="dosis">Dosis</label>
+          <input id="dosis" name="dosis" type="text" placeholder="Enter Dosage"
+            style="width: 100%; padding: 12px; background: #D9D9D9; border-radius: 8px; font-size: 16px;" value="{{ obat.dosis }}" required />
+        </div>
+
+        <div class="mb-8 w-full">
+          <label class="block text-[24px] font-medium text-black mb-2" for="stok">Stok</label>
+          <input id="stok" name="stok" type="number" placeholder="Enter Stock"
+            style="width: 100%; padding: 12px; background: #D9D9D9; border-radius: 8px; font-size: 16px;" value="{{ obat.stok }}" required />
+        </div>
+
+        <div class="flex justify-between items-center">
+          <a href="{% url 'biru:list_medicine' %}" style="width: 150px; padding: 12px 34px; background: #C6E7FF; border-radius: 20px; font-size: 16px; font-weight: 500; color: black; display: inline-block; text-align: center; text-decoration: none;">
+            Cancel
+          </a>
+          <button type="submit" style="width: 150px; padding: 12px 34px; background: #6FA6D0; border-radius: 20px; font-size: 16px; font-weight: 500; color: white; border: none; cursor: pointer;">
+            Update
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+{% endblock %}

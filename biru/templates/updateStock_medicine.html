@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Update Medicine Stock - Pet Clinic{% endblock %}
+
+{% block content %}
+<section class="py-20 bg-[#FBF9F1] min-h-screen flex items-center">
+  <div class="container mx-auto px-6 lg:px-14">
+    <div style="border-radius: 24px; padding: 30px; background: #FBF9F1; max-width: 580px; margin: 0 auto; overflow: hidden; box-shadow: 0 0 15px rgba(0,0,0,0.1);">
+      <h2 class="text-center font-poppins font-bold text-[36px] mb-10 text-black">Update Stock for {{ obat.nama }}</h2>
+
+      {% if messages %}
+      <ul class="mb-5">
+        {% for message in messages %}
+          <li class="{% if message.tags %}{{ message.tags }}{% endif %}">{{ message }}</li>
+        {% endfor %}
+      </ul>
+      {% endif %}
+
+      <form method="POST" action="">
+        {% csrf_token %}
+        <div class="mb-5 w-full">
+          <label class="block text-[24px] font-medium text-black mb-2" for="stok">Stok Baru</label>
+          <input id="stok" name="stok" type="number" min="0" value="{{ obat.stok }}" required
+            style="width: 100%; padding: 12px; background: #D9D9D9; border-radius: 8px; font-size: 16px;" />
+        </div>
+
+        <div class="flex justify-between items-center">
+          <a href="{% url 'biru:list_medicine' %}" style="width: 150px; padding: 12px 34px; background: #C6E7FF; border-radius: 20px; font-size: 16px; font-weight: 500; color: black; display: inline-block; text-align: center; text-decoration: none;">Cancel</a>
+          <button type="submit" style="width: 150px; padding: 12px 34px; background: #6FA6D0; border-radius: 20px; font-size: 16px; font-weight: 500; color: white; border: none; cursor: pointer;">Update</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+{% endblock %}
