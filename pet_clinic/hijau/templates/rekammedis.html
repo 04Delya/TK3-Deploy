@@ -35,19 +35,20 @@
 
         <!-- Value Kanan -->
         <div class="flex flex-col gap-8 text-xl font-medium text-black">
-          <p>27°C</p>
-          <p>27 kg</p>
-          <p>
-            Hewan dalam kondisi sehat, diberikan vaksin rabies dosis standar, tidak ada reaksi alergi setelah penyuntikan.
-          </p>
+          <p>{{ suhu }}°C</p>
+          <p>{{ berat_badan }}</p>
+          <p>{{ catatan }}</p>
         </div>
+
       </div>
 
       <!-- Tombol Update -->
       <div class="flex justify-end mt-10">
-        <button class="bg-slate-400 text-white text-base font-medium px-6 py-3 rounded-2xl outline outline-1 outline-slate-500 hover:bg-slate-500 transition">
-          Update Rekam Medis
-        </button>
+        <a href="{% url 'hijau:update_rekammedis' id_kunjungan %}">
+          <button class="bg-slate-400 text-white text-base font-medium px-6 py-3 rounded-2xl outline outline-1 outline-slate-500 hover:bg-slate-500 transition">
+            Update Rekam Medis
+          </button>
+        </a>
       </div>
     </div>
   </main>

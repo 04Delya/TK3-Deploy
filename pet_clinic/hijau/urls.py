@@ -22,8 +22,8 @@ urlpatterns = [
     path('kunjungan/delete/', views.delete_kunjungan_view, name='delete_kunjungan'),
     path('kunjungan/table/', views.table_kunjungan_view, name='table_kunjungan'),
 
-    path('rekammedis/create/', views.create_rekammedis_view, name='create_rekammedis'),
-    path('rekammedis/update/', views.update_rekammedis_view, name='update_rekammedis'),
-    path('rekammedis/notfound/', views.notfound_rekammedis_view, name='notfound_rekammedis'),
-    path('rekammedis/view/', views.rekammedis_view, name='rekammedis'),
+    path('rekammedis/update/<uuid:id_kunjungan>/', views.update_rekammedis_view, name='update_rekammedis'),
+    path('rekammedis/notfound/<uuid:id_kunjungan>/', views.notfound_rekammedis_view, name='notfound_rekammedis'),
+    path('rekammedis/create/<uuid:id_kunjungan>/', views.create_rekammedis_view, name='create_rekammedis'),
+    path('rekammedis/view/<uuid:id_kunjungan>/', views.rekammedis_view, name='rekammedis'),
 ]

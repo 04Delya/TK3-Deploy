@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
 from main.models import Hewan, Klien, Perawatan, Kunjungan, TenagaMedis, DokterHewan, PerawatHewan, FrontDesk, Pegawai, KunjunganKeperawatan
 
@@ -151,6 +151,7 @@ def delete_kunjungan_view(request):
 
 def table_kunjungan_view(request):
     records = Kunjungan.objects.all()
+    print("Jumlah kunjungan:", records.count())  # DEBUG
     data = []
 
     for i, record in enumerate(records):
@@ -164,9 +165,12 @@ def table_kunjungan_view(request):
             "timestamp_akhir": record.timestamp_akhir,
         })
 
+    print("DATA:", data)  # DEBUG
+
     return render(request, 'table_kunjungan.html', {
         'kunjungan_list': data
     })
+
 
 def kunjungan_views(request, action):
     if action == 'create':
@@ -179,14 +183,74 @@ def kunjungan_views(request, action):
         return HttpResponse('Invalid action')
 
 # Rekam Medis views
-def create_rekammedis_view(request):
-    return render(request, 'create_rekammedis.html')
+def create_rekammedis_view(request, id_kunjungan):
+    kunjungan = get_object_or_404(Kunjungan, id_kunjungan=id_kunjungan)
 
-def update_rekammedis_view(request):
-    return render(request, 'update_rekammedis.html')
+    if request.method == "POST":
+        suhu = request.POST.get("suhu")
+        berat = request.POST.get("berat_badan")
+        catatan = request.POST.get("catatan")
 
-def notfound_rekammedis_view(request):
-    return render(request, 'notfound_rekammedis.html')
+        try:
+            kunjungan.suhu = int(suhu) if suhu else None
+            kunjungan.berat_badan = float(berat) if berat else None
+            kunjungan.catatan = catatan
+            kunjungan.save()
+            return redirect('hijau:rekammedis', id_kunjungan=id_kunjungan)
+        except Exception as e:
+            return render(request, 'create_rekammedis.html', {
+                'kunjungan': kunjungan,
+                'error': str(e)
+            })
 
-def rekammedis_view(request):
-    return render(request, 'rekammedis.html')
+    return render(request, 'create_rekammedis.html', {'kunjungan': kunjungan})
+
+
+def update_rekammedis_view(request, id_kunjungan):
+    kunjungan = get_object_or_404(Kunjungan, id_kunjungan=id_kunjungan)
+
+    if request.method == "POST":
+        suhu = request.POST.get("suhu")
+        berat_badan = request.POST.get("berat_badan")
+        catatan = request.POST.get("catatan")
+
+        try:
+            kunjungan.suhu = int(suhu) if suhu else None
+            kunjungan.berat_badan = float(berat_badan) if berat_badan else None
+            kunjungan.catatan = catatan
+            kunjungan.save()
+            return redirect('hijau:rekammedis', id_kunjungan=id_kunjungan)
+        except Exception as e:
+            return render(request, 'update_rekammedis.html', {
+                'error': str(e),
+                'kunjungan': kunjungan,
+            })
+
+    return render(request, 'update_rekammedis.html', {
+        'kunjungan': kunjungan,
+    })
+
+def notfound_rekammedis_view(request, id_kunjungan):
+    return render(request, 'notfound_rekammedis.html', {
+        'id_kunjungan': id_kunjungan
+    })
+
+
+def rekammedis_view(request, id_kunjungan):
+    try:
+        kunjungan = Kunjungan.objects.get(id_kunjungan=id_kunjungan)
+
+        if kunjungan.suhu is None and kunjungan.berat_badan is None and not kunjungan.catatan:
+            return redirect('hijau:notfound_rekammedis', id_kunjungan=id_kunjungan)
+
+        return render(request, 'rekammedis.html', {
+            'id_kunjungan': id_kunjungan,
+            'suhu': kunjungan.suhu or "-",
+            'berat_badan': f"{kunjungan.berat_badan} kg" if kunjungan.berat_badan else "- kg",
+            'catatan': kunjungan.catatan or "-",
+        })
+
+    except Kunjungan.DoesNotExist:
+        return redirect('hijau:notfound_rekammedis', id_kunjungan=id_kunjungan)
+
+
