@@ -28,7 +28,7 @@
     <select name="nama_hewan" required class="w-full bg-zinc-300 rounded-lg px-3 py-2 mb-4 text-black">
       <option disabled selected>Pilih Nama Hewan</option>
       {% for hewan in hewan_list %}
-        <option value="{{ hewan.nama_hewan }}">{{ hewan.nama_hewan }}</option>
+        <option value="{{ hewan.nama }}">{{ hewan.nama }}</option>
       {% endfor %}
     </select>
 
@@ -37,7 +37,7 @@
     <select name="no_dokter_hewan" required class="w-full bg-zinc-300 rounded-lg px-3 py-2 mb-4 text-black">
       <option disabled selected>Pilih Dokter Hewan</option>
       {% for dokter in dokter_list %}
-        <option value="{{ dokter.no_dokter_hewan }}">{{ dokter.nama }}</option>
+        <option value="{{ dokter.id }}">{{ dokter.email }}</option>
       {% endfor %}
     </select>
 
@@ -46,13 +46,9 @@
     <select name="no_perawat_hewan" required class="w-full bg-zinc-300 rounded-lg px-3 py-2 mb-4 text-black">
       <option disabled selected>Pilih Perawat Hewan</option>
       {% for perawat in perawat_list %}
-        <option value="{{ perawat.no_perawat_hewan }}">{{ perawat.nama }}</option>
+        <option value="{{ perawat.id }}">{{ perawat.email }}</option>
       {% endfor %}
     </select>
-
-    <!-- Front Desk -->
-    <label class="block mb-1 text-gray-800 text-sm font-medium">Front Desk</label>
-    <input name="no_front_desk" type="text" placeholder="UUID FrontDesk" required class="w-full bg-zinc-300 rounded-lg px-3 py-2 mb-4 text-black"/>
 
     <!-- Metode Kunjungan -->
     <label class="block mb-1 text-gray-800 text-sm font-medium">Metode Kunjungan</label>
@@ -70,18 +66,6 @@
     <!-- Waktu Akhir -->
     <label class="block mb-1 text-gray-800 text-sm font-medium">Waktu Akhir</label>
     <input name="timestamp_akhir" type="datetime-local" required class="w-full bg-zinc-300 rounded-lg px-3 py-2 mb-4 text-black"/>
-
-    <!-- Suhu -->
-    <label class="block mb-1 text-gray-800 text-sm font-medium">Suhu (°C)</label>
-    <input name="suhu" type="number" class="w-full bg-zinc-300 rounded-lg px-3 py-2 mb-4 text-black"/>
-
-    <!-- Berat Badan -->
-    <label class="block mb-1 text-gray-800 text-sm font-medium">Berat Badan (kg)</label>
-    <input name="berat_badan" type="number" step="0.01" class="w-full bg-zinc-300 rounded-lg px-3 py-2 mb-4 text-black"/>
-
-    <!-- Catatan -->
-    <label class="block mb-1 text-gray-800 text-sm font-medium">Catatan</label>
-    <textarea name="catatan" rows="3" class="w-full bg-zinc-300 rounded-lg px-3 py-2 mb-6 text-black resize-none"></textarea>
 
     <!-- Buttons -->
     <div class="flex justify-end gap-3">

@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
 from django.views.decorators.http import require_http_methods
-from main.models import Hewan, Klien, Perawatan, Kunjungan, TenagaMedis, DokterHewan, PerawatHewan, FrontDesk, Pegawai, KunjunganKeperawatan
+from main.models import Hewan, Klien, Perawatan, Kunjungan, TenagaMedis, DokterHewan, PerawatHewan, FrontDesk, Pegawai, KunjunganKeperawatan, User
 import uuid
 from django.utils import timezone
 
@@ -162,19 +162,39 @@ def create_kunjungan_view(request):
             )
             return redirect("hijau:table_kunjungan")
         except Exception as e:
-            return render(request, "create_kunjungan.html", {
-                "error": str(e),
-                "klien_list": Klien.objects.all(),
-                "hewan_list": Hewan.objects.all(),
-                "dokter_list": DokterHewan.objects.all(),
-                "perawat_list": PerawatHewan.objects.all()
-            })
+            print(e)  # debug
+            pass
+
+    # JOIN DENGAN TABEL USER UNTUK AMBIL EMAIL
+    dokter_data = []
+    for dokter in DokterHewan.objects.all():
+        try:
+            tenaga = TenagaMedis.objects.get(no_tenaga_medis=dokter.no_tenaga_medis)
+            pegawai = Pegawai.objects.get(no_pegawai=tenaga.no_pegawai)
+            user = User.objects.get(email=pegawai.email_user)
+            dokter_data.append({"id": dokter.no_dokter_hewan, "email": user.email})
+        except:
+            continue
+
+    perawat_data = []
+    for perawat in PerawatHewan.objects.all():
+        try:
+            tenaga = TenagaMedis.objects.get(no_tenaga_medis=perawat.no_tenaga_medis)
+            pegawai = Pegawai.objects.get(no_pegawai=tenaga.no_pegawai)
+            user = User.objects.get(email=pegawai.email_user)
+            perawat_data.append({"id": perawat.no_perawat_hewan, "email": user.email})
+        except:
+            continue
+
+    hewan_data = []
+    for hewan in Hewan.objects.all():
+        hewan_data.append({"nama": hewan.nama})
 
     return render(request, "create_kunjungan.html", {
         "klien_list": Klien.objects.all(),
-        "hewan_list": Hewan.objects.all(),
-        "dokter_list": DokterHewan.objects.all(),
-        "perawat_list": PerawatHewan.objects.all()
+        "hewan_list": hewan_data,
+        "dokter_list": dokter_data,
+        "perawat_list": perawat_data
     })
 
 @require_http_methods(["GET", "POST"])
