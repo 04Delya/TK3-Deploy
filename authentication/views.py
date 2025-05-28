@@ -1,10 +1,9 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from django.db import connection
+from django.db import connection, transaction
 from main.models import User, Pegawai, TenagaMedis, DokterHewan, PerawatHewan, FrontDesk, Klien, Individu, Perusahaan
 import uuid
 from datetime import date
-from main.models import User, DokterHewan, TenagaMedis, Pegawai
 
 def login_view(request):
     if request.method == 'POST':
@@ -98,146 +97,278 @@ def register_selection(request):
 
 def register_individual(request):
     if request.method == 'POST':
-        username = request.POST.get('username')
         email = request.POST.get('email')
         password = request.POST.get('password')
-        nama = request.POST.get('nama')
+        nama_depan = request.POST.get('nama_depan')
+        nama_tengah = request.POST.get('nama_tengah')
+        nama_belakang = request.POST.get('nama_belakang')
+        telepon = request.POST.get('telepon')
+        alamat = request.POST.get('alamat')
         
-        if username and password and nama:
+        # Validate required fields
+        if not all([email, password, nama_depan, nama_belakang, telepon, alamat]):
+            messages.error(request, 'Semua field wajib harus diisi.')
+            return render(request, 'register_individual.html')
+        
+        # Check if user already exists
+        if User.objects.filter(email=email).exists():
+            messages.error(request, 'Email sudah terdaftar.')
+            return render(request, 'register_individual.html')
+        
+        try:
             with transaction.atomic():
-                # Create a Django user
-                user = User.objects.create_user(
-                    username=username,
+                # Create User
+                user = User.objects.create(
                     email=email,
-                    password=password
+                    password=password,  # In production, you should hash this
+                    alamat=alamat,
+                    nomor_telepon=telepon
                 )
                 
-                # Add user to individual clients group
-                client_group, _ = Group.objects.get_or_create(name='individual_clients')
-                user.groups.add(client_group)
-                
-                # Create a Klien for the user
+                # Create Klien
+                klien_id = uuid.uuid4()
                 klien = Klien.objects.create(
-                    id=uuid.uuid4(),
-                    nama=nama,
-                    jenis='individual'
+                    no_identitas=klien_id,
+                    tanggal_registrasi=date.today(),
+                    email=email
                 )
                 
-                login(request, user)
-                return redirect('main:landing_page')
+                # Create Individu
+                individu = Individu.objects.create(
+                    no_identitas_klien=klien_id,
+                    nama_depan=nama_depan,
+                    nama_tengah=nama_tengah,
+                    nama_belakang=nama_belakang
+                )
+                
+                messages.success(request, 'Registrasi berhasil! Silakan login.')
+                return redirect('authentication:login')
+                
+        except Exception as e:
+            messages.error(request, f'Terjadi kesalahan: {str(e)}')
+            return render(request, 'register_individual.html')
     
     return render(request, 'register_individual.html')
 
 def register_company(request):
     if request.method == 'POST':
-        username = request.POST.get('username')
         email = request.POST.get('email')
         password = request.POST.get('password')
         nama_perusahaan = request.POST.get('nama_perusahaan')
+        telepon = request.POST.get('telepon')
+        alamat = request.POST.get('alamat')
         
-        if username and password and nama_perusahaan:
+        # Validate required fields
+        if not all([email, password, nama_perusahaan, telepon, alamat]):
+            messages.error(request, 'Semua field wajib harus diisi.')
+            return render(request, 'register_company.html')
+        
+        # Check if user already exists
+        if User.objects.filter(email=email).exists():
+            messages.error(request, 'Email sudah terdaftar.')
+            return render(request, 'register_company.html')
+        
+        try:
             with transaction.atomic():
-                # Create a Django user
-                user = User.objects.create_user(
-                    username=username,
+                # Create User
+                user = User.objects.create(
                     email=email,
-                    password=password
+                    password=password,  # In production, you should hash this
+                    alamat=alamat,
+                    nomor_telepon=telepon
                 )
                 
-                # Add user to company clients group
-                client_group, _ = Group.objects.get_or_create(name='company_clients')
-                user.groups.add(client_group)
-                
-                # Create a Klien for the user
+                # Create Klien
+                klien_id = uuid.uuid4()
                 klien = Klien.objects.create(
-                    id=uuid.uuid4(),
-                    nama=nama_perusahaan,
-                    jenis='company'
+                    no_identitas=klien_id,
+                    tanggal_registrasi=date.today(),
+                    email=email
                 )
                 
-                login(request, user)
-                return redirect('landing_page')
+                # Create Perusahaan
+                perusahaan = Perusahaan.objects.create(
+                    no_identitas_klien=klien_id,
+                    nama_perusahaan=nama_perusahaan
+                )
+                
+                messages.success(request, 'Registrasi berhasil! Silakan login.')
+                return redirect('authentication:login')
+                
+        except Exception as e:
+            messages.error(request, f'Terjadi kesalahan: {str(e)}')
+            return render(request, 'register_company.html')
     
     return render(request, 'register_company.html')
 
 def register_frontdesk(request):
     if request.method == 'POST':
-        username = request.POST.get('username')
         email = request.POST.get('email')
         password = request.POST.get('password')
-        nama = request.POST.get('nama')
+        telepon = request.POST.get('telepon')
+        tanggal_diterima = request.POST.get('tanggal_diterima')
+        alamat = request.POST.get('alamat')
         
-        if username and password and nama:
+        # Validate required fields
+        if not all([email, password, telepon, tanggal_diterima, alamat]):
+            messages.error(request, 'Semua field wajib harus diisi.')
+            return render(request, 'register_frontdesk.html')
+        
+        # Check if user already exists
+        if User.objects.filter(email=email).exists():
+            messages.error(request, 'Email sudah terdaftar.')
+            return render(request, 'register_frontdesk.html')
+        
+        try:
             with transaction.atomic():
-                # Create a Django user
-                user = User.objects.create_user(
-                    username=username,
+                # Create User
+                user = User.objects.create(
                     email=email,
-                    password=password
+                    password=password,  # In production, you should hash this
+                    alamat=alamat,
+                    nomor_telepon=telepon
                 )
                 
-                # Add user to staff group
-                staff_group, _ = Group.objects.get_or_create(name='frontdesk')
-                user.groups.add(staff_group)
-                user.is_staff = True
-                user.save()
+                # Create Pegawai
+                pegawai_id = uuid.uuid4()
+                pegawai = Pegawai.objects.create(
+                    no_pegawai=pegawai_id,
+                    tanggal_mulai_kerja=tanggal_diterima,
+                    email_user=email
+                )
                 
-                login(request, user)
-                return redirect('landing_page')
+                # Create FrontDesk
+                frontdesk = FrontDesk.objects.create(
+                    no_front_desk=uuid.uuid4(),
+                    no_pegawai=pegawai_id
+                )
+                
+                messages.success(request, 'Registrasi berhasil! Silakan login.')
+                return redirect('authentication:login')
+                
+        except Exception as e:
+            messages.error(request, f'Terjadi kesalahan: {str(e)}')
+            return render(request, 'register_frontdesk.html')
     
     return render(request, 'register_frontdesk.html')
 
 def register_vet(request):
     if request.method == 'POST':
-        username = request.POST.get('username')
+        no_izin = request.POST.get('no_izin')
         email = request.POST.get('email')
         password = request.POST.get('password')
-        nama = request.POST.get('nama')
+        telepon = request.POST.get('telepon')
+        tanggal_diterima = request.POST.get('tanggal_diterima')
+        alamat = request.POST.get('alamat')
         
-        if username and password and nama:
+        # Validate required fields
+        if not all([no_izin, email, password, telepon, tanggal_diterima, alamat]):
+            messages.error(request, 'Semua field wajib harus diisi.')
+            return render(request, 'register_vet.html')
+        
+        # Check if user already exists
+        if User.objects.filter(email=email).exists():
+            messages.error(request, 'Email sudah terdaftar.')
+            return render(request, 'register_vet.html')
+        
+        try:
             with transaction.atomic():
-                # Create a Django user
-                user = User.objects.create_user(
-                    username=username,
+                # Create User
+                user = User.objects.create(
                     email=email,
-                    password=password
+                    password=password,  # In production, you should hash this
+                    alamat=alamat,
+                    nomor_telepon=telepon
                 )
                 
-                # Add user to vet group
-                vet_group, _ = Group.objects.get_or_create(name='veterinarians')
-                user.groups.add(vet_group)
-                user.is_staff = True
-                user.save()
+                # Create Pegawai
+                pegawai_id = uuid.uuid4()
+                pegawai = Pegawai.objects.create(
+                    no_pegawai=pegawai_id,
+                    tanggal_mulai_kerja=tanggal_diterima,
+                    email_user=email
+                )
                 
-                login(request, user)
-                return redirect('landing_page')
+                # Create TenagaMedis
+                tenaga_medis_id = uuid.uuid4()
+                tenaga_medis = TenagaMedis.objects.create(
+                    no_tenaga_medis=tenaga_medis_id,
+                    no_pegawai=pegawai_id,
+                    no_izin_praktik=no_izin
+                )
+                
+                # Create DokterHewan
+                dokter = DokterHewan.objects.create(
+                    no_dokter_hewan=uuid.uuid4(),
+                    no_tenaga_medis=tenaga_medis_id
+                )
+                
+                messages.success(request, 'Registrasi berhasil! Silakan login.')
+                return redirect('authentication:login')
+                
+        except Exception as e:
+            messages.error(request, f'Terjadi kesalahan: {str(e)}')
+            return render(request, 'register_vet.html')
     
     return render(request, 'register_vet.html')
 
 def register_nurse(request):
     if request.method == 'POST':
-        username = request.POST.get('username')
+        no_izin = request.POST.get('no_izin')
         email = request.POST.get('email')
         password = request.POST.get('password')
-        nama = request.POST.get('nama')
+        telepon = request.POST.get('telepon')
+        tanggal_diterima = request.POST.get('tanggal_diterima')
+        alamat = request.POST.get('alamat')
         
-        if username and password and nama:
+        # Validate required fields
+        if not all([no_izin, email, password, telepon, tanggal_diterima, alamat]):
+            messages.error(request, 'Semua field wajib harus diisi.')
+            return render(request, 'register_nurse.html')
+        
+        # Check if user already exists
+        if User.objects.filter(email=email).exists():
+            messages.error(request, 'Email sudah terdaftar.')
+            return render(request, 'register_nurse.html')
+        
+        try:
             with transaction.atomic():
-                # Create a Django user
-                user = User.objects.create_user(
-                    username=username,
+                # Create User
+                user = User.objects.create(
                     email=email,
-                    password=password
+                    password=password,  # In production, you should hash this
+                    alamat=alamat,
+                    nomor_telepon=telepon
                 )
                 
-                # Add user to nurse group
-                nurse_group, _ = Group.objects.get_or_create(name='nurses')
-                user.groups.add(nurse_group)
-                user.is_staff = True
-                user.save()
+                # Create Pegawai
+                pegawai_id = uuid.uuid4()
+                pegawai = Pegawai.objects.create(
+                    no_pegawai=pegawai_id,
+                    tanggal_mulai_kerja=tanggal_diterima,
+                    email_user=email
+                )
                 
-                login(request, user)
-                return redirect('landing_page')
+                # Create TenagaMedis
+                tenaga_medis_id = uuid.uuid4()
+                tenaga_medis = TenagaMedis.objects.create(
+                    no_tenaga_medis=tenaga_medis_id,
+                    no_pegawai=pegawai_id,
+                    no_izin_praktik=no_izin
+                )
+                
+                # Create PerawatHewan
+                perawat = PerawatHewan.objects.create(
+                    no_perawat_hewan=uuid.uuid4(),
+                    no_tenaga_medis=tenaga_medis_id
+                )
+                
+                messages.success(request, 'Registrasi berhasil! Silakan login.')
+                return redirect('authentication:login')
+                
+        except Exception as e:
+            messages.error(request, f'Terjadi kesalahan: {str(e)}')
+            return render(request, 'register_nurse.html')
     
     return render(request, 'register_nurse.html')
 

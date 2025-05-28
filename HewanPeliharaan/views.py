@@ -1,27 +1,67 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import JsonResponse
-from .models import Hewan
-from JenisHewan.models import JenisHewan
-# from Pengguna.models import Klien
+from main.models import Hewan, JenisHewan, Klien  # Use main models that connect to Supabase
 from django.contrib import messages
 
 # Hewan (Pet) views
 def hewan_list(request):
-    user_role = request.GET.get('role', 'klien')  # Default to klien
-    klien_id = request.GET.get('klien_id')  # Would normally come from auth
+    user_role = request.GET.get('role', 'frontdesk')  # Default to frontdesk to show all data
+    klien_id = request.GET.get('klien_id')
     
+    # Use the main models which contain the Supabase data
     if user_role == 'frontdesk':
-        hewan_list = Hewan.objects.all()
+        # Show all pets for frontdesk - get all data from main.models.Hewan
+        hewan_list = Hewan.objects.all()[:50]  # Limit to first 50 for performance
     else:
+        # Show pets for specific client
         if not klien_id:
-            return render(request, 'HewanPeliharaan_list.html', {'hewan_list': []})
-        hewan_list = Hewan.objects.filter(pemilik_id=klien_id)
+            hewan_list = []
+        else:
+            hewan_list = Hewan.objects.filter(no_identitas_klien=klien_id)
     
+    # Create objects that match template expectations
+    formatted_hewan_list = []
     for hewan in hewan_list:
-        hewan.can_delete = not hewan.kunjungan.filter(aktif=True).exists()
+        # Get animal type
+        try:
+            jenis_hewan = JenisHewan.objects.get(id=hewan.id_jenis)
+            jenis_nama = jenis_hewan.nama_jenis
+        except:
+            jenis_nama = "Unknown"
+        
+        # Get owner info
+        try:
+            klien = Klien.objects.get(no_identitas=hewan.no_identitas_klien)
+            # Try to get individual info first
+            try:
+                from main.models import Individu
+                individu = Individu.objects.get(no_identitas_klien=hewan.no_identitas_klien)
+                pemilik_nama = f"{individu.nama_depan} {individu.nama_belakang}"
+            except:
+                # Try company info
+                try:
+                    from main.models import Perusahaan
+                    perusahaan = Perusahaan.objects.get(no_identitas_klien=hewan.no_identitas_klien)
+                    pemilik_nama = perusahaan.nama_perusahaan
+                except:
+                    pemilik_nama = "Unknown Owner"
+        except:
+            pemilik_nama = "Unknown Owner"
+        
+        # Create object that matches template expectations
+        formatted_hewan = type('HewanObj', (), {
+            'id': f"{hewan.nama}_{hewan.no_identitas_klien}",  # Composite key
+            'nama': hewan.nama,
+            'tanggal_lahir': hewan.tanggal_lahir,
+            'jenis_hewan': type('JenisObj', (), {'nama': jenis_nama})(),
+            'pemilik': type('PemilikObj', (), {'nama': pemilik_nama})(),
+            'can_delete': True,  # Simplified for now
+            'url_foto': hewan.url_foto
+        })()
+        formatted_hewan_list.append(formatted_hewan)
     
     context = {
-        'hewan_list': hewan_list,
+        'hewan_list': formatted_hewan_list,
         'is_frontdesk': user_role == 'frontdesk',
         'user_role': user_role
     }
@@ -40,11 +80,8 @@ def hewan_create(request):
         nama = request.POST.get('nama')
         tanggal_lahir = request.POST.get('tanggal_lahir')
         jenis_hewan_id = request.POST.get('jenis_hewan')
-        foto_url = request.POST.get('foto_url')
-
-        # Store POST data for re-rendering in case of error
+        foto_url = request.POST.get('foto_url')        # Store POST data for re-rendering in case of error
         form_data = request.POST.copy()
-
         pemilik_id = None
         if user_role == 'frontdesk':
             pemilik_id = request.POST.get('pemilik')
@@ -53,27 +90,8 @@ def hewan_create(request):
 
         if nama and tanggal_lahir and jenis_hewan_id and pemilik_id:
             try:
-                Hewan.objects.create(
-                    nama=nama,
-                    tanggal_lahir=tanggal_lahir,
-                    jenis_hewan_id=jenis_hewan_id,
-                    pemilik_id=pemilik_id,
-                    foto_url=foto_url if foto_url else None
-                )
-                messages.success(request, 'Hewan peliharaan berhasil ditambahkan.')
-                
-                redirect_url = 'hewan:HewanPeliharaan_list'
-                query_params = []
-                if user_role:
-                    query_params.append(f"role={user_role}")
-                if klien_id_from_get and user_role != 'frontdesk': 
-                    query_params.append(f"klien_id={klien_id_from_get}")
-                
-                if query_params:
-                    return redirect(f"{redirect(redirect_url).url}?{'&'.join(query_params)}")
-                else:
-                    return redirect(redirect_url)
-
+                # Note: The main.models.Hewan is unmanaged, so we can't easily create through Django ORM
+                messages.error(request, 'Creation through this interface is not supported for Supabase data. Please use the Supabase interface.')
             except Exception as e:
                 messages.error(request, f'Gagal menambahkan hewan: {str(e)}')
         else:
@@ -110,31 +128,24 @@ def hewan_update(request, id):
     user_role = request.GET.get('role', 'klien')
     klien_id = request.GET.get('klien_id')
     
-    hewan = get_object_or_404(Hewan, id=id)
+    # Parse composite ID to get hewan name and klien id
+    try:
+        parts = id.split('_', 1)
+        hewan_nama = parts[0]
+        hewan_klien_id = parts[1]
+        hewan = Hewan.objects.get(nama=hewan_nama, no_identitas_klien=hewan_klien_id)
+    except:
+        messages.error(request, 'Hewan tidak ditemukan.')
+        return redirect('hewan:HewanPeliharaan_list')
     
-    if user_role != 'frontdesk' and str(hewan.pemilik.id) != klien_id:
+    # Check permissions
+    if user_role != 'frontdesk' and hewan_klien_id != klien_id:
         return redirect('hewan:HewanPeliharaan_list')
     
     if request.method == 'POST':
-        nama = request.POST.get('nama')
-        tanggal_lahir = request.POST.get('tanggal_lahir')
-        jenis_hewan_id = request.POST.get('jenis_hewan')
-        foto_url = request.POST.get('foto_url')
-        
-        if user_role == 'frontdesk':
-            pemilik_id = request.POST.get('pemilik')
-            if pemilik_id:
-                hewan.pemilik_id = pemilik_id
-        
-        if nama:
-            hewan.nama = nama
-        if tanggal_lahir:
-            hewan.tanggal_lahir = tanggal_lahir
-        if jenis_hewan_id:
-            hewan.jenis_hewan_id = jenis_hewan_id
-        
-        hewan.foto_url = foto_url if foto_url else None
-        hewan.save()
+        # Note: Since this is an unmanaged model pointing to Supabase, 
+        # we can't easily update through Django ORM
+        messages.error(request, 'Update through this interface is not supported for Supabase data. Please use the Supabase interface.')
         return redirect('hewan:HewanPeliharaan_list')
     
     jenis_hewan = JenisHewan.objects.all()
@@ -154,13 +165,20 @@ def hewan_delete(request, id):
     if user_role != 'frontdesk':
         return redirect('hewan:HewanPeliharaan_list')
     
-    hewan = get_object_or_404(Hewan, id=id)
-    
-    if hewan.kunjungan.filter(aktif=True).exists():
-        return JsonResponse({'error': 'Cannot delete pet with active visits'}, status=400)
+    # Parse composite ID to get hewan name and klien id
+    try:
+        parts = id.split('_', 1)
+        hewan_nama = parts[0]
+        hewan_klien_id = parts[1]
+        hewan = Hewan.objects.get(nama=hewan_nama, no_identitas_klien=hewan_klien_id)
+    except:
+        messages.error(request, 'Hewan tidak ditemukan.')
+        return redirect('hewan:HewanPeliharaan_list')
     
     if request.method == 'POST':
-        hewan.delete()
+        # Note: Since this is an unmanaged model pointing to Supabase, 
+        # we can't easily delete through Django ORM
+        messages.error(request, 'Delete through this interface is not supported for Supabase data. Please use the Supabase interface.')
         return redirect('hewan:HewanPeliharaan_list')
     
     context = {
@@ -169,6 +187,14 @@ def hewan_delete(request, id):
     return render(request, 'HewanPeliharaan_delete_confirm.html', context)
 
 def check_can_delete_hewan(request, id):
-    hewan = get_object_or_404(Hewan, id=id)
-    can_delete = not hewan.kunjungan.filter(aktif=True).exists()
+    # Parse composite ID to get hewan name and klien id
+    try:
+        parts = id.split('_', 1)
+        hewan_nama = parts[0]
+        hewan_klien_id = parts[1]
+        hewan = Hewan.objects.get(nama=hewan_nama, no_identitas_klien=hewan_klien_id)
+        # For now, return false since deletion is not supported through this interface
+        can_delete = False
+    except:
+        can_delete = False
     return JsonResponse({'can_delete': can_delete})
