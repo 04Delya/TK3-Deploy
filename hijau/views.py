@@ -43,7 +43,6 @@ def create_treatment_view(request):
     })
 
 def update_treatment_view(request, id_kunjungan, nama_hewan, no_identitas_klien, no_front_desk, no_perawat_hewan, no_dokter_hewan, kode_perawatan):
-    
     try:
         treatment = KunjunganKeperawatan.objects.get(
             id_kunjungan=id_kunjungan,
@@ -228,8 +227,16 @@ def update_kunjungan_view(request, id_kunjungan):
         "perawat_list": PerawatHewan.objects.all()
     })
 
-def delete_kunjungan_view(request):
-    return render(request, 'delete_kunjungan.html')
+def delete_kunjungan_view(request, id_kunjungan):
+    kunjungan = get_object_or_404(Kunjungan, id_kunjungan=id_kunjungan)
+
+    if request.method == "POST":
+        kunjungan.delete()
+        return redirect('hijau:table_kunjungan')  # Ganti ini dengan nama view daftar kunjungan kamu
+
+    return render(request, 'delete_kunjungan.html', {
+        "kunjungan": kunjungan
+    })
 
 def table_kunjungan_view(request):
     records = Kunjungan.objects.all()
