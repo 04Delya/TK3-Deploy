@@ -39,11 +39,57 @@ def create_treatment_view(request):
         'perawatan_list': Perawatan.objects.all(),
     })
 
-def update_treatment_view(request):
-    return render(request, 'update_treatment.html')
+def update_treatment_view(request, id_kunjungan, nama_hewan, no_identitas_klien, no_front_desk, no_perawat_hewan, no_dokter_hewan, kode_perawatan):
+    
+    try:
+        treatment = KunjunganKeperawatan.objects.get(
+            id_kunjungan=id_kunjungan,
+            nama_hewan=nama_hewan,
+            no_identitas_klien=no_identitas_klien,
+            no_front_desk=no_front_desk,
+            no_perawat_hewan=no_perawat_hewan,
+            no_dokter_hewan=no_dokter_hewan,
+            kode_perawatan=kode_perawatan
+        )
+        kunjungan = Kunjungan.objects.get(id_kunjungan=id_kunjungan)
 
-def delete_treatment_view(request):
-    return render(request, 'delete_treatment.html')
+        if request.method == "POST":
+            treatment.kode_perawatan = request.POST.get("kode_perawatan")
+            kunjungan.catatan = request.POST.get("catatan")
+            treatment.save()
+            kunjungan.save()
+            return redirect('hijau:table_treatment')
+
+        return render(request, 'update_treatment.html', {
+            'treatment': treatment,
+            'kunjungan': kunjungan,
+            'perawatan_list': Perawatan.objects.all(),
+        })
+    except Exception as e:
+        return HttpResponse(f"Error: {e}")
+
+def delete_treatment_view(request, id_kunjungan, nama_hewan, no_identitas_klien, no_front_desk, no_perawat_hewan, no_dokter_hewan, kode_perawatan):
+    try:
+        treatment = KunjunganKeperawatan.objects.get(
+            id_kunjungan=id_kunjungan,
+            nama_hewan=nama_hewan,
+            no_identitas_klien=no_identitas_klien,
+            no_front_desk=no_front_desk,
+            no_perawat_hewan=no_perawat_hewan,
+            no_dokter_hewan=no_dokter_hewan,
+            kode_perawatan=kode_perawatan
+        )
+
+        if request.method == "POST":
+            treatment.delete()
+            return redirect('hijau:table_treatment')
+
+        return render(request, 'delete_treatment.html', {
+            'treatment': treatment
+        })
+    except Exception as e:
+        return HttpResponse(f"Error: {e}")
+
 
 def table_treatment_view(request):
     records = KunjunganKeperawatan.objects.all()
@@ -70,13 +116,14 @@ def table_treatment_view(request):
 
         data.append({
             "no": i + 1,
-            "kode_kunjungan": record.id_kunjungan,
+            "kode_kunjungan": str(record.id_kunjungan),
             "id_klien": record.no_identitas_klien,
             "nama_hewan": record.nama_hewan,
             "perawat": record.no_perawat_hewan,
             "dokter": record.no_dokter_hewan,
             "frontdesk": record.no_front_desk,
-            "jenis_perawatan": f"{perawatan.kode_perawatan} - {perawatan.nama_perawatan}" if perawatan else "-",
+            "kode_perawatan": record.kode_perawatan,
+            "jenis_perawatan": f"{record.kode_perawatan} - {perawatan.nama_perawatan}" if perawatan else "-",
             "catatan_medis": catatan or "-",
         })
 
@@ -103,7 +150,23 @@ def delete_kunjungan_view(request):
     return render(request, 'delete_kunjungan.html')
 
 def table_kunjungan_view(request):
-    return render(request, 'table_kunjungan.html')
+    records = Kunjungan.objects.all()
+    data = []
+
+    for i, record in enumerate(records):
+        data.append({
+            "no": i + 1,
+            "id_kunjungan": record.id_kunjungan,
+            "no_identitas_klien": record.no_identitas_klien,
+            "nama_hewan": record.nama_hewan,
+            "tipe_kunjungan": record.tipe_kunjungan,
+            "timestamp_awal": record.timestamp_awal,
+            "timestamp_akhir": record.timestamp_akhir,
+        })
+
+    return render(request, 'table_kunjungan.html', {
+        'kunjungan_list': data
+    })
 
 def kunjungan_views(request, action):
     if action == 'create':

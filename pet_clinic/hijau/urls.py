@@ -1,12 +1,20 @@
-from django.urls import path, include
+from django.urls import path
 from . import views
 
 app_name = 'hijau'
 # force push
 urlpatterns = [
     path('treatment/create/', views.create_treatment_view, name='create_treatment'),
-    path('treatment/update/', views.update_treatment_view, name='update_treatment'),
-    path('treatment/delete/', views.delete_treatment_view, name='delete_treatment'),
+    path(
+    'treatment/update/<uuid:id_kunjungan>/<str:nama_hewan>/<str:no_identitas_klien>/<str:no_front_desk>/<str:no_perawat_hewan>/<str:no_dokter_hewan>/<str:kode_perawatan>/',
+    views.update_treatment_view,
+    name='update_treatment'
+    ),
+    path(
+    'treatment/delete/<uuid:id_kunjungan>/<str:nama_hewan>/<uuid:no_identitas_klien>/<uuid:no_front_desk>/<uuid:no_perawat_hewan>/<uuid:no_dokter_hewan>/<str:kode_perawatan>/',
+    views.delete_treatment_view,
+    name='delete_treatment'
+    ),
     path('treatment/table/', views.table_treatment_view, name='table_treatment'),
     
     path('kunjungan/create/', views.create_kunjungan_view, name='create_kunjungan'),

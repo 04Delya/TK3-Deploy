@@ -8,37 +8,44 @@
 </head>
 <body class="bg-gray-800 flex items-center justify-center min-h-screen">
 
-  <div class="w-[400px] bg-stone-100 rounded-[40px] p-6 relative shadow-md" style="background-image: url('https://placehold.co/1208x1480'); background-size: cover; background-repeat: no-repeat; background-blend-mode: lighten;">
+  <form method="POST" class="w-[400px] bg-stone-100 rounded-[40px] p-6 relative shadow-md"
+        style="background-image: url('https://placehold.co/1208x1480'); background-size: cover; background-repeat: no-repeat; background-blend-mode: lighten;">
+    {% csrf_token %}
 
     <!-- Tombol close -->
-    <button class="absolute top-4 right-4 text-black text-2xl font-bold">×</button>
+    <a href="{% url 'hijau:table_treatment' %}" class="absolute top-4 right-4 text-black text-2xl font-bold">×</a>
 
     <!-- Judul -->
     <h1 class="text-2xl font-bold text-center mb-6 text-zinc-900 font-['Poppins']">Update Treatment</h1>
 
-    <!-- Kunjungan ID -->
+    <!-- Kunjungan -->
     <label class="block mb-1 text-black text-sm font-medium font-['Poppins']">Kunjungan</label>
-    <input type="text" value="KJN001" class="w-full bg-zinc-400 rounded-lg px-3 py-2 mb-4 text-black font-['Poppins']" disabled/>
+    <input type="text" value="{{ treatment.id_kunjungan }}" class="w-full bg-zinc-400 rounded-lg px-3 py-2 mb-4 text-black font-['Poppins']" disabled />
 
     <!-- Jenis Perawatan -->
     <label class="block mb-1 text-black text-sm font-medium font-['Poppins']">Jenis Perawatan</label>
-    <select class="w-full bg-zinc-300 rounded-lg px-3 py-2 mb-4 text-black font-['Poppins']">
-      <option disabled selected>Jenis Perawatan</option>
-      <option>TRM001 - Dental Care</option>
-      <option>TRM002 - Parasite Control</option>
-      <option>TRM003 - Flea Treatment</option>
+    <select name="kode_perawatan" class="w-full bg-zinc-300 rounded-lg px-3 py-2 mb-4 text-black font-['Poppins']" required>
+      {% for p in perawatan_list %}
+        <option value="{{ p.kode_perawatan }}" {% if p.kode_perawatan == treatment.kode_perawatan %}selected{% endif %}>
+          {{ p.kode_perawatan }} - {{ p.nama_perawatan }}
+        </option>
+      {% endfor %}
     </select>
 
     <!-- Catatan Medis -->
     <label class="block mb-1 text-black text-sm font-medium font-['Poppins']">Catatan Medis</label>
-    <input type="text" value="Hewan nya dijaga terus ya!" class="w-full bg-zinc-300 rounded-lg px-3 py-2 mb-6 text-black font-['Poppins']"/>
+    <input name="catatan" type="text" value="{{ kunjungan.catatan }}" class="w-full bg-zinc-300 rounded-lg px-3 py-2 mb-6 text-black font-['Poppins']" required />
 
     <!-- Tombol -->
     <div class="flex justify-end gap-3">
-      <button class="bg-blue-100 text-slate-600 px-4 py-2 rounded-xl text-sm font-medium border border-slate-400">Cancel</button>
-      <button class="bg-blue-400 text-white px-4 py-2 rounded-xl text-sm font-medium">Update</button>
+      <a href="{% url 'hijau:table_treatment' %}" class="bg-blue-100 text-slate-600 px-4 py-2 rounded-xl text-sm font-medium border border-slate-400">Cancel</a>
+      <button type="submit" class="bg-blue-400 text-white px-4 py-2 rounded-xl text-sm font-medium">Update</button>
     </div>
-  </div>
+
+    {% if error %}
+      <p class="text-red-500 text-sm mt-4 text-center">{{ error }}</p>
+    {% endif %}
+  </form>
 
 </body>
 </html>

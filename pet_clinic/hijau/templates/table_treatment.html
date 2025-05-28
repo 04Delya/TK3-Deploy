@@ -55,8 +55,21 @@
     <td class="border border-zinc-400 px-4 py-2">{{ item.jenis_perawatan }}</td>
     <td class="border border-zinc-400 px-4 py-2">{{ item.catatan_medis }}</td>
     <td class="border border-zinc-400 px-4 py-2 flex gap-2 justify-center">
-      <button class="px-3 py-1 bg-sky-200 rounded-xl text-xs font-medium border border-slate-500">Update</button>
-      <button class="px-3 py-1 bg-stone-200 rounded-xl text-xs font-medium border border-slate-500">Delete</button>
+      <a href="{% url 'hijau:update_treatment' 
+      item.kode_kunjungan 
+      item.nama_hewan|urlencode 
+      item.id_klien 
+      item.frontdesk 
+      item.perawat 
+      item.dokter 
+      item.kode_perawatan 
+      %}">
+        <button class="px-3 py-1 bg-sky-200 rounded-xl text-xs font-medium border border-slate-500">Update</button>
+      </a>
+      <a href="{% url 'hijau:delete_treatment' item.kode_kunjungan item.nama_hewan item.id_klien item.frontdesk item.perawat item.dokter item.kode_perawatan %}">
+        <button class="px-3 py-1 bg-red-300 rounded-xl text-xs font-medium border border-slate-500">Delete</button>
+      </a>
+
     </td>
   </tr>
   {% endfor %}

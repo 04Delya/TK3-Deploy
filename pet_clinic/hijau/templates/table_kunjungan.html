@@ -42,24 +42,29 @@
             </tr>
           </thead>
           <tbody>
-            <tr class="bg-orange-50">
-              <td class="px-4 py-2 border border-zinc-400">1</td>
-              <td class="px-4 py-2 border border-zinc-400">KJN001</td>
-              <td class="px-4 py-2 border border-zinc-400">FD0123</td>
-              <td class="px-4 py-2 border border-zinc-400">Snowy</td>
-              <td class="px-4 py-2 border border-zinc-400">Janji Temu</td>
-              <td class="px-4 py-2 border border-zinc-400">03-04-2025 14:30:10</td>
-              <td class="px-4 py-2 border border-zinc-400">03-04-2025 17:10:10</td>
-              <td class="px-4 py-2 border border-zinc-400">
-                <button class="px-3 py-1 bg-slate-500 text-white rounded-xl text-xs">Lihat Rekam Medis</button>
-              </td>
-              <td class="px-4 py-2 border border-zinc-400 flex gap-2 justify-center">
-                <button class="px-3 py-1 bg-sky-200 border border-slate-500 rounded-xl text-xs">Update</button>
-                <button class="px-3 py-1 bg-stone-200 border border-slate-500 rounded-xl text-xs">Delete</button>
-              </td>
-            </tr>
-            <!-- Tambah baris lain sesuai data -->
-          </tbody>
+  {% for item in kunjungan_list %}
+  <tr class="bg-orange-50">
+    <td class="px-4 py-2 border border-zinc-400">{{ item.no }}</td>
+    <td class="px-4 py-2 border border-zinc-400">{{ item.id_kunjungan }}</td>
+    <td class="px-4 py-2 border border-zinc-400">{{ item.no_identitas_klien }}</td>
+    <td class="px-4 py-2 border border-zinc-400">{{ item.nama_hewan }}</td>
+    <td class="px-4 py-2 border border-zinc-400">{{ item.tipe_kunjungan }}</td>
+    <td class="px-4 py-2 border border-zinc-400">{{ item.timestamp_awal|date:"d-m-Y H:i:s" }}</td>
+    <td class="px-4 py-2 border border-zinc-400">{{ item.timestamp_akhir|date:"d-m-Y H:i:s" }}</td>
+    <td class="px-4 py-2 border border-zinc-400">
+      <a href="{% url 'hijau:rekammedis' %}">
+  <button class="px-3 py-1 bg-slate-500 text-white rounded-xl text-xs">Lihat Rekam Medis</button>
+</a>
+
+    </td>
+    <td class="px-4 py-2 border border-zinc-400 flex gap-2 justify-center">
+      <button class="px-3 py-1 bg-sky-200 border border-slate-500 rounded-xl text-xs">Update</button>
+      <button class="px-3 py-1 bg-stone-200 border border-slate-500 rounded-xl text-xs">Delete</button>
+    </td>
+  </tr>
+  {% endfor %}
+</tbody>
+
         </table>
       </div>
 
