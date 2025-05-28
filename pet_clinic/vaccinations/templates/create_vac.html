@@ -14,7 +14,9 @@
           <label for="kunjungan" class="block text-xl font-medium text-black mb-2">Kunjungan</label>
           <select id="kunjungan" name="kunjungan" class="w-full bg-gray1 p-3 rounded-lg text-black font-medium text-lg focus:outline-none">
             {% for kunjungan in kunjungan_list %}
-              <option value="{{ kunjungan }}">{{ kunjungan }}</option>
+              <option value="{{ kunjungan.id_kunjungan }}">
+                {{ kunjungan.id_kunjungan }} - {{ kunjungan.nama_hewan }} ({{ kunjungan.timestamp_awal|date:"d F Y" }})
+              </option>
             {% endfor %}
           </select>
         </div>

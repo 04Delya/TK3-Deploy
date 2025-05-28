@@ -1,13 +1,70 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth.models import User, Group
-from django.contrib.auth import login
-from django.db import transaction
-from .models import Klien
+from django.contrib import messages
+from django.db import connection
+from main.models import User, Klien, Individu, Perusahaan, Pegawai, FrontDesk, TenagaMedis, DokterHewan, PerawatHewan
 import uuid
+from datetime import date
+from main.models import User, DokterHewan, TenagaMedis, Pegawai
 
-# Create your views here.
-def landing_page(request):
-    return render(request, 'landingpage.html')
+def login_view(request):
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        password = request.POST.get('password')
+
+        try:
+            user = User.objects.get(email=email)
+            if user.password == password:
+                request.session['user_email'] = email
+
+                # Ambil role dokter & simpan ke sesi
+                pegawai = Pegawai.objects.filter(email_user=email).first()
+                if pegawai:
+                    tenaga = TenagaMedis.objects.filter(no_pegawai=pegawai.no_pegawai).first()
+                    if tenaga:
+                        dokter = DokterHewan.objects.filter(no_tenaga_medis=tenaga.no_tenaga_medis).first()
+                        if dokter:
+                            request.session['dokter_id'] = str(dokter.no_dokter_hewan)
+                            request.session['role'] = 'dokter'
+                            return redirect('main:landing_page')  # langsung ke landing_page
+
+                messages.error(request, "Anda bukan dokter hewan.")
+            else:
+                messages.error(request, 'Password salah.')
+        except User.DoesNotExist:
+            messages.error(request, 'Email tidak ditemukan.')
+
+    return render(request, 'login.html')
+
+
+# def login_view(request):
+#     if request.method == 'POST':
+#         email = request.POST.get('email')
+#         password = request.POST.get('password')
+
+#         try:
+#             user = User.objects.get(email=email)
+#             if user.password == password:
+#                 request.session['user_email'] = user.email
+#                 # Cek role user
+#                 if Klien.objects.filter(email=email).exists():
+#                     request.session['role'] = 'klien'
+#                     return redirect('main:dashboard_klien')
+#                 elif Pegawai.objects.filter(email_user=email).exists():
+#                     no_pegawai = Pegawai.objects.get(email_user=email).no_pegawai
+#                     if DokterHewan.objects.filter(no_tenaga_medis__in=TenagaMedis.objects.filter(no_pegawai=no_pegawai).values_list('no_tenaga_medis', flat=True)).exists():
+#                         request.session['role'] = 'dokter'
+#                         return redirect('main:dashboard_dokterhewan')
+#                     elif PerawatHewan.objects.filter(no_tenaga_medis__in=TenagaMedis.objects.filter(no_pegawai=no_pegawai).values_list('no_tenaga_medis', flat=True)).exists():
+#                         request.session['role'] = 'perawat'
+#                         return redirect('main:dashboard_perawat')
+#                     elif FrontDesk.objects.filter(no_pegawai=no_pegawai).exists():
+#                         request.session['role'] = 'frontdesk'
+#                         return redirect('main:dashboard_frontdesk')
+#             else:
+#                 messages.error(request, "Password salah.")
+#         except User.DoesNotExist:
+#             messages.error(request, "Email tidak ditemukan.")
+#     return render(request, 'login.html')
 
 def register_selection(request):
     return render(request, 'register.html')
@@ -40,7 +97,7 @@ def register_individual(request):
                 )
                 
                 login(request, user)
-                return redirect('landing_page')
+                return redirect('main:landing_page')
     
     return render(request, 'register_individual.html')
 
@@ -156,3 +213,8 @@ def register_nurse(request):
                 return redirect('landing_page')
     
     return render(request, 'register_nurse.html')
+
+def logout_view(request):
+    request.session.flush()
+    messages.success(request, "Anda berhasil logout.")
+    return redirect('main:landing_page')
