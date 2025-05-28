@@ -1,6 +1,9 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
+from django.views.decorators.http import require_http_methods
 from main.models import Hewan, Klien, Perawatan, Kunjungan, TenagaMedis, DokterHewan, PerawatHewan, FrontDesk, Pegawai, KunjunganKeperawatan
+import uuid
+from django.utils import timezone
 
 # Treatment views
 def create_treatment_view(request):
@@ -141,10 +144,69 @@ def treatment_views(request, action):
 
 # Kunjungan views
 def create_kunjungan_view(request):
-    return render(request, 'create_kunjungan.html')
+    if request.method == "POST":
+        try:
+            Kunjungan.objects.create(
+                id_kunjungan=uuid.uuid4(),
+                nama_hewan=request.POST.get("nama_hewan"),
+                no_identitas_klien=request.POST.get("no_identitas_klien"),
+                no_front_desk=request.POST.get("no_front_desk"),
+                no_perawat_hewan=request.POST.get("no_perawat_hewan"),
+                no_dokter_hewan=request.POST.get("no_dokter_hewan"),
+                tipe_kunjungan=request.POST.get("tipe_kunjungan"),
+                timestamp_awal=request.POST.get("timestamp_awal"),
+                timestamp_akhir=request.POST.get("timestamp_akhir"),
+                suhu=request.POST.get("suhu"),
+                berat_badan=request.POST.get("berat_badan"),
+                catatan=request.POST.get("catatan"),
+            )
+            return redirect("hijau:table_kunjungan")
+        except Exception as e:
+            return render(request, "create_kunjungan.html", {
+                "error": str(e),
+                "klien_list": Klien.objects.all(),
+                "hewan_list": Hewan.objects.all(),
+                "dokter_list": DokterHewan.objects.all(),
+                "perawat_list": PerawatHewan.objects.all()
+            })
 
-def update_kunjungan_view(request):
-    return render(request, 'update_kunjungan.html')
+    return render(request, "create_kunjungan.html", {
+        "klien_list": Klien.objects.all(),
+        "hewan_list": Hewan.objects.all(),
+        "dokter_list": DokterHewan.objects.all(),
+        "perawat_list": PerawatHewan.objects.all()
+    })
+
+@require_http_methods(["GET", "POST"])
+def update_kunjungan_view(request, id_kunjungan):
+    kunjungan = get_object_or_404(Kunjungan, id_kunjungan=id_kunjungan)
+
+    if request.method == "POST":
+        try:
+            kunjungan.nama_hewan = request.POST["nama_hewan"]
+            kunjungan.no_identitas_klien = uuid.UUID(request.POST["no_identitas_klien"])
+            kunjungan.no_dokter_hewan = uuid.UUID(request.POST["no_dokter_hewan"])
+            kunjungan.no_perawat_hewan = uuid.UUID(request.POST["no_perawat_hewan"])
+            kunjungan.tipe_kunjungan = request.POST["tipe_kunjungan"]
+            kunjungan.timestamp_awal = request.POST["timestamp_awal"]
+            kunjungan.timestamp_akhir = request.POST["timestamp_akhir"]
+            kunjungan.save()
+            return redirect("hijau:table_kunjungan")
+        except Exception as e:
+            return render(request, "update_kunjungan.html", {
+                "kunjungan": kunjungan,
+                "klien_list": Klien.objects.all(),
+                "dokter_list": DokterHewan.objects.all(),
+                "perawat_list": PerawatHewan.objects.all(),
+                "error": str(e)
+            })
+
+    return render(request, "update_kunjungan.html", {
+        "kunjungan": kunjungan,
+        "klien_list": Klien.objects.all(),
+        "dokter_list": DokterHewan.objects.all(),
+        "perawat_list": PerawatHewan.objects.all()
+    })
 
 def delete_kunjungan_view(request):
     return render(request, 'delete_kunjungan.html')

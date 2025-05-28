@@ -57,10 +57,18 @@
 </a>
 
     </td>
-    <td class="px-4 py-2 border border-zinc-400 flex gap-2 justify-center">
-      <button class="px-3 py-1 bg-sky-200 border border-slate-500 rounded-xl text-xs">Update</button>
-      <button class="px-3 py-1 bg-stone-200 border border-slate-500 rounded-xl text-xs">Delete</button>
-    </td>
+      <td class="px-4 py-2 border border-zinc-400 flex gap-2 justify-center">
+        <a href="{% url 'hijau:update_kunjungan' item.id_kunjungan %}" 
+          class="px-3 py-1 bg-sky-200 border border-slate-500 rounded-xl text-xs hover:bg-sky-300 transition">
+          Update
+        </a>
+        <a href="{% url 'hijau:delete_kunjungan' item.id_kunjungan %}" 
+          class="px-3 py-1 bg-red-200 border border-slate-500 rounded-xl text-xs hover:bg-red-300 transition">
+          Delete
+        </a>
+
+      </td>
+
   </tr>
   {% endfor %}
 </tbody>
@@ -70,9 +78,9 @@
 
       <!-- Tombol Create -->
       <div class="flex justify-end mt-8">
-        <button class="flex items-center gap-2 bg-slate-400 text-white px-6 py-3 rounded-2xl outline outline-1 outline-slate-500">
+        <a href="{% url 'hijau:create_kunjungan' %}" class="flex items-center gap-2 bg-slate-400 text-white px-6 py-3 rounded-2xl outline outline-1 outline-slate-500 hover:bg-slate-500 transition">
           <span class="text-base font-medium">+ Create New Kunjungan</span>
-        </button>
+        </a>
       </div>
     </div>
   </div>

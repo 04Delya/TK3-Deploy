@@ -8,74 +8,91 @@
 </head>
 <body class="bg-gray-800 flex items-center justify-center min-h-screen">
 
-  <div class="w-[360px] bg-stone-100 rounded-3xl p-6 relative shadow-md">
-    <button class="absolute top-4 right-4 text-black text-2xl font-bold">×</button>
+  <form method="POST" class="w-[400px] bg-stone-100 rounded-3xl p-6 relative shadow-md">
+    {% csrf_token %}
+    <button type="button" onclick="window.history.back()" class="absolute top-4 right-4 text-black text-2xl font-bold">×</button>
 
     <h1 class="text-2xl font-bold text-center mb-6">Create Kunjungan</h1>
 
     <!-- ID Klien -->
     <label class="block mb-1 text-gray-800 text-sm font-medium">ID Klien</label>
-    <select class="w-full bg-zinc-300 rounded-lg px-3 py-2 mb-4 text-black">
-      <option disabled selected>Kunjungan</option>
-      <option>FDO123</option>
-      <option>KII123</option>
-      <option>PKE123</option>
+    <select name="no_identitas_klien" required class="w-full bg-zinc-300 rounded-lg px-3 py-2 mb-4 text-black">
+      <option disabled selected>Pilih Klien</option>
+      {% for klien in klien_list %}
+        <option value="{{ klien.no_identitas }}">{{ klien.no_identitas }}</option>
+      {% endfor %}
     </select>
 
     <!-- Nama Hewan -->
     <label class="block mb-1 text-gray-800 text-sm font-medium">Nama Hewan</label>
-    <select class="w-full bg-zinc-300 rounded-lg px-3 py-2 mb-4 text-black">
+    <select name="nama_hewan" required class="w-full bg-zinc-300 rounded-lg px-3 py-2 mb-4 text-black">
       <option disabled selected>Pilih Nama Hewan</option>
-      <option>Snowy</option>
-      <option>Blacky</option>
-      <option>Hamseug</option>
+      {% for hewan in hewan_list %}
+        <option value="{{ hewan.nama_hewan }}">{{ hewan.nama_hewan }}</option>
+      {% endfor %}
     </select>
 
     <!-- Dokter Hewan -->
     <label class="block mb-1 text-gray-800 text-sm font-medium">Dokter Hewan</label>
-    <select class="w-full bg-zinc-300 rounded-lg px-3 py-2 mb-4 text-black">
+    <select name="no_dokter_hewan" required class="w-full bg-zinc-300 rounded-lg px-3 py-2 mb-4 text-black">
       <option disabled selected>Pilih Dokter Hewan</option>
-      <option>Dr. Rizki</option>
-      <option>Dr. Amin</option>
-      <option>Dr. Safira</option>
+      {% for dokter in dokter_list %}
+        <option value="{{ dokter.no_dokter_hewan }}">{{ dokter.nama }}</option>
+      {% endfor %}
     </select>
 
     <!-- Perawat Hewan -->
     <label class="block mb-1 text-gray-800 text-sm font-medium">Perawat Hewan</label>
-    <select class="w-full bg-zinc-300 rounded-lg px-3 py-2 mb-4 text-black">
+    <select name="no_perawat_hewan" required class="w-full bg-zinc-300 rounded-lg px-3 py-2 mb-4 text-black">
       <option disabled selected>Pilih Perawat Hewan</option>
-      <option>Tina</option>
-      <option>Tini</option>
-      <option>Tino</option>
+      {% for perawat in perawat_list %}
+        <option value="{{ perawat.no_perawat_hewan }}">{{ perawat.nama }}</option>
+      {% endfor %}
     </select>
+
+    <!-- Front Desk -->
+    <label class="block mb-1 text-gray-800 text-sm font-medium">Front Desk</label>
+    <input name="no_front_desk" type="text" placeholder="UUID FrontDesk" required class="w-full bg-zinc-300 rounded-lg px-3 py-2 mb-4 text-black"/>
 
     <!-- Metode Kunjungan -->
     <label class="block mb-1 text-gray-800 text-sm font-medium">Metode Kunjungan</label>
-    <select class="w-full bg-zinc-300 rounded-lg px-3 py-2 mb-4 text-black">
+    <select name="tipe_kunjungan" required class="w-full bg-zinc-300 rounded-lg px-3 py-2 mb-4 text-black">
       <option disabled selected>Pilih Metode Kunjungan</option>
-      <option>Janji Temu</option>
-      <option>Walk-In</option>
-      <option>Darurat</option>
+      <option value="Janji Temu">Janji Temu</option>
+      <option value="Walk-In">Walk-In</option>
+      <option value="Darurat">Darurat</option>
     </select>
 
     <!-- Waktu Mulai -->
-    <label class="block mb-1 text-gray-800 text-sm font-medium">Waktu Mulai Penanganan</label>
-    <div class="relative mb-4">
-      <input type="datetime-local" class="w-full bg-zinc-300 rounded-lg px-3 py-2 text-black" />
-    </div>
+    <label class="block mb-1 text-gray-800 text-sm font-medium">Waktu Mulai</label>
+    <input name="timestamp_awal" type="datetime-local" required class="w-full bg-zinc-300 rounded-lg px-3 py-2 mb-4 text-black"/>
 
-    <!-- Waktu Selesai -->
-    <label class="block mb-1 text-gray-800 text-sm font-medium">Waktu Selesai Penanganan</label>
-    <div class="relative mb-6">
-      <input type="datetime-local" class="w-full bg-zinc-300 rounded-lg px-3 py-2 text-black" />
-    </div>
+    <!-- Waktu Akhir -->
+    <label class="block mb-1 text-gray-800 text-sm font-medium">Waktu Akhir</label>
+    <input name="timestamp_akhir" type="datetime-local" required class="w-full bg-zinc-300 rounded-lg px-3 py-2 mb-4 text-black"/>
+
+    <!-- Suhu -->
+    <label class="block mb-1 text-gray-800 text-sm font-medium">Suhu (°C)</label>
+    <input name="suhu" type="number" class="w-full bg-zinc-300 rounded-lg px-3 py-2 mb-4 text-black"/>
+
+    <!-- Berat Badan -->
+    <label class="block mb-1 text-gray-800 text-sm font-medium">Berat Badan (kg)</label>
+    <input name="berat_badan" type="number" step="0.01" class="w-full bg-zinc-300 rounded-lg px-3 py-2 mb-4 text-black"/>
+
+    <!-- Catatan -->
+    <label class="block mb-1 text-gray-800 text-sm font-medium">Catatan</label>
+    <textarea name="catatan" rows="3" class="w-full bg-zinc-300 rounded-lg px-3 py-2 mb-6 text-black resize-none"></textarea>
 
     <!-- Buttons -->
     <div class="flex justify-end gap-3">
-      <button class="bg-orange-100 text-slate-500 px-4 py-2 rounded-xl text-sm font-medium border border-slate-400">Cancel</button>
-      <button class="bg-blue-400 text-white px-4 py-2 rounded-xl text-sm font-medium">Create</button>
+      <a href="{% url 'hijau:table_kunjungan' %}" class="bg-orange-100 text-slate-600 px-4 py-2 rounded-xl text-sm font-medium border border-slate-400">Cancel</a>
+      <button type="submit" class="bg-blue-400 text-white px-4 py-2 rounded-xl text-sm font-medium">Create</button>
     </div>
-  </div>
+
+    {% if error %}
+      <p class="text-red-500 text-sm text-center mt-4">{{ error }}</p>
+    {% endif %}
+  </form>
 
 </body>
 </html>
