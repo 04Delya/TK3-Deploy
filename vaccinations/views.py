@@ -1,8 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
-from django.views.decorators.http import require_http_methods
+from django.views.decorators.http import require_http_methods, require_POST
 from django.db import connection
-from main.models import Kunjungan, Vaksin
 
 def vaccination_list(request):
     no_tenaga_medis = request.session.get('no_tenaga_medis')
@@ -261,7 +260,7 @@ def vaccination_update(request, no):
         'selected_kode': kode_vaksin_lama
     })
 
-@require_http_methods(["GET", "POST"])
+@require_POST
 def vaccination_delete(request, no):
     no_tenaga_medis = request.session.get('no_tenaga_medis')
     if not no_tenaga_medis:
@@ -296,37 +295,28 @@ def vaccination_delete(request, no):
 
     kode_vaksin, dokter_pemilik = result
 
-    # Validasi kunjungan dimiliki dokter login (harus dibandingkan sebagai string!)
     if str(dokter_pemilik) != str(no_tenaga_medis):
         messages.error(request, "Kunjungan ini bukan milik Anda.")
         return redirect('vaccinations:vaccination_list')
 
-    # POST: hapus vaksin dari kunjungan & kembalikan stok
-    if request.method == 'POST':
-        with connection.cursor() as cursor:
-            if kode_vaksin:
-                # Tambahkan stok kembali
-                cursor.execute("""
-                    UPDATE pet_clinic."VAKSIN"
-                    SET stok = stok + 1
-                    WHERE kode = %s
-                """, [kode_vaksin])
-
-            # Hapus vaksin dari kunjungan (set NULL)
+    # Eksekusi delete vaksin dari kunjungan & tambah stok
+    with connection.cursor() as cursor:
+        if kode_vaksin:
             cursor.execute("""
-                UPDATE pet_clinic."KUNJUNGAN"
-                SET kode_vaksin = NULL
-                WHERE id_kunjungan = %s
-            """, [str(no)])
+                UPDATE pet_clinic."VAKSIN"
+                SET stok = stok + 1
+                WHERE kode = %s
+            """, [kode_vaksin])
 
-        messages.success(request, "Vaksinasi berhasil dihapus dari kunjungan.")
-        return redirect('vaccinations:vaccination_list')
+        cursor.execute("""
+            UPDATE pet_clinic."KUNJUNGAN"
+            SET kode_vaksin = NULL
+            WHERE id_kunjungan = %s
+        """, [str(no)])
 
-    # GET: render konfirmasi
-    return render(request, 'delete_vac.html', {
-        'id_kunjungan': no,
-        'kode_vaksin': kode_vaksin
-    })
+    messages.success(request, "Vaksinasi berhasil dihapus dari kunjungan.")
+    return redirect('vaccinations:vaccination_list')
+
 
 def vaccination_history(request):
     email = request.session.get('user_email')

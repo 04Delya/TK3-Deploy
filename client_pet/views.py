@@ -1,5 +1,4 @@
 from django.shortcuts import render, redirect
-from main.models import Klien, Individu, Perusahaan, Hewan, Pegawai, FrontDesk, JenisHewan
 from django.db import connection
 
 def client_list(request):
@@ -51,10 +50,6 @@ def client_list(request):
     } for row in rows]
 
     return render(request, "clients_list.html", {"clients": clients})
-
-from django.db import connection
-from django.shortcuts import render, redirect
-from main.models import Pegawai, FrontDesk
 
 def client_detail(request, cid):
     email = request.session.get("user_email")
