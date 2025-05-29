@@ -5,7 +5,7 @@
 <div class="container mx-auto px-4 py-8">
   <div class="flex justify-between items-center mb-4">
     <h1 class="text-2xl font-bold">List Vaccination</h1>
-    <a href="/vaccinations/create/"
+    <a href="{% url 'vaccinations:vaccination_create' %}"
        class="px-6 py-3 bg-primary text-white font-medium rounded-xl outline outline-1 outline-blue1 hover:opacity-90 transition">
       + Create New Vaccination
     </a>
@@ -31,20 +31,18 @@
           <td class="px-6 py-4">{{ v.vaksin }}</td>
           <td class="px-6 py-4">
             <div class="flex items-center gap-2">
-              <!-- Tombol Update -->
               <a href="{% url 'vaccinations:vaccination_update' v.kunjungan %}" class="px-6 py-2 bg-secondary text-black font-medium rounded-xl outline outline-1 outline-blue1 hover:opacity-90 transition">
                 Update
               </a>
 
-              <!-- Tombol Delete -->
-              <button onclick="document.getElementById('modal-delete-{{ v.no }}').classList.remove('hidden')" 
+              <button onclick="document.getElementById('modal-delete-{{ v.kunjungan }}').classList.remove('hidden')" 
                       class="px-6 py-2 bg-gray4 text-black font-medium rounded-xl outline outline-1 outline-gray2 hover:opacity-90 transition">
                 Delete
               </button>
             </div>
 
-            <!-- Modal Delete (tetap di dalam td) -->
-            <div id="modal-delete-{{ v.no }}" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40 hidden">
+            <!-- MODAL DELETE -->
+            <div id="modal-delete-{{ v.kunjungan }}" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40 backdrop-blur-sm hidden">
               <div class="bg-white rounded-xl p-8 max-w-md w-full shadow-lg">
                 <h2 class="text-2xl font-bold text-red-600 mb-4">Delete Vaccination</h2>
                 <p class="text-lg text-black mb-6">
@@ -57,7 +55,7 @@
                 <form method="post" action="{% url 'vaccinations:vaccination_delete' v.kunjungan %}" class="flex justify-end gap-4">
                   {% csrf_token %}
                   <button type="button"
-                          onclick="document.getElementById('modal-delete-{{ v.no }}').classList.add('hidden')"
+                          onclick="document.getElementById('modal-delete-{{ v.kunjungan }}').classList.add('hidden')"
                           class="px-6 py-2 rounded-xl bg-blue4 text-black font-medium outline outline-1 outline-primary hover:opacity-90">
                     Cancel
                   </button>
@@ -69,7 +67,6 @@
               </div>
             </div>
           </td>
-
         </tr>
         {% endfor %}
       </tbody>

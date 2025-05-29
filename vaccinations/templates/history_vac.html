@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+{% load humanize %}
+{% block title %}History Vaksinasi{% endblock %}
+
+{% block content %}
+<div class="bg-gray3 min-h-screen px-4 py-10">
+  <div class="max-w-7xl mx-auto">
+    <h2 class="text-3xl font-bold text-black mb-8">List Vaccine for Client's Pet</h2>
+
+    <form method="get" class="flex flex-wrap gap-4 mb-6">
+        <div>
+            <label class="block text-black mb-1 font-medium">Filter by Pet</label>
+            <select name="pet" class="px-4 py-2 rounded-md border border-gray-300 focus:outline-none">
+            <option value="">-- All Pets --</option>
+            {% for pet in pet_options %}
+                <option value="{{ pet }}" {% if pet == pet_filter %}selected{% endif %}>{{ pet }}</option>
+            {% endfor %}
+            </select>
+        </div>
+        <div>
+            <label class="block text-black mb-1 font-medium">Filter by Vaccine</label>
+            <select name="vaksin" class="px-4 py-2 rounded-md border border-gray-300 focus:outline-none">
+            <option value="">-- All Vaccines --</option>
+            {% for vaksin in vaksin_options %}
+                <option value="{{ vaksin }}" {% if vaksin == vaksin_filter %}selected{% endif %}>{{ vaksin }}</option>
+            {% endfor %}
+            </select>
+        </div>
+        <div class="flex items-end">
+            <button type="submit" class="px-5 py-2 bg-primary text-white rounded-md font-medium hover:opacity-90">Apply</button>
+        </div>
+    </form>
+    
+    <div class="overflow-x-auto rounded-xl shadow bg-white">
+      <table class="w-full text-left text-sm border-collapse">
+        <thead class="bg-blue3 text-white">
+          <tr>
+            <th class="px-6 py-4 font-semibold">No</th>
+            <th class="px-6 py-4 font-semibold">Pet</th>
+            <th class="px-6 py-4 font-semibold">Vaksin</th>
+            <th class="px-6 py-4 font-semibold">ID Vaksin</th>
+            <th class="px-6 py-4 font-semibold">Harga</th>
+            <th class="px-6 py-4 font-semibold">Time and Date</th>
+          </tr>
+        </thead>
+        <tbody class="text-black">
+          {% for row in results %}
+            <tr class="border-b hover:bg-gray-100">
+              <td class="px-6 py-4">{{ row.no }}</td>
+              <td class="px-6 py-4">{{ row.pet }}</td>
+              <td class="px-6 py-4">{{ row.vaksin }}</td>
+              <td class="px-6 py-4 font-semibold text-red-600">{{ row.vaksin_id }}</td>
+              <td class="px-6 py-4">Rp{{ row.harga|intcomma }}</td>
+              <td class="px-6 py-4">{{ row.waktu }}</td>
+            </tr>
+          {% empty %}
+            <tr>
+              <td colspan="6" class="text-center py-6 text-gray-500">Tidak ada data ditemukan.</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+{% endblock %}
