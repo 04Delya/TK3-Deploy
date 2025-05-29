@@ -1,67 +1,57 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.decorators.http import require_http_methods, require_POST
 from django.contrib import messages
-from django.db import connection
+from django.db import connection, InternalError, DatabaseError, transaction
+from psycopg2.errors import RaiseException 
 
 @require_http_methods(["GET"])
 def vaccine_list(request):
-    # Cek hanya bisa diakses oleh perawat
-    no_tenaga_medis = request.session.get('no_tenaga_medis')
+    # autentikasi & validasi role perawat 
+    no_tenaga_medis = request.session.get("no_tenaga_medis")
     if not no_tenaga_medis:
-        return redirect('authentication:login')
+        return redirect("authentication:login")
 
     with connection.cursor() as cursor:
         cursor.execute("""
-            SELECT COUNT(*) FROM pet_clinic."PERAWAT_HEWAN"
+            SELECT 1
+            FROM pet_clinic."PERAWAT_HEWAN"
             WHERE no_tenaga_medis = %s
+            LIMIT 1
         """, [no_tenaga_medis])
-        if cursor.fetchone()[0] == 0:
-            return redirect('authentication:login')
+        if cursor.fetchone() is None:
+            return redirect("authentication:login")
 
-    # Ambil keyword pencarian
-    q = request.GET.get("q", "").lower()
+    # pencarian optional
+    q = (request.GET.get("q") or "").lower()
 
-    # Query vaksin sesuai pencarian (desc by kode)
     with connection.cursor() as cursor:
         if q:
             cursor.execute("""
-                SELECT kode, nama, harga, stok 
+                SELECT kode, nama, harga, stok
                 FROM pet_clinic."VAKSIN"
                 WHERE LOWER(nama) LIKE %s
                 ORDER BY kode DESC
             """, [f"%{q}%"])
         else:
             cursor.execute("""
-                SELECT kode, nama, harga, stok 
+                SELECT kode, nama, harga, stok
                 FROM pet_clinic."VAKSIN"
                 ORDER BY kode DESC
             """)
         vaccines_raw = cursor.fetchall()
 
-    # Ambil kode vaksin yang pernah digunakan
-    with connection.cursor() as cursor:
-        cursor.execute("""
-            SELECT DISTINCT kode_vaksin 
-            FROM pet_clinic."KUNJUNGAN" 
-            WHERE kode_vaksin IS NOT NULL
-        """)
-        used_kodes = set(row[0] for row in cursor.fetchall())
+    # format data ke template 
+    vaccines = [
+        {
+            "kode": kode,
+            "nama": nama,
+            "harga": harga,
+            "stok": stok,
+        }
+        for (kode, nama, harga, stok) in vaccines_raw
+    ]
 
-    # Format data untuk template
-    vaccines = []
-    for row in vaccines_raw:
-        kode = row[0]
-        vaccines.append({
-            'kode': kode,
-            'nama': row[1],
-            'harga': row[2],
-            'stok': row[3],
-            'pernah_dipakai': kode in used_kodes
-        })
-
-    return render(request, "vaccines_list.html", {
-        "vaccines": vaccines
-    })
+    return render(request, "vaccines_list.html", {"vaccines": vaccines})
 
 @require_http_methods(["GET", "POST"])
 def vaccine_create(request):
@@ -276,54 +266,54 @@ def vaccine_update_stock(request, kode):
 
 @require_POST
 def vaccine_delete(request, kode):
-    # Cek sesi dan role perawat
+    # validasi role perawat 
     no_tenaga_medis = request.session.get('no_tenaga_medis')
     if not no_tenaga_medis:
         return redirect('authentication:login')
 
     with connection.cursor() as cursor:
         cursor.execute("""
-            SELECT COUNT(*) FROM pet_clinic."PERAWAT_HEWAN"
+            SELECT 1 FROM pet_clinic."PERAWAT_HEWAN"
             WHERE no_tenaga_medis = %s
-        """, [no_tenaga_medis])
-        is_perawat = cursor.fetchone()[0] > 0
-
-    if not is_perawat:
-        return redirect('authentication:login')
-
-    # Cek apakah vaksin pernah digunakan
-    with connection.cursor() as cursor:
-        cursor.execute("""
-            SELECT 1 FROM pet_clinic."KUNJUNGAN"
-            WHERE kode_vaksin = %s
             LIMIT 1
-        """, [kode])
-        used = cursor.fetchone()
+        """, [no_tenaga_medis])
+        if cursor.fetchone() is None:
+            return redirect('authentication:login')
 
-    if used:
-        messages.error(request, "Vaksin ini sudah pernah digunakan dan tidak dapat dihapus.")
-        return redirect('vaccines:vaccine_list')
-
-    # Ambil nama vaksin untuk notifikasi
+    # dapatkan nama vaksin
     with connection.cursor() as cursor:
         cursor.execute("""
             SELECT nama FROM pet_clinic."VAKSIN"
             WHERE kode = %s
         """, [kode])
         row = cursor.fetchone()
-
     if not row:
         messages.error(request, "Vaksin tidak ditemukan.")
         return redirect('vaccines:vaccine_list')
 
     nama_vaksin = row[0]
 
-    # Hapus vaksin dari database
-    with connection.cursor() as cursor:
-        cursor.execute("""
-            DELETE FROM pet_clinic."VAKSIN"
-            WHERE kode = %s
-        """, [kode])
+    # coba hapus & tangkap error trigger 
+    try:
+        with transaction.atomic():                      
+            with connection.cursor() as cursor:
+                cursor.execute("""
+                    DELETE FROM pet_clinic."VAKSIN"
+                    WHERE kode = %s
+                """, [kode])
 
-    messages.success(request, f"Vaksin {nama_vaksin} berhasil dihapus.")
+        messages.success(request, f"Vaksin {nama_vaksin} berhasil dihapus.")
+    except (InternalError, DatabaseError) as e:
+        # bersihkan transaksi gagal
+        connection.rollback()
+
+        err_text = str(e)
+        if "Vaksin tidak dapat dihapus dikarenakan telah digunakan untuk vaksinasi" in err_text:
+            messages.error(
+                request,
+                "ERROR: Vaksin tidak dapat dihapus dikarenakan telah digunakan untuk vaksinasi."
+            )
+        else:
+            messages.error(request, f"Terjadi kesalahan: {err_text}")
+
     return redirect('vaccines:vaccine_list')
