@@ -6,6 +6,9 @@ import uuid
 from django.utils import timezone
 from django.db import connection
 
+def format_id(id_value, prefix):
+    return id_value if str(id_value).startswith(prefix) else f"{prefix}{str(id_value)[:4].upper()}"
+
 def is_role(request, role_name):
     id_key = {
         "dokter": "no_tenaga_medis",
@@ -161,12 +164,13 @@ def table_treatment_view(request):
     for i, row in enumerate(records):
         treatment_list.append({
             "no": i + 1,
-            "id_kunjungan": str(row[0]),
+            "id_kunjungan": str(row[0]),  # ← tetap UUID
+            "id_kunjungan_display": format_id(str(row[0]), "KJN"),  # ← hanya untuk ditampilkan
             "nama_hewan": row[1],
-            "id_klien": row[2],
-            "perawat": row[3],
-            "dokter": row[4],
-            "frontdesk": row[5],
+            "id_klien": format_id(str(row[2]), "KLN"),
+            "perawat": get_email_by_pegawai(row[3]),
+            "dokter": get_email_by_pegawai(row[4]),
+            "frontdesk": get_email_by_pegawai(row[5]),
             "kode_perawatan": row[6],
             "jenis_perawatan": f"{row[6]} - {row[7]}" if row[7] else "-",
             "catatan_medis": row[8] or "-"
@@ -175,6 +179,7 @@ def table_treatment_view(request):
     return render(request, 'table_treatment.html', {
         'treatment_list': treatment_list
     })
+
 
 def treatment_views(request, action):
     if action == 'create':
@@ -262,16 +267,25 @@ def get_perawat_dropdown_data():
 def create_kunjungan_view(request):
     if request.method == "POST":
         try:
+            # Generate ID KJNxxx
             with connection.cursor() as cursor:
+                cursor.execute("""
+                    SELECT id_kunjungan FROM pet_clinic."KUNJUNGAN"
+                    WHERE id_kunjungan LIKE 'KJN%%'
+                    ORDER BY id_kunjungan DESC LIMIT 1
+                """)
+                last = cursor.fetchone()
+                new_id = 'KJN001' if not last else f'KJN{int(last[0][3:]) + 1:03}'
+
                 cursor.execute("""
                     INSERT INTO pet_clinic."KUNJUNGAN" (
                         id_kunjungan, nama_hewan, no_identitas_klien,
                         no_front_desk, no_perawat_hewan, no_dokter_hewan,
-                        tipe_kunjungan, timestamp_awal, timestamp_akhir, suhu,
-                        berat_badan, catatan
+                        tipe_kunjungan, timestamp_awal, timestamp_akhir,
+                        suhu, berat_badan, catatan
                     ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
                 """, [
-                    str(uuid.uuid4()),
+                    new_id,
                     request.POST.get("nama_hewan"),
                     request.POST.get("no_identitas_klien"),
                     request.session.get("no_pegawai"),
@@ -288,6 +302,7 @@ def create_kunjungan_view(request):
         except Exception as e:
             return HttpResponse(f"Gagal menambahkan kunjungan: {e}")
 
+    # Dropdown
     with connection.cursor() as cursor:
         cursor.execute("SELECT no_identitas FROM pet_clinic.\"KLIEN\"")
         klien_list = [{"no_identitas": row[0]} for row in cursor.fetchall()]
@@ -315,6 +330,28 @@ def create_kunjungan_view(request):
         "dokter_list": dokter_list,
         "perawat_list": perawat_list
     })
+
+def create_klien_view(request):
+    if request.method == "POST":
+        try:
+            with connection.cursor() as cursor:
+                cursor.execute("""
+                    SELECT no_identitas FROM pet_clinic."KLIEN"
+                    WHERE no_identitas LIKE 'KLN%%'
+                    ORDER BY no_identitas DESC LIMIT 1
+                """)
+                last = cursor.fetchone()
+                new_id = 'KLN001' if not last else f'KLN{int(last[0][3:]) + 1:03}'
+
+                cursor.execute("""
+                    INSERT INTO pet_clinic."KLIEN"(no_identitas, nama, alamat, no_telepon)
+                    VALUES (%s, %s, %s, %s)
+                """, [new_id, request.POST.get("nama"), request.POST.get("alamat"), request.POST.get("no_telepon")])
+            return redirect("klien:list_klien")
+        except Exception as e:
+            return HttpResponse(f"Gagal menambahkan klien: {e}")
+    return render(request, "create_klien.html")
+
 
 def update_kunjungan_view(request, id_kunjungan):
     if request.method == "POST":
@@ -422,9 +459,6 @@ def delete_kunjungan_view(request, id_kunjungan):
     })
 
 def table_kunjungan_view(request):
-    # if not (is_role(request, 'dokter') or is_role(request, 'frontdesk')):
-    #     return redirect('authentication:login')
-
     with connection.cursor() as cursor:
         cursor.execute("""
             SELECT id_kunjungan, no_identitas_klien, nama_hewan,
@@ -437,8 +471,9 @@ def table_kunjungan_view(request):
     for i, record in enumerate(records):
         data.append({
             "no": i + 1,
-            "id_kunjungan": record[0],
-            "no_identitas_klien": record[1],
+            "id_kunjungan": str(record[0]),  # ← UUID asli
+            "id_kunjungan_display": format_id(str(record[0]), "KJN"),
+            "no_identitas_klien": format_id(str(record[1]), "KLN"),
             "nama_hewan": record[2],
             "tipe_kunjungan": record[3],
             "timestamp_awal": record[4],
@@ -448,6 +483,7 @@ def table_kunjungan_view(request):
     return render(request, 'table_kunjungan.html', {
         'kunjungan_list': data
     })
+
 
 def kunjungan_views(request, action):
     if action == 'create':
