@@ -97,14 +97,15 @@ WSGI_APPLICATION = 'pet_clinic.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
+# Use PostgreSQL for both local and production since models are designed for PostgreSQL
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'postgres',
-        'USER': 'postgres.owqvarxnrapljqejlypk',
-        'PASSWORD': 'KopiSusuForji',
-        'HOST': 'aws-0-ap-southeast-1.pooler.supabase.com',
-        'PORT': '5432',
+        'NAME': os.environ.get('DB_NAME', 'postgres'),
+        'USER': os.environ.get('DB_USER', 'postgres.owqvarxnrapljqejlypk'),
+        'PASSWORD': os.environ.get('DB_PASSWORD', 'KopiSusuForji'),
+        'HOST': os.environ.get('DB_HOST', 'aws-0-ap-southeast-1.pooler.supabase.com'),
+        'PORT': os.environ.get('DB_PORT', '5432'),
         'OPTIONS': {
             'sslmode': 'require',
         },
