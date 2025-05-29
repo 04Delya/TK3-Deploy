@@ -1,49 +1,91 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Create New Treatment</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-800 flex items-center justify-center min-h-screen">
+<body class="bg-gray-800 flex items-center justify-center min-h-screen font-[Poppins]">
 
-  <div class="w-[400px] bg-stone-100 rounded-[40px] p-6 relative shadow-md" style="background-image: url('https://placehold.co/1208x1480'); background-size: cover; background-repeat: no-repeat; background-blend-mode: lighten;">
+  <form method="POST" class="w-[420px] bg-stone-100 rounded-[40px] p-6 relative shadow-md"
+        style="background-image: url('https://placehold.co/1208x1480'); background-size: cover; background-repeat: no-repeat; background-blend-mode: lighten;">
+    {% csrf_token %}
 
     <!-- Close button -->
-    <button class="absolute top-4 right-4 text-black text-2xl font-bold">×</button>
+    <a href="{% url 'hijau:table_treatment' %}" class="absolute top-4 right-4 text-black text-2xl font-bold">×</a>
 
     <!-- Title -->
-    <h1 class="text-2xl font-bold text-center mb-6 text-zinc-900 font-['Poppins']">Create New Treatment</h1>
+    <h1 class="text-2xl font-bold text-center mb-6 text-zinc-900">Create New Treatment</h1>
 
-    <!-- Dropdown: Kunjungan -->
-    <label class="block mb-1 text-black text-sm font-medium font-['Poppins']">Kunjungan</label>
-    <select class="w-full bg-zinc-300 rounded-lg px-3 py-2 mb-4 text-black font-['Poppins']">
-      <option disabled selected>Kunjungan</option>
-      <option>KJN001</option>
-      <option>KJN002</option>
-      <option>KJN003</option>
-    </select>
+    <!-- Fake Dropdown: Kunjungan -->
+    <label class="block mb-1 text-black text-sm font-medium">Kunjungan</label>
+    <div class="relative">
+      <button type="button" onclick="toggleDropdown()" class="w-full bg-zinc-300 rounded-lg px-3 py-2 mb-4 text-left text-black">
+        <span id="selectedOption">-- Pilih Kunjungan --</span>
+      </button>
+
+      <div id="dropdownOptions" class="absolute z-10 mt-1 w-full bg-white border rounded-lg shadow-lg max-h-60 overflow-y-auto hidden">
+        {% for k in kunjungan_list %}
+          <div onclick="selectOption('{{ k.id_kunjungan }}', `ID Kunjungan : {{ k.id_kunjungan }}\nNama Hewan : {{ k.nama_hewan }}\nID Klien : {{ k.no_identitas_klien }}\nFront Desk : {{ k.frontdesk_email }}\nDokter : {{ k.dokter_email }}\nPerawat : {{ k.perawat_email }}`)" 
+               class="px-4 py-2 hover:bg-gray-100 text-left whitespace-pre-wrap cursor-pointer text-black text-sm">
+            ID Kunjungan : {{ k.id_kunjungan }}<br>
+            Nama Hewan : {{ k.nama_hewan }}<br>
+            ID Klien : {{ k.no_identitas_klien }}<br>
+            Front Desk : {{ k.frontdesk_email }}<br>
+            Dokter : {{ k.dokter_email }}<br>
+            Perawat : {{ k.perawat_email }}
+          </div>
+        {% endfor %}
+      </div>
+
+      <input type="hidden" name="id_kunjungan" id="idKunjunganHidden">
+    </div>
 
     <!-- Dropdown: Jenis Perawatan -->
-    <label class="block mb-1 text-black text-sm font-medium font-['Poppins']">Jenis Perawatan</label>
-    <select class="w-full bg-zinc-300 rounded-lg px-3 py-2 mb-4 text-black font-['Poppins']">
-      <option disabled selected>Jenis Perawatan</option>
-      <option>TRM001 - Dental Care</option>
-      <option>TRM002 - Parasite Control</option>
-      <option>TRM003 - Flea Treatment</option>
+    <label class="block mb-1 text-black text-sm font-medium">Jenis Perawatan</label>
+    <select name="kode_perawatan" class="w-full bg-zinc-300 rounded-lg px-3 py-2 mb-4 text-black" required>
+      <option disabled selected>-- Pilih Perawatan --</option>
+      {% for p in perawatan_list %}
+        <option value="{{ p.kode_perawatan }}">{{ p.kode_perawatan }} - {{ p.nama_perawatan }}</option>
+      {% endfor %}
     </select>
 
     <!-- Catatan Medis -->
-    <label class="block mb-1 text-black text-sm font-medium font-['Poppins']">Catatan Medis</label>
-    <input type="text" placeholder="Masukkan catatan..." class="w-full bg-zinc-300 rounded-lg px-3 py-2 mb-6 text-black font-['Poppins']"/>
+    <label class="block mb-1 text-black text-sm font-medium">Catatan Medis</label>
+    <input name="catatan" type="text" placeholder="Masukkan catatan..." class="w-full bg-zinc-300 rounded-lg px-3 py-2 mb-6 text-black"/>
 
     <!-- Buttons -->
     <div class="flex justify-end gap-3">
-      <button class="bg-blue-100 text-slate-600 px-4 py-2 rounded-xl text-sm font-medium border border-slate-400">Cancel</button>
-      <button class="bg-blue-400 text-white px-4 py-2 rounded-xl text-sm font-medium">Create</button>
+      <a href="{% url 'hijau:table_treatment' %}" class="bg-blue-100 text-slate-600 px-4 py-2 rounded-xl text-sm font-medium border border-slate-400">Cancel</a>
+      <button type="submit" class="bg-blue-400 text-white px-4 py-2 rounded-xl text-sm font-medium">Create</button>
     </div>
-  </div>
+
+    {% if error %}
+      <p class="text-red-500 text-sm mt-4 text-center">{{ error }}</p>
+    {% endif %}
+  </form>
+
+  <script>
+    function toggleDropdown() {
+      const dropdown = document.getElementById("dropdownOptions");
+      dropdown.classList.toggle("hidden");
+    }
+
+    function selectOption(id, label) {
+      document.getElementById("selectedOption").innerText = label;
+      document.getElementById("idKunjunganHidden").value = id;
+      document.getElementById("dropdownOptions").classList.add("hidden");
+    }
+
+    document.addEventListener("click", function(e) {
+      const dropdown = document.getElementById("dropdownOptions");
+      const button = document.querySelector("button[onclick='toggleDropdown()']");
+      if (!dropdown.contains(e.target) && !button.contains(e.target)) {
+        dropdown.classList.add("hidden");
+      }
+    });
+  </script>
 
 </body>
 </html>

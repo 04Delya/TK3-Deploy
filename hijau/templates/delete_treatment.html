@@ -8,27 +8,32 @@
 </head>
 <body class="bg-gray-800 flex items-center justify-center min-h-screen">
 
-  <div class="w-[400px] bg-stone-100 rounded-[40px] p-6 relative shadow-md" style="background-image: url('https://placehold.co/1208x1192'); background-size: cover; background-repeat: no-repeat; background-blend-mode: lighten;">
+  <form method="POST" class="w-[400px] bg-stone-100 rounded-[40px] p-6 relative shadow-md"
+        style="background-image: url('https://placehold.co/1208x1192'); background-size: cover; background-repeat: no-repeat; background-blend-mode: lighten;">
+    {% csrf_token %}
 
     <!-- Tombol close -->
-    <button class="absolute top-4 right-4 text-black text-2xl font-bold">×</button>
+    <a href="{% url 'hijau:table_treatment' %}" class="absolute top-4 right-4 text-black text-2xl font-bold">×</a>
 
     <!-- Judul -->
-    <h1 class="text-2xl font-bold text-center mb-4 text-zinc-900 font-['Poppins']">Delete Treatment</h1>
+    <h1 class="text-xl font-bold text-red-600 text-center mb-4">Delete Treatment</h1>
+<p class="text-center text-sm text-gray-800">
+  Apakah kamu yakin untuk menghapus Perawatan<br />
+  untuk Kunjungan <span class="font-bold text-red-600">{{ treatment.id_kunjungan }}</span>
+  dengan Perawatan <span class="font-bold text-red-600">{{ treatment.kode_perawatan }}</span>?
+</p>
 
-    <!-- Pesan Konfirmasi -->
-    <p class="text-center text-lg font-medium text-black font-['Poppins'] leading-relaxed px-2">
-      Apakah kamu yakin untuk menghapus Perawatan untuk Kunjungan
-      <span class="text-red-600 font-semibold">KJN001</span> dengan Perawatan
-      <span class="text-red-600 font-semibold">TRM001</span>?
-    </p>
-
-    <!-- Tombol -->
+    <!-- Tombol Aksi -->
     <div class="flex justify-center gap-4 mt-8">
-      <button class="bg-blue-100 text-slate-600 px-5 py-2 rounded-xl text-sm font-medium border border-slate-400">Cancel</button>
-      <button class="bg-red-600 text-white px-5 py-2 rounded-xl text-sm font-medium">Confirm Deletion</button>
+      <a href="{% url 'hijau:table_treatment' %}" class="bg-blue-100 text-slate-600 px-5 py-2 rounded-xl text-sm font-medium border border-slate-400">
+        Cancel
+      </a>
+      <button type="submit" class="bg-red-600 text-white px-5 py-2 rounded-xl text-sm font-medium">
+        Confirm Deletion
+      </button>
     </div>
-  </div>
+
+  </form>
 
 </body>
 </html>

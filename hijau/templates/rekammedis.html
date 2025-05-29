@@ -6,68 +6,33 @@
   <title>Rekam Medis</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-orange-50 font-[Poppins]">
+<body class="bg-[#1e293b] font-[Poppins] flex items-center justify-center min-h-screen">
 
-  <!-- Navbar -->
-  <header class="w-full bg-slate-500 px-14 py-5 flex items-center justify-between text-white">
-    <div class="flex items-center gap-3">
-      <img src="https://placehold.co/50x50" class="w-12 h-12" alt="logo">
-      <h1 class="text-xl font-semibold">Pet Clinic - 03</h1>
-    </div>
-    <div class="flex gap-6 text-xl font-semibold">
-      <a href="#">Login</a>
-      <a href="#">Register</a>
-    </div>
-  </header>
-
-  <!-- Content -->
-  <main class="flex justify-center items-center mt-20">
-    <div class="w-[1078px] bg-orange-50 border-[10px] border-slate-400 rounded-[65px] p-12 relative shadow-md">
-      <h2 class="text-4xl font-bold text-center mb-12">Rekam Medis</h2>
-
-      <div class="grid grid-cols-2 gap-20">
-        <!-- Label Kiri -->
-        <div class="flex flex-col gap-8 text-2xl font-semibold text-black">
-          <p>Suhu Tubuh</p>
-          <p>Berat Badan</p>
-          <p>Catatan Medis</p>
-        </div>
-
-        <!-- Value Kanan -->
-        <div class="flex flex-col gap-8 text-xl font-medium text-black">
-          <p>27°C</p>
-          <p>27 kg</p>
-          <p>
-            Hewan dalam kondisi sehat, diberikan vaksin rabies dosis standar, tidak ada reaksi alergi setelah penyuntikan.
-          </p>
-        </div>
-      </div>
-
-      <!-- Tombol Update -->
-      <div class="flex justify-end mt-10">
-        <button class="bg-slate-400 text-white text-base font-medium px-6 py-3 rounded-2xl outline outline-1 outline-slate-500 hover:bg-slate-500 transition">
-          Update Rekam Medis
+  <div class="w-[800px] bg-white border-2 border-gray-400 rounded-3xl p-10 shadow-md relative">
+    <div class="flex justify-between items-center mb-8">
+      <h2 class="text-3xl font-bold text-black">Rekam Medis</h2>
+      <a href="{% url 'hijau:update_rekammedis' id_kunjungan %}">
+        <button class="bg-slate-800 text-white px-5 py-2 rounded-md hover:bg-slate-700 transition text-sm font-semibold">
+          Update
         </button>
-      </div>
+      </a>
     </div>
-  </main>
 
-  <!-- Footer -->
-  <footer class="bg-slate-500 px-24 py-12 mt-20 text-white">
-    <div class="flex justify-between items-center">
-      <div class="flex items-center gap-3">
-        <img src="https://placehold.co/100x100" class="w-24 h-24" alt="logo">
-        <div class="text-4xl font-semibold">Pet Clinic - 03</div>
+    <div class="space-y-4 text-black">
+      <div class="flex gap-4">
+        <span class="font-semibold w-40">Suhu Tubuh</span>
+        <span>: {{ suhu }}°C</span>
       </div>
-      <div class="flex gap-6">
-        <div class="w-6 h-6 bg-white rounded-full"></div>
-        <div class="w-6 h-6 bg-white rounded-full"></div>
-        <div class="w-6 h-6 bg-white rounded-full"></div>
-        <div class="w-6 h-6 bg-white rounded-full"></div>
-        <div class="w-6 h-6 bg-white rounded-full"></div>
+      <div class="flex gap-4">
+        <span class="font-semibold w-40">Berat Badan</span>
+        <span>: {{ berat_badan }}</span>
+      </div>
+      <div class="flex gap-4">
+        <span class="font-semibold w-40">Catatan Medis</span>
+        <span>: {{ catatan }}</span>
       </div>
     </div>
-  </footer>
+  </div>
 
 </body>
 </html>
