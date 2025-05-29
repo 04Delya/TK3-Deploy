@@ -16,22 +16,20 @@
 
         <div class="mb-8 w-full">
           <label for="treatment" class="block text-[24px] font-medium text-black mb-3">Jenis Perawatan</label>
-          <select id="treatment" name="treatment" class="w-full h-[43px] bg-gray-300 rounded-lg px-3 text-[18px] font-medium focus:outline-none focus:ring-2 focus:ring-primary" required>
+          <select id="treatment" name="treatment" required
+                  class="w-full h-[43px] bg-gray-300 rounded-lg px-3 text-[18px] font-medium focus:outline-none focus:ring-2 focus:ring-primary">
             {% for treatment in treatments %}
               <option value="{{ treatment.kode_perawatan }}">{{ treatment.kode_perawatan }} - {{ treatment.nama_perawatan }}</option>
-            {% empty %}
-              <option disabled>No treatments available</option>
             {% endfor %}
           </select>
         </div>
 
         <div class="mb-8 w-full">
           <label for="medicine" class="block text-[24px] font-medium text-black mb-3">Obat</label>
-          <select id="medicine" name="medicine" class="w-full h-[43px] bg-gray-300 rounded-lg px-3 text-[18px] font-medium focus:outline-none focus:ring-2 focus:ring-primary" required>
+          <select id="medicine" name="medicine" required
+                  class="w-full h-[43px] bg-gray-300 rounded-lg px-3 text-[18px] font-medium focus:outline-none focus:ring-2 focus:ring-primary">
             {% for medicine in medicines %}
               <option value="{{ medicine.kode }}">{{ medicine.kode }} - {{ medicine.nama }} [Stok: {{ medicine.stok }}]</option>
-            {% empty %}
-              <option disabled>No medicines available</option>
             {% endfor %}
           </select>
         </div>
@@ -44,7 +42,7 @@
 
         <div class="flex justify-between">
           <a href="{% url 'biru:list_prescriptions' %}"
-            class="w-[150px] py-3 rounded-[20px] bg-blue-200 text-black font-medium hover:bg-blue-300 transition flex justify-center items-center">
+             class="w-[150px] py-3 rounded-[20px] bg-blue-200 text-black font-medium hover:bg-blue-300 transition flex justify-center items-center">
             Cancel
           </a>
           <button type="submit"
