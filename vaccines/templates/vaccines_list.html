@@ -7,7 +7,7 @@
 <div class="container mx-auto px-4 py-12">
   <div class="flex justify-between items-center mb-6">
     <h1 class="text-3xl font-bold">List Vaccines</h1>
-    <a href="{% url 'vaccine_create' %}" class="px-6 py-3 bg-primary text-white font-medium rounded-xl hover:opacity-90">
+    <a href="{% url 'vaccines:vaccine_create' %}" class="px-6 py-3 bg-primary text-white font-medium rounded-xl hover:opacity-90">
       + Add New Vaccine
     </a>
   </div>
@@ -46,12 +46,38 @@
           <td class="px-6 py-4">Rp{{ v.harga|intcomma }}</td>
           <td class="px-6 py-4">{{ v.stok }}</td>
           <td class="px-6 py-4 space-x-2">
-            <a href="{% url 'vaccine_update_stock' v.kode %}" class="px-4 py-2 bg-blue1 text-white rounded-xl">Update Stock</a>
-            <a href="{% url 'vaccine_update' v.kode %}" class="px-4 py-2 bg-secondary text-black rounded-xl">Update</a>
-            <form method="post" action="{% url 'vaccine_delete' v.kode %}" style="display:inline">
-              {% csrf_token %}
-              <button type="submit" class="px-4 py-2 bg-red-500 text-white rounded-xl">Delete</button>
-            </form>
+            <!-- Update Buttons -->
+            <a href="{% url 'vaccines:vaccine_update_stock' v.kode %}" class="px-4 py-2 bg-blue1 text-white rounded-xl">Update Stock</a>
+            <a href="{% url 'vaccines:vaccine_update' v.kode %}" class="px-4 py-2 bg-secondary text-black rounded-xl">Update</a>
+
+            <!-- Delete Button -->
+            <button onclick="document.getElementById('modal-delete-{{ v.kode }}').classList.remove('hidden')"
+                    class="px-4 py-2 bg-red-500 text-white rounded-xl">Delete</button>
+
+            <!-- Modal Delete -->
+            <div id="modal-delete-{{ v.kode }}" class="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm hidden">
+              <div class="bg-white rounded-xl p-8 max-w-md w-full shadow-lg">
+                <h2 class="text-2xl font-bold text-red-600 mb-4">Delete Vaccine</h2>
+                <p class="text-lg text-black mb-6">
+                  Apakah kamu yakin untuk menghapus Vaksin
+                  <span class="font-semibold text-red-600">{{ v.nama }}</span>
+                  dengan <span class="font-semibold text-red-600">{{ v.kode }}</span>?
+                </p>
+
+                <form method="post" action="{% url 'vaccines:vaccine_delete' v.kode %}" class="flex justify-end gap-4">
+                  {% csrf_token %}
+                  <button type="button"
+                          onclick="document.getElementById('modal-delete-{{ v.kode }}').classList.add('hidden')"
+                          class="px-6 py-2 rounded-xl bg-blue4 text-black font-medium outline outline-1 outline-primary hover:opacity-90">
+                    Cancel
+                  </button>
+                  <button type="submit"
+                          class="px-6 py-2 rounded-xl bg-red-500 text-white font-medium hover:bg-red-600">
+                    Confirm Deletion
+                  </button>
+                </form>
+              </div>
+            </div>
           </td>
         </tr>
         {% empty %}

@@ -4,40 +4,55 @@
     <!-- Logo & Title -->
     <a href="{% url 'main:landing_page' %}" class="flex items-center gap-2">
       <img src="{% static 'images/Logo_Basdat_03.svg' %}" alt="Logo" class="w-8 h-8"/>
-      <span class="text-xl font-semibold">Pet Clinic – 03</span>
+      <span class="text-xl font-semibold">Pet Clinic - 03</span>
     </a>
+    <!-- Toggle Mobile Menu Button -->
+    <button class="lg:hidden focus:outline-none" data-toggle="mobileMenu" aria-label="Toggle menu">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none"
+          viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M4 6h16M4 12h16M4 18h16" />
+      </svg>
+    </button>
 
     <!-- Desktop Menu -->
     <div class="hidden lg:flex space-x-6 items-center">
       {% if request.session.user_email %}
         {% if request.session.role == 'individu' or request.session.role == 'perusahaan' %}
           <a href="{% url 'main:dashboard_klien' %}" class="hover:text-gray-300">Dashboard</a>
-          <a href="{% url 'hewan:kelola_hewan' %}" class="hover:text-gray-300">Kelola Hewan Peliharaan</a>
+          <a href="{% url 'hewan:HewanPeliharaan_list' %}" class="hover:text-gray-300">Kelola Hewan Peliharaan</a>
           <a href="{% url 'hijau:table_kunjungan' %}" class="hover:text-gray-300">Daftar Kunjungan</a>
-          <a href="{% url 'vaccinations:table' %}" class="hover:text-gray-300">Daftar Vaksinasi</a>
+          <a href="{% url 'vaccinations:vaccination_list' %}" class="hover:text-gray-300">Daftar Vaksinasi</a>
+          <a href="{% url 'biru:list_medicine' %}" class="hover:text-gray-300">Manajemen Obat</a>
+          <a href="{% url 'biru:list_treatment_type' %}" class="hover:text-gray-300">Jenis Perawatan</a>
+          <a href="{% url 'biru:list_prescriptions' %}" class="hover:text-gray-300">Pemberian Obat</a>
 
         {% elif request.session.role == 'frontdesk' %}
           <a href="{% url 'main:dashboard_frontdesk' %}" class="hover:text-gray-300">Dashboard</a>
-          <a href="{% url 'jenis:jenis_list' %}" class="hover:text-gray-300">Kelola Jenis Hewan</a>
-          <a href="{% url 'hewan:kelola_hewan' %}" class="hover:text-gray-300">Kelola Hewan Peliharaan</a>
+          <a href="{% url 'jenis:JenisHewan_list' %}" class="hover:text-gray-300">Kelola Jenis Hewan</a>
+          <a href="#">Kelola Hewan Peliharaan</a>
           <a href="{% url 'hijau:table_kunjungan' %}" class="hover:text-gray-300">Kelola Kunjungan</a>
-          <a href="{% url 'main:klien_list' %}" class="hover:text-gray-300">Daftar Klien</a>
+          <a href="{% url 'client_pet:list' %}" class="hover:text-gray-300">Daftar Klien</a>
+          <a href="{% url 'biru:list_medicine' %}" class="hover:text-gray-300">Manajemen Obat</a>
+          <a href="{% url 'biru:list_treatment_type' %}" class="hover:text-gray-300">Jenis Perawatan</a>
+          <a href="{% url 'biru:list_prescriptions' %}" class="hover:text-gray-300">Pemberian Obat</a>
 
         {% elif request.session.role == 'dokter' %}
           <a href="{% url 'main:dashboard_dokterhewan' %}" class="hover:text-gray-300">Dashboard</a>
-          <a href="{% url 'jenis:jenis_list' %}" class="hover:text-gray-300">Daftar Jenis Hewan</a>
+          <a href="{% url 'jenis:JenisHewan_list' %}" class="hover:text-gray-300">Daftar Jenis Hewan</a>
           <a href="{% url 'hijau:table_treatment' %}" class="hover:text-gray-300">Perawatan Hewan</a>
           <a href="{% url 'hijau:table_kunjungan' %}" class="hover:text-gray-300">Daftar Kunjungan</a>
-          <a href="#">Manajemen Obat</a>
-          <a href="#">Jenis Perawatan</a>
-          <a href="#">Pemberian Obat</a>
-          <a href="#">Vaksinasi Hewan</a>
+          <a href="{% url 'biru:list_medicine' %}" class="hover:text-gray-300">Manajemen Obat</a>
+          <a href="{% url 'biru:list_treatment_type' %}" class="hover:text-gray-300">Jenis Perawatan</a>
+          <a href="{% url 'biru:list_prescriptions' %}" class="hover:text-gray-300">Pemberian Obat</a>
+          <a href="{% url 'vaccinations:vaccination_list' %}" class="hover:text-gray-300">Manajemen Vaksinasi Hewan</a>
 
         {% elif request.session.role == 'perawat' %}
           <a href="{% url 'main:dashboard_perawat' %}" class="hover:text-gray-300">Dashboard</a>
-          <a href="#">Manajemen Obat</a>
-          <a href="#">Jenis Perawatan</a>
-          <a href="#">Manajemen Vaksin</a>
+          <a href="{% url 'biru:list_medicine' %}" class="hover:text-gray-300">Manajemen Obat</a>
+          <a href="{% url 'biru:list_treatment_type' %}" class="hover:text-gray-300">Jenis Perawatan</a>
+          <a href="{% url 'biru:list_prescriptions' %}" class="hover:text-gray-300">Pemberian Obat</a>
+          <a href="{% url 'vaccines:vaccine_list' %}" class="block text-white">Manajemen Vaksin</a>
         {% endif %}
         <a href="{% url 'authentication:logout' %}" class="hover:text-red-400 font-semibold">Logout</a>
       {% else %}
@@ -52,32 +67,39 @@
     {% if request.session.user_email %}
       {% if request.session.role == 'individu' or request.session.role == 'perusahaan' %}
         <a href="{% url 'main:dashboard_klien' %}" class="block text-white">Dashboard</a>
-        <a href="{% url 'hewan:kelola_hewan' %}" class="block text-white">Kelola Hewan</a>
+        <a href="{% url 'hewan:HewanPeliharaan_list' %}" class="block text-white">Kelola Hewan</a>
         <a href="{% url 'hijau:table_kunjungan' %}" class="block text-white">Kunjungan</a>
-        <a href="{% url 'vaccinations:table' %}" class="block text-white">Vaksinasi</a>
+        <a href="{% url 'vaccinations:vaccination_list' %}" class="block text-white">Vaksinasi</a>
+        <a href="{% url 'biru:list_medicine' %}" class="hover:text-gray-300">Manajemen Obat</a>
+        <a href="{% url 'biru:list_treatment_type' %}" class="hover:text-gray-300">Jenis Perawatan</a>
+        <a href="{% url 'biru:list_prescriptions' %}" class="hover:text-gray-300">Pemberian Obat</a>        
 
       {% elif request.session.role == 'frontdesk' %}
         <a href="{% url 'main:dashboard_frontdesk' %}" class="block text-white">Dashboard</a>
-        <a href="{% url 'jenis:jenis_list' %}" class="block text-white">Jenis Hewan</a>
-        <a href="{% url 'hewan:kelola_hewan' %}" class="block text-white">Hewan</a>
+        <a href="{% url 'jenis:JenisHewan_list' %}" class="block text-white">Jenis Hewan</a>
+        <a href="{% url 'hewan:HewanPeliharaan_list' %}" class="block text-white">Hewan</a>
         <a href="{% url 'hijau:table_kunjungan' %}" class="block text-white">Kunjungan</a>
-        <a href="{% url 'main:klien_list' %}" class="block text-white">Klien</a>
+        <a href="{% url 'client_pet:list' %}" class="block text-white">Klien</a>
+        <a href="{% url 'biru:list_medicine' %}" class="hover:text-gray-300">Manajemen Obat</a>
+        <a href="{% url 'biru:list_treatment_type' %}" class="hover:text-gray-300">Jenis Perawatan</a>
+        <a href="{% url 'biru:list_prescriptions' %}" class="hover:text-gray-300">Pemberian Obat</a>
 
       {% elif request.session.role == 'dokter' %}
         <a href="{% url 'main:dashboard_dokterhewan' %}" class="block text-white">Dashboard</a>
-        <a href="{% url 'jenis:jenis_list' %}" class="block text-white">Jenis Hewan</a>
+        <a href="{% url 'jenis:JenisHewan_list' %}" class="block text-white">Jenis Hewan</a>
         <a href="{% url 'hijau:table_treatment' %}" class="block text-white">Perawatan</a>
         <a href="{% url 'hijau:table_kunjungan' %}" class="block text-white">Kunjungan</a>
-        <a href="#" class="block text-white">Manajemen Obat</a>
-        <a href="#" class="block text-white">Jenis Perawatan</a>
-        <a href="#" class="block text-white">Pemberian Obat</a>
-        <a href="#" class="block text-white">Vaksinasi</a>
+        <a href="{% url 'biru:list_medicine' %}" class="hover:text-gray-300">Manajemen Obat</a>
+        <a href="{% url 'biru:list_treatment_type' %}" class="hover:text-gray-300">Jenis Perawatan</a>
+        <a href="{% url 'biru:list_prescriptions' %}" class="hover:text-gray-300">Pemberian Obat</a>
+        <a href="{% url 'vaccinations:vaccination_list' %}" class="block text-white">Manajemen Vaksinasi Hewan</a>
 
       {% elif request.session.role == 'perawat' %}
         <a href="{% url 'main:dashboard_perawat' %}" class="block text-white">Dashboard</a>
-        <a href="#" class="block text-white">Manajemen Obat</a>
-        <a href="#" class="block text-white">Jenis Perawatan</a>
-        <a href="#" class="block text-white">Vaksinasi</a>
+        <a href="{% url 'biru:list_medicine' %}" class="hover:text-gray-300">Manajemen Obat</a>
+        <a href="{% url 'biru:list_treatment_type' %}" class="hover:text-gray-300">Jenis Perawatan</a>
+        <a href="{% url 'biru:list_prescriptions' %}" class="hover:text-gray-300">Pemberian Obat</a>
+        <a href="{% url 'vaccines:vaccine_list' %}" class="block text-white">Manajemen Vaksin</a>
       {% endif %}
       <a href="{% url 'authentication:logout' %}" class="block text-red-400 font-semibold">Logout</a>
     {% else %}

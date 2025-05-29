@@ -3,19 +3,59 @@ from django.contrib import messages
 from django.views.decorators.http import require_POST
 from django.db.models import Q
 from django.db import connection
-from main.models import Kunjungan, Vaksin  
+from main.models import DokterHewan, Kunjungan, Vaksin
+import locale
 
 def vaccination_list(request):
-    vaksinasi = Kunjungan.objects.filter(kode_vaksin__isnull=False)
+    # Ambil sesi user
+    no_tenaga_medis = request.session.get('no_tenaga_medis')
+    if not no_tenaga_medis:
+        return redirect('authentication:login')
 
+    # Validasi role: hanya dokter hewan yang boleh mengakses
+    with connection.cursor() as cursor:
+        cursor.execute("""
+            SELECT COUNT(*) 
+            FROM pet_clinic."DOKTER_HEWAN"
+            WHERE no_tenaga_medis = %s
+        """, [no_tenaga_medis])
+        is_dokter = cursor.fetchone()[0] > 0
+
+    if not is_dokter:
+        return redirect('authentication:login')
+
+    # Ambil data vaksinasi milik dokter login
+    with connection.cursor() as cursor:
+        cursor.execute("""
+            SELECT 
+                k.id_kunjungan, 
+                k.timestamp_awal, 
+                v.kode, 
+                v.nama
+            FROM pet_clinic."KUNJUNGAN" k
+            LEFT JOIN pet_clinic."VAKSIN" v ON k.kode_vaksin = v.kode
+            WHERE k.kode_vaksin IS NOT NULL
+              AND k.no_dokter_hewan = %s
+            ORDER BY k.timestamp_awal DESC
+        """, [no_tenaga_medis])
+        rows = cursor.fetchall()
+
+    # Set locale ke Bahasa Indonesia jika tersedia
+    try:
+        locale.setlocale(locale.LC_TIME, 'id_ID.UTF-8')
+    except locale.Error:
+        pass  # fallback: tetap pakai format default jika locale tidak tersedia
+
+    # Format data untuk template
     data = []
-    for i, item in enumerate(vaksinasi, start=1):
-        vaksin = Vaksin.objects.filter(kode=item.kode_vaksin).first()
+    for i, row in enumerate(rows, start=1):
+        tanggal = row[1].strftime('%A, %-d %B %Y') if row[1] else "-"
+        vaksin_info = f"{row[2]} - {row[3]}" if row[2] and row[3] else "N/A"
         data.append({
             'no': i,
-            'kunjungan': item.id_kunjungan,
-            'tanggal': item.timestamp_awal.strftime('%A, %-d %B %Y'),
-            'vaksin': f'{vaksin.kode} - {vaksin.nama}' if vaksin else 'N/A'
+            'kunjungan': row[0],
+            'tanggal': tanggal,
+            'vaksin': vaksin_info
         })
 
     return render(request, 'vaccinations_list.html', {
