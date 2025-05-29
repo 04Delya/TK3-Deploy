@@ -76,6 +76,11 @@ def login_view(request):
     return render(request, 'login.html')
 
 
+def register_selection(request):
+    """Display the registration options page"""
+    return render(request, 'register.html')
+
+
 def register_individual(request):
     if request.method == 'POST':
         email = request.POST.get('email')
