@@ -3,7 +3,6 @@ from django.contrib import messages
 from django.db import connection
 import uuid
 from datetime import date
-from django.views.decorators.http import require_http_methods
 
 def login_view(request):
     if request.method == 'POST':
@@ -76,10 +75,7 @@ def login_view(request):
 
     return render(request, 'login.html')
 
-def register_selection(request):
-    return render(request, 'register.html')
 
-@require_http_methods(["GET", "POST"])
 def register_individual(request):
     if request.method == 'POST':
         email = request.POST.get('email')
@@ -120,12 +116,12 @@ def register_individual(request):
 
                 messages.success(request, 'Registrasi berhasil! Silakan login.')
                 return redirect('authentication:login')
-
             except Exception as e:
                 messages.error(request, f'Terjadi kesalahan: {str(e)}')
                 return render(request, 'register_individual.html')
 
     return render(request, 'register_individual.html')
+
 
 def register_company(request):
     if request.method == 'POST':
@@ -146,7 +142,7 @@ def register_company(request):
                 return render(request, 'register_company.html')
 
             try:
-                klien_id = uuid.uuid4()
+                klien_id = str(uuid.uuid4())
                 cursor.execute('BEGIN')
                 cursor.execute("""
                     INSERT INTO "pet_clinic"."USER"(email, password, alamat, nomor_telepon)
@@ -171,6 +167,7 @@ def register_company(request):
 
     return render(request, 'register_company.html')
 
+
 def register_frontdesk(request):
     if request.method == 'POST':
         email = request.POST.get('email')
@@ -190,8 +187,8 @@ def register_frontdesk(request):
                 return render(request, 'register_frontdesk.html')
 
             try:
-                pegawai_id = uuid.uuid4()
-                frontdesk_id = uuid.uuid4()
+                pegawai_id = str(uuid.uuid4())
+                frontdesk_id = str(uuid.uuid4())
 
                 cursor.execute('BEGIN')
                 cursor.execute("""
@@ -217,6 +214,7 @@ def register_frontdesk(request):
 
     return render(request, 'register_frontdesk.html')
 
+
 def register_vet(request):
     if request.method == 'POST':
         no_izin = request.POST.get('no_izin')
@@ -237,9 +235,9 @@ def register_vet(request):
                 return render(request, 'register_vet.html')
 
             try:
-                pegawai_id = uuid.uuid4()
-                tenaga_id = uuid.uuid4()
-                dokter_id = uuid.uuid4()
+                pegawai_id = str(uuid.uuid4())
+                tenaga_id = str(uuid.uuid4())
+                dokter_id = str(uuid.uuid4())
 
                 cursor.execute('BEGIN')
                 cursor.execute("""
@@ -270,6 +268,7 @@ def register_vet(request):
 
     return render(request, 'register_vet.html')
 
+
 def register_nurse(request):
     if request.method == 'POST':
         no_izin = request.POST.get('no_izin')
@@ -290,9 +289,9 @@ def register_nurse(request):
                 return render(request, 'register_nurse.html')
 
             try:
-                pegawai_id = uuid.uuid4()
-                tenaga_id = uuid.uuid4()
-                perawat_id = uuid.uuid4()
+                pegawai_id = str(uuid.uuid4())
+                tenaga_id = str(uuid.uuid4())
+                perawat_id = str(uuid.uuid4())
 
                 cursor.execute('BEGIN')
                 cursor.execute("""
@@ -323,8 +322,8 @@ def register_nurse(request):
 
     return render(request, 'register_nurse.html')
 
+
 def logout_view(request):
-    # Menghapus seluruh session user 
     request.session.flush()
     messages.success(request, "Anda berhasil logout.")
     return redirect('main:landing_page')
