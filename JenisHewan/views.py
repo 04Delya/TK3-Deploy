@@ -2,7 +2,8 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.http import JsonResponse
 from main.models import JenisHewan, Hewan  # Use main models that connect to Supabase
 from django.contrib import messages
-from django.db import connection
+from django.db import connection, IntegrityError
+from psycopg2 import Error as PostgreSQLError
 import uuid
 
 # Create your views here.
@@ -36,6 +37,12 @@ def jenis_hewan_create(request):
                 messages.success(request, f'Jenis hewan "{nama}" berhasil ditambahkan!')
                 return redirect('jenis:JenisHewan_list')
                 
+            except PostgreSQLError as e:
+                # Extract error message from PostgreSQL trigger
+                error_msg = str(e).strip()
+                if "ERROR:" in error_msg:
+                    error_msg = error_msg.split("ERROR:")[-1].strip()
+                messages.error(request, error_msg)
             except Exception as e:
                 messages.error(request, f'Gagal menambahkan jenis hewan: {str(e)}')
         else:
@@ -49,7 +56,6 @@ def jenis_hewan_update(request, id):
     except JenisHewan.DoesNotExist:
         messages.error(request, 'Jenis hewan tidak ditemukan.')
         return redirect('jenis:JenisHewan_list')
-    
     if request.method == 'POST':
         nama = request.POST.get('nama')
         if nama:
@@ -64,6 +70,12 @@ def jenis_hewan_update(request, id):
                 messages.success(request, f'Jenis hewan berhasil diupdate menjadi "{nama}"!')
                 return redirect('jenis:JenisHewan_list')
                 
+            except PostgreSQLError as e:
+                # Extract error message from PostgreSQL trigger
+                error_msg = str(e).strip()
+                if "ERROR:" in error_msg:
+                    error_msg = error_msg.split("ERROR:")[-1].strip()
+                messages.error(request, error_msg)
             except Exception as e:
                 messages.error(request, f'Gagal mengupdate jenis hewan: {str(e)}')
         else:

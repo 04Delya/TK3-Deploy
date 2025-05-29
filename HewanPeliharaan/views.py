@@ -2,7 +2,8 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.http import JsonResponse
 from main.models import Hewan, JenisHewan, Klien  # Use main models that connect to Supabase
 from django.contrib import messages
-from django.db import connection
+from django.db import connection, IntegrityError
+from psycopg2 import Error as PostgreSQLError
 from django.urls import reverse
 import uuid
 
@@ -116,27 +117,36 @@ def hewan_create(request):
 
         if nama and tanggal_lahir and jenis_hewan_id and pemilik_id:
             try:
-                # Check if animal name already exists for this owner
-                existing_hewan = Hewan.objects.filter(nama=nama, no_identitas_klien=pemilik_id).first()
-                if existing_hewan:
-                    messages.error(request, f'Hewan dengan nama "{nama}" sudah ada untuk pemilik ini.')
-                else:
-                    # Use raw SQL to insert into Supabase
-                    with connection.cursor() as cursor:
+                # Check if animal name already exists for this owner using raw SQL
+                with connection.cursor() as cursor:
+                    cursor.execute(
+                        'SELECT COUNT(*) FROM pet_clinic."HEWAN" WHERE nama = %s AND no_identitas_klien = %s',
+                        [nama, str(pemilik_id)]
+                    )
+                    if cursor.fetchone()[0] > 0:
+                        messages.error(request, f'Hewan dengan nama "{nama}" sudah ada untuk pemilik ini.')
+                    else:
+                        # Use raw SQL to insert into Supabase
                         cursor.execute(
                             'INSERT INTO pet_clinic."HEWAN" (nama, no_identitas_klien, tanggal_lahir, id_jenis, url_foto) VALUES (%s, %s, %s, %s, %s)',
                             [nama, str(pemilik_id), tanggal_lahir, str(jenis_hewan_id), foto_url or '']
                         )
-                    # Ensure transaction is committed
-                    connection.commit()
-                    messages.success(request, f'Hewan "{nama}" berhasil ditambahkan!')
-                    if user_role == 'frontdesk':
-                        return redirect('hewan:HewanPeliharaan_list')
-                    else:
-                        from django.urls import reverse
-                        redirect_url = reverse('hewan:HewanPeliharaan_list') + f"?role={user_role}&klien_id={pemilik_id}"
-                        return redirect(redirect_url)
+                        # Ensure transaction is committed
+                        connection.commit()
+                        messages.success(request, f'Hewan "{nama}" berhasil ditambahkan!')
+                        if user_role == 'frontdesk':
+                            return redirect('hewan:HewanPeliharaan_list')
+                        else:
+                            from django.urls import reverse
+                            redirect_url = reverse('hewan:HewanPeliharaan_list') + f"?role={user_role}&klien_id={pemilik_id}"
+                            return redirect(redirect_url)
                     
+            except PostgreSQLError as e:
+                # Extract error message from PostgreSQL trigger
+                error_msg = str(e).strip()
+                if "ERROR:" in error_msg:
+                    error_msg = error_msg.split("ERROR:")[-1].strip()
+                messages.error(request, error_msg)
             except Exception as e:
                 messages.error(request, f'Gagal menambahkan hewan: {str(e)}')
         else:
@@ -221,8 +231,7 @@ def hewan_update(request, id):
                             )
                             cursor.execute(
                                 'INSERT INTO pet_clinic."HEWAN" (nama, no_identitas_klien, tanggal_lahir, id_jenis, url_foto) VALUES (%s, %s, %s, %s, %s)',
-                                [nama, str(pemilik_id), tanggal_lahir, str(jenis_hewan_id), foto_url or '']
-                            )
+                                [nama, str(pemilik_id), tanggal_lahir, str(jenis_hewan_id), foto_url or '']                            )
                     
                     messages.success(request, f'Hewan berhasil diupdate!')
                     if user_role == 'frontdesk':
@@ -230,7 +239,13 @@ def hewan_update(request, id):
                     else:
                         redirect_url = reverse('hewan:HewanPeliharaan_list') + f"?role={user_role}&klien_id={pemilik_id}"
                         return redirect(redirect_url)
-                    
+                        
+            except PostgreSQLError as e:
+                # Extract error message from PostgreSQL trigger
+                error_msg = str(e).strip()
+                if "ERROR:" in error_msg:
+                    error_msg = error_msg.split("ERROR:")[-1].strip()
+                messages.error(request, error_msg)
             except Exception as e:
                 messages.error(request, f'Gagal mengupdate hewan: {str(e)}')
         else:
@@ -277,7 +292,8 @@ def hewan_delete(request, id):
     
     if user_role != 'frontdesk':
         return redirect('hewan:HewanPeliharaan_list')
-      # Parse composite ID to get hewan name and klien id
+    
+    # Parse composite ID to get hewan name and klien id
     try:
         parts = id.split('_', 1)
         hewan_nama = parts[0]
@@ -289,22 +305,8 @@ def hewan_delete(request, id):
     
     if request.method == 'POST':
         try:
-            # Check if this animal has any visits before deleting using raw SQL
+            # Delete using raw SQL - the trigger will check for active visits
             with connection.cursor() as cursor:
-                cursor.execute(
-                    'SELECT COUNT(*) FROM pet_clinic."KUNJUNGAN" WHERE nama_hewan = %s AND no_identitas_klien = %s',
-                    [hewan_nama, str(hewan_klien_id)]
-                )
-                visits_count = cursor.fetchone()[0]
-                
-                if visits_count > 0:
-                    messages.error(request, f'Tidak dapat menghapus hewan ini karena memiliki {visits_count} kunjungan.')
-                    redirect_url = reverse('hewan:HewanPeliharaan_list')
-                    if user_role != 'frontdesk' and klien_id:
-                        redirect_url += f"?role={user_role}&klien_id={klien_id}"
-                    return redirect(redirect_url)
-                
-                # Delete using raw SQL
                 cursor.execute(
                     'DELETE FROM pet_clinic."HEWAN" WHERE nama = %s AND no_identitas_klien = %s',
                     [hewan_nama, str(hewan_klien_id)]
@@ -313,11 +315,20 @@ def hewan_delete(request, id):
             messages.success(request, f'Hewan "{hewan_nama}" berhasil dihapus!')
             return redirect('hewan:HewanPeliharaan_list')
             
+        except PostgreSQLError as e:
+            # Extract error message from PostgreSQL trigger
+            error_msg = str(e).strip()
+            if "ERROR:" in error_msg:
+                error_msg = error_msg.split("ERROR:")[-1].strip()
+            messages.error(request, error_msg)
+            redirect_url = reverse('hewan:HewanPeliharaan_list')
+            if user_role != 'frontdesk' and klien_id:
+                redirect_url += f"?role={user_role}&klien_id={klien_id}"
+            return redirect(redirect_url)
         except Exception as e:
             messages.error(request, f'Gagal menghapus hewan: {str(e)}')
-            # Redirect back to the list, possibly with role and klien_id if needed
             redirect_url = reverse('hewan:HewanPeliharaan_list')
-            if user_role != 'frontdesk' and klien_id: # Should not happen
+            if user_role != 'frontdesk' and klien_id:
                  redirect_url += f"?role={user_role}&klien_id={klien_id}"
             return redirect(redirect_url)
     
