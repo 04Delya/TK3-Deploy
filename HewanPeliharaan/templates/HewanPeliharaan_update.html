@@ -32,10 +32,9 @@
                 <label for="jenis_hewan" class="block text-gray-700 text-sm font-bold mb-2">Jenis Hewan:</label>
                 <select id="jenis_hewan" name="jenis_hewan" required
                     class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
-                    <option value="">--- Pilih Jenis Hewan ---</option>
-                    {% for jenis in jenis_hewan %}
+                    <option value="">--- Pilih Jenis Hewan ---</option>                    {% for jenis in jenis_hewan %}
                     <option value="{{ jenis.id }}" {% if jenis.id == hewan.jenis_hewan.id %}selected{% endif %}>
-                        {{ jenis.nama }}
+                        {{ jenis.nama_jenis }}
                     </option>
                     {% endfor %}
                 </select>
