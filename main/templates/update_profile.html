@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block title %}Update Profile{% endblock %}
+
+{% block content %}
+<div class="bg-gray3 flex justify-center items-start pt-12 pb-12 px-4">
+  <div class="w-full max-w-xl bg-gray2 p-8 rounded-3xl shadow-xl">
+    <h2 class="text-3xl font-bold text-black mb-6">Update Profile</h2>
+
+    <form method="POST" class="space-y-6">
+      {% csrf_token %}
+
+      <!-- Nama Depan -->
+      <div>
+        <label for="first_name" class="block text-xl font-medium text-black mb-2">Nama Depan</label>
+        <input id="first_name" name="first_name" type="text" value="{{ first_name }}"
+               required
+               class="w-full bg-white p-3 rounded-lg text-black font-medium text-lg focus:outline-none"/>
+      </div>
+
+      <!-- Nama Tengah -->
+      <div>
+        <label for="middle_name" class="block text-xl font-medium text-black mb-2">Nama Tengah</label>
+        <input id="middle_name" name="middle_name" type="text" value="{{ middle_name }}"
+               class="w-full bg-white p-3 rounded-lg text-black font-medium text-lg focus:outline-none"/>
+      </div>
+
+      <!-- Nama Belakang -->
+      <div>
+        <label for="last_name" class="block text-xl font-medium text-black mb-2">Nama Belakang</label>
+        <input id="last_name" name="last_name" type="text" value="{{ last_name }}"
+               required
+               class="w-full bg-white p-3 rounded-lg text-black font-medium text-lg focus:outline-none"/>
+      </div>
+
+      <!-- Tombol Aksi -->
+      <div class="flex justify-end space-x-4 pt-4">
+        <!-- Cancel pakai history.back() -->
+        <button type="button"
+                onclick="history.back()"
+                class="px-6 py-3 bg-blue4 text-black font-medium rounded-xl outline outline-1 outline-primary hover:opacity-90 transition">
+          Cancel
+        </button>
+
+        <!-- Simpan perubahan -->
+        <button type="submit"
+                class="px-6 py-3 bg-primary text-white font-medium rounded-xl outline outline-1 outline-blue1 hover:opacity-90">
+          Update Profile
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

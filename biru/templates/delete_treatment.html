@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Delete Treatment Type</title>
+  <style>
+    body {
+      margin: 0;
+      background: #222;
+      font-family: Poppins, sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+
+    .modal {
+      position: relative;
+      width: 580px;
+      background: #FBF9F1;
+      border-radius: 24px;
+      padding: 40px 32px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+      overflow: hidden;
+    }
+
+    /* faint background pattern */
+    .modal::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: url('https://placehold.co/718x718') no-repeat bottom right;
+      background-size: cover;
+      opacity: 0.08;
+      transform: rotate(180deg);
+      pointer-events: none;
+    }
+
+    .modal > * {
+      position: relative; /* sit above pseudo-bg */
+    }
+
+    .modal .close {
+      position: absolute;
+      top: 20px; right: 20px;
+      width: 24px; height: 24px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 24px;
+      line-height: 1;
+    }
+
+    .modal h2 {
+      margin: 0 0 32px;
+      font-size: 36px;
+      font-weight: 700;
+      color: #FF0000;
+    }
+
+    .modal p {
+      margin: 0 0 24px;
+      font-size: 24px;
+      font-weight: 500;
+      color: #000;
+    }
+
+    .highlight {
+      color: #FF0000;
+      font-weight: 500;
+    }
+
+    .actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 12px;
+    }
+
+    .btn {
+      min-width: 150px;
+      height: 48px;
+      padding: 0 24px;
+      font-size: 16px;
+      font-weight: 500;
+      border-radius: 20px;
+      border: none;
+      cursor: pointer;
+    }
+
+    .btn.cancel {
+      background: #C6E7FF;
+      border: 1px solid #6FA6D0;
+      color: #000;
+    }
+
+    .btn.confirm {
+      background: #FF0000;
+      border: 1px solid #FF0000;
+      color: #F6F8FF;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="modal">
+    <button class="close" aria-label="Close">×</button>
+    <h2>Delete Treatment Type</h2>
+    <p>Apakah kamu yakin untuk menghapus jenis perawatan <span class="highlight">Dental Care</span> dengan Kode <span class="highlight">TRM001</span>?</p>
+
+    <div class="actions">
+      <button class="btn cancel">Cancel</button>
+      <button class="btn confirm">Confirm Deletion</button>
+    </div>
+  </div>
+
+</body>
+</html>

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Delete Kunjungan</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-800 flex items-center justify-center min-h-screen">
+
+  <form method="POST" class="w-[400px] bg-stone-100 rounded-[40px] p-6 relative shadow-md"
+        style="background-image: url('https://placehold.co/1208x1192'); background-size: cover; background-blend-mode: lighten; opacity: 0.95;">
+    {% csrf_token %}
+
+    <!-- Tombol X -->
+    <a href="{% url 'hijau:table_kunjungan' %}" class="absolute top-4 right-4 text-black text-2xl font-bold">×</a>
+
+    <!-- Judul -->
+    <h1 class="text-2xl font-bold text-center text-zinc-900 mb-6 font-['Poppins']">Delete Kunjungan</h1>
+
+    <!-- Pesan Konfirmasi -->
+    <p class="text-center text-2xl font-medium text-black font-['Poppins'] leading-relaxed px-2">
+      Apakah kamu yakin ingin menghapus KUNJUNGAN dengan ID
+      <span class="text-red-600 font-semibold">{{ kunjungan.id_kunjungan }}</span>?
+    </p>
+
+    <!-- Tombol -->
+    <div class="flex justify-center gap-4 mt-10">
+      <a href="{% url 'hijau:table_kunjungan' %}">
+        <button type="button" class="bg-blue-100 text-slate-600 px-6 py-2 rounded-xl text-base font-medium border border-slate-400">
+          Cancel
+        </button>
+      </a>
+      <button type="submit" class="bg-red-600 text-white px-6 py-2 rounded-xl text-base font-medium">
+        Confirm Deletion
+      </button>
+    </div>
+  </form>
+
+</body>
+</html>

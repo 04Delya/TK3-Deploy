@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Rekam Medis Tidak Tersedia</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+    }
+  </style>
+</head>
+<body class="bg-gray-800 flex items-center justify-center min-h-screen">
+
+  <div class="w-[653px] h-72 bg-[#FFF6E5] rounded-3xl p-8 relative shadow-md"
+       style="background-image: url('https://placehold.co/718x718'); background-size: cover; background-repeat: no-repeat; background-position: center; background-blend-mode: lighten;">
+
+    <!-- Tombol Close -->
+    <a href="{% url 'hijau:table_kunjungan' %}" class="absolute top-4 right-4 text-black text-xl font-bold">&times;</a>
+
+    <!-- Konten modal -->
+    <div class="flex flex-col justify-between h-full">
+      
+      <!-- Judul dan isi pesan -->
+      <div>
+        <h1 class="text-2xl font-bold text-[#F60000] mb-2">
+          Rekam Medis Tidak Tersedia
+        </h1>
+        <p class="text-lg font-medium text-[#222222] leading-relaxed">
+          Maaf, sepertinya belum ada rekam medis yang dibuat untuk kunjungan ini.
+        </p>
+      </div>
+
+      <!-- Tombol -->
+      <div class="flex justify-end gap-3 mt-6">
+        <a href="{% url 'hijau:create_rekammedis' id_kunjungan %}">
+          <button class="bg-[#D2E9FA] text-black px-6 py-2 rounded-full text-sm font-medium shadow-sm hover:bg-[#bde2fc]">
+            Create
+          </button>
+        </a>
+        <a href="{% url 'hijau:table_kunjungan' %}">
+          <button class="bg-[#81B3D9] text-white px-6 py-2 rounded-full text-sm font-medium shadow-sm hover:bg-[#6fa6d3]">
+            OK
+          </button>
+        </a>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>

@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}List Kunjungan{% endblock %}
+
+{% block content %}
+<div class="p-10">
+  <div class="bg-orange-50 border-[10px] border-slate-400 rounded-[65px] px-10 py-8 shadow-md relative overflow-hidden" style="background-image: url('https://placehold.co/1440x1440'); background-size: cover; background-blend-mode: lighten; background-repeat: no-repeat; opacity: 1;">
+    <div class="overflow-x-auto rounded-lg">
+      <table class="min-w-full text-sm text-left border border-zinc-400">
+        <thead class="bg-white font-semibold text-black">
+          <tr>
+            <th class="px-4 py-2 border border-zinc-400">No</th>
+            <th class="px-4 py-2 border border-zinc-400">ID Kunjungan</th>
+            <th class="px-4 py-2 border border-zinc-400">ID Klien</th>
+            <th class="px-4 py-2 border border-zinc-400">Nama Hewan</th>
+            <th class="px-4 py-2 border border-zinc-400">Metode Kunjungan</th>
+            <th class="px-4 py-2 border border-zinc-400">Waktu Mulai</th>
+            <th class="px-4 py-2 border border-zinc-400">Waktu Akhir</th>
+            <th class="px-4 py-2 border border-zinc-400">Rekam Medis</th>
+            <th class="px-4 py-2 border border-zinc-400 text-center">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for item in kunjungan_list %}
+          <tr class="bg-orange-50">
+            <td class="px-4 py-2 border border-zinc-400">{{ forloop.counter }}</td>
+            <td class="px-4 py-2 border border-zinc-400">{{ item.id_kunjungan }}</td>
+            <td class="px-4 py-2 border border-zinc-400">{{ item.no_identitas_klien }}</td>
+            <td class="px-4 py-2 border border-zinc-400">{{ item.nama_hewan }}</td>
+            <td class="px-4 py-2 border border-zinc-400">{{ item.tipe_kunjungan }}</td>
+            <td class="px-4 py-2 border border-zinc-400">{{ item.timestamp_awal|date:"d-m-Y H:i:s" }}</td>
+            <td class="px-4 py-2 border border-zinc-400">
+              {{ item.timestamp_akhir|default:"-"|date:"d-m-Y H:i:s" }}
+            </td>
+            <td class="px-4 py-2 border border-zinc-400">
+              <a href="{% url 'hijau:rekammedis' item.id_kunjungan %}">
+                <button class="px-3 py-1 bg-slate-500 text-white rounded-xl text-xs">Lihat Rekam Medis</button>
+              </a>
+            </td>
+            <td class="px-4 py-2 border border-zinc-400 flex gap-2 justify-center">
+              <a href="{% url 'hijau:update_kunjungan' item.id_kunjungan %}" 
+                class="px-3 py-1 bg-sky-200 border border-slate-500 rounded-xl text-xs hover:bg-sky-300 transition">
+                Update
+              </a>
+              <a href="{% url 'hijau:delete_kunjungan' item.id_kunjungan %}">
+                <button class="px-3 py-1 bg-red-300 rounded-xl text-xs font-medium border border-slate-500">
+                  Delete
+                </button>
+              </a>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Tombol Create -->
+    <div class="flex justify-end mt-8">
+      <a href="{% url 'hijau:create_kunjungan' %}" class="flex items-center gap-2 bg-slate-400 text-white px-6 py-3 rounded-2xl outline outline-1 outline-slate-500 hover:bg-slate-500 transition">
+        <span class="text-base font-medium">+ Create New Kunjungan</span>
+      </a>
+    </div>
+  </div>
+</div>
+{% endblock %}

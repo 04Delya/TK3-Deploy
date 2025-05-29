@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}List Medicines - Pet Clinic{% endblock %}
+
+{% block content %}
+<section class="bg-[#FBF9F1] min-h-screen py-10 px-6 lg:px-14">
+  <div class="max-w-7xl mx-auto">
+    <div class="mb-6 max-w-md mx-auto">
+      <input type="text" placeholder="Search Medicine Name" class="w-full h-10 px-3 rounded-lg bg-gray-300 focus:outline-none" />
+    </div>
+
+    <h2 class="text-center text-3xl font-semibold font-poppins mb-8">List Medicines</h2>
+
+    {% if obat_list %}
+    <div class="overflow-x-auto">
+      <table class="w-full min-w-[900px] border-collapse border border-gray-300 text-center font-poppins">
+        <thead>
+          <tr class="bg-gray-300">
+            <th class="border border-gray-300 px-4 py-3">No</th>
+            <th class="border border-gray-300 px-4 py-3">Kode Obat</th>
+            <th class="border border-gray-300 px-4 py-3">Nama Obat</th>
+            <th class="border border-gray-300 px-4 py-3">Harga Satuan</th>
+            <th class="border border-gray-300 px-4 py-3">Stok</th>
+            <th class="border border-gray-300 px-4 py-3">Dosis</th>
+            <th class="border border-gray-300 px-4 py-3">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for obat in obat_list %}
+          <tr class="hover:bg-gray-100">
+            <td class="border border-gray-300 px-4 py-3">{{ forloop.counter }}</td>
+            <td class="border border-gray-300 px-4 py-3">{{ obat.kode }}</td>
+            <td class="border border-gray-300 px-4 py-3">{{ obat.nama }}</td>
+            <td class="border border-gray-300 px-4 py-3">Rp{{ obat.harga }}</td>
+            <td class="border border-gray-300 px-4 py-3">{{ obat.stok }}</td>
+            <td class="border border-gray-300 px-4 py-3">{{ obat.dosis }}</td>
+            <td class="border border-gray-300 px-4 py-3">
+              <div class="flex flex-wrap gap-2 justify-center">
+                <a href="{% url 'biru:update_stock_medicine' obat.kode %}"
+                   class="bg-[#547792] hover:bg-[#446377] transition text-white px-3 py-1 rounded-md text-sm font-medium">
+                   Update Stock
+                </a>
+                <a href="{% url 'biru:update_medicine' obat.kode %}"
+                   class="bg-[#547792] hover:bg-[#446377] transition text-white px-3 py-1 rounded-md text-sm font-medium">
+                   Update
+                </a>
+                <a href="{% url 'biru:delete_medicine' obat.kode %}"
+                   class="bg-gray-200 hover:bg-gray-300 transition text-black px-3 py-1 rounded-md text-sm font-medium">
+                   Delete
+                </a>
+              </div>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+      <p class="text-center text-lg font-poppins text-gray-600">No medicines available.</p>
+    {% endif %}
+
+    <a href="{% url 'biru:create_medicine' %}"
+       class="block w-max mx-auto mt-8 px-6 py-3 bg-[#6FA6D0] text-white rounded-xl font-medium hover:bg-[#5d95bb] transition">
+      Add New Medicine
+    </a>
+  </div>
+</section>
+{% endblock %}

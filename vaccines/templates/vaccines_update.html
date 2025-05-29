@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% block title %}Update Vaccine{% endblock %}
+
+{% block content %}
+<div class="bg-gray3 flex justify-center items-start pt-12 pb-12 px-4 min-h-screen">
+  <div class="w-full max-w-xl bg-gray2 p-8 rounded-3xl shadow-xl">
+    <h2 class="text-3xl font-bold text-black mb-6">Update Vaccine</h2>
+
+    <form method="POST" class="space-y-6">
+      {% csrf_token %}
+      <div>
+        <label for="id" class="block text-xl font-medium text-black mb-2">ID Vaksin</label>
+        <input type="text" id="id" name="id" value="{{ vaccine.id }}" readonly
+               class="w-full bg-gray4 text-black p-3 rounded-lg font-medium text-lg focus:outline-none cursor-not-allowed" />
+      </div>
+
+      <div>
+        <label for="name" class="block text-xl font-medium text-black mb-2">Nama Vaksin</label>
+        <input type="text" id="name" name="name" value="{{ vaccine.name }}"
+               class="w-full bg-white p-3 rounded-lg text-black font-medium text-lg focus:outline-none" />
+      </div>
+
+      <div>
+        <label for="price" class="block text-xl font-medium text-black mb-2">Harga</label>
+        <input type="number" id="price" name="price" value="{{ vaccine.price }}"
+               class="w-full bg-white p-3 rounded-lg text-black font-medium text-lg focus:outline-none" />
+      </div>
+
+      <div class="flex justify-end space-x-4 pt-4">
+        <a href="{% url 'vaccine_list' %}" class="px-6 py-3 bg-blue4 text-black font-medium rounded-xl outline outline-1 outline-primary hover:opacity-90 transition">Cancel</a>
+        <button type="submit" class="px-6 py-3 bg-secondary text-black font-medium rounded-xl outline outline-1 outline-blue1 hover:opacity-90 transition">Update</button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

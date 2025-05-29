@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}List Treatments{% endblock %}
+
+{% block content %}
+<div class="p-10">
+  <div class="bg-orange-50 border-[10px] border-slate-400 rounded-[65px] px-10 py-8 shadow-md relative overflow-hidden" style="background-image: url('https://placehold.co/1440x1440'); background-size: cover; background-blend-mode: lighten; background-repeat: no-repeat; opacity: 1;">
+    <h2 class="text-3xl font-semibold text-center mb-8">List Treatments</h2>
+
+    <div class="overflow-auto rounded-lg">
+      <table class="min-w-full text-sm text-left border border-zinc-400">
+        <thead class="bg-white text-black font-semibold">
+          <tr>
+            <th class="border border-zinc-400 px-4 py-2">No</th>
+            <th class="border border-zinc-400 px-4 py-2">Kunjungan</th>
+            <th class="border border-zinc-400 px-4 py-2">ID Klien</th>
+            <th class="border border-zinc-400 px-4 py-2">Nama Hewan</th>
+            <th class="border border-zinc-400 px-4 py-2">Perawat</th>
+            <th class="border border-zinc-400 px-4 py-2">Dokter</th>
+            <th class="border border-zinc-400 px-4 py-2">Front Desk</th>
+            <th class="border border-zinc-400 px-4 py-2">Jenis Perawatan</th>
+            <th class="border border-zinc-400 px-4 py-2">Catatan Medis</th>
+            <th class="border border-zinc-400 px-4 py-2 text-center">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for item in treatment_list %}
+          <tr class="bg-orange-50">
+            <td class="border border-zinc-400 px-4 py-2">{{ item.no }}</td>
+            <td class="border border-zinc-400 px-4 py-2">{{ item.id_kunjungan }}</td>
+            <td class="border border-zinc-400 px-4 py-2">{{ item.id_klien }}</td>
+            <td class="border border-zinc-400 px-4 py-2">{{ item.nama_hewan }}</td>
+            <td class="border border-zinc-400 px-4 py-2">{{ item.perawat }}</td>
+            <td class="border border-zinc-400 px-4 py-2">{{ item.dokter }}</td>
+            <td class="border border-zinc-400 px-4 py-2">{{ item.frontdesk }}</td>
+            <td class="border border-zinc-400 px-4 py-2">{{ item.jenis_perawatan }}</td>
+            <td class="border border-zinc-400 px-4 py-2">{{ item.catatan }}</td>
+            <td class="border border-zinc-400 px-4 py-2 flex gap-2 justify-center">
+             {% if item.id_kunjungan and item.nama_hewan and item.id_klien and item.frontdesk and item.perawat and item.dokter and item.kode_perawatan %}
+                <a href="{% url 'hijau:update_treatment' item.id_kunjungan %}">
+                  <button type="button" class="px-3 py-1 bg-sky-200 rounded-xl text-xs font-medium border border-slate-500">
+                    Update
+                  </button>
+                </a>
+              {% else %}
+                <span class="text-gray-400 italic text-xs">Data belum lengkap</span>
+              {% endif %}
+
+<a href="{% url 'hijau:delete_treatment' item.id_kunjungan item.kode_perawatan %}">
+  <button class="px-3 py-1 bg-red-300 rounded-xl text-xs font-medium border border-slate-500">
+    Delete
+  </button>
+</a>
+
+            </td>
+          </tr>
+
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Tombol Create -->
+    <div class="flex justify-end mt-8">
+      <a href="{% url 'hijau:create_treatment' %}" class="flex items-center gap-2 bg-slate-400 text-white px-6 py-3 rounded-2xl outline outline-1 outline-slate-500 hover:bg-slate-500 transition">
+        <span class="text-lg font-medium">+ Create New Treatment</span>
+      </a>
+    </div>
+  </div>
+</div>
+{% endblock %}

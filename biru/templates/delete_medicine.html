@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Delete Medicine - Pet Clinic{% endblock %}
+
+{% block content %}
+<section class="py-20 bg-[#FBF9F1] min-h-screen flex items-center justify-center">
+  <div style="border-radius: 24px; padding: 40px; background: #FBF9F1; max-width: 480px; text-align: center; box-shadow: 0 0 15px rgba(0,0,0,0.1);">
+    <h2 class="font-poppins font-bold text-[36px] mb-6 text-black">Delete Medicine</h2>
+    <p class="font-poppins text-lg mb-8 text-black">Are you sure you want to delete medicine <strong>{{ obat.nama }}</strong> (Kode: {{ obat.kode }})?</p>
+    
+    <form method="POST" action="{% url 'biru:delete_medicine' obat.kode %}">
+      {% csrf_token %}
+      <input type="hidden" name="kode" value="{{ obat.kode }}" />
+      <div class="flex justify-center gap-6">
+        <a href="{% url 'biru:list_medicine' %}" class="px-8 py-3 bg-[#C6E7FF] text-black rounded-xl font-medium">Cancel</a>
+        <button type="submit" class="px-8 py-3 bg-[#D9534F] text-white rounded-xl font-medium">Delete</button>
+      </div>
+    </form>
+  </div>
+</section>
+{% endblock %}
