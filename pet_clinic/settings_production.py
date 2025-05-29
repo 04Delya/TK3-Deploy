@@ -3,15 +3,15 @@ from .settings import *
 # Production-specific settings
 DEBUG = False
 
-# Force PostgreSQL database for production - Override any environment variables
+# Force PostgreSQL database for production - Use direct connection instead of pooler
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'postgres',
         'USER': 'postgres.owqvarxnrapljqejlypk',
         'PASSWORD': 'KopiSusuForji',
-        'HOST': 'aws-0-ap-southeast-1.pooler.supabase.com',
-        'PORT': '5432',
+        'HOST': 'aws-0-ap-southeast-1.pooler.supabase.com',  # Try direct connection
+        'PORT': '6543',  # Direct connection port (not pooler)
         'OPTIONS': {
             'sslmode': 'require',
         },
