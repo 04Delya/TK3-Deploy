@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Create New Prescription - Pet Clinic{% endblock %}
+
+{% block content %}
+<section class="py-20 bg-[#FBF9F1] min-h-screen flex items-center">
+  <div class="container mx-auto px-6 lg:px-14">
+    <div style="border-radius: 24px; padding: 30px; background: #FBF9F1; max-width: 580px; margin: 0 auto; overflow: hidden; box-shadow: 0 0 15px rgba(0,0,0,0.1);">
+      <div class="text-center font-poppins font-bold text-[36px] mb-10 text-black">
+        Create New Prescription
+      </div>
+
+      <form method="POST" autocomplete="off">
+        {% csrf_token %}
+
+        <div class="mb-8 w-full">
+          <label for="treatment" class="block text-[24px] font-medium text-black mb-3">Jenis Perawatan</label>
+          <select id="treatment" name="treatment" required
+                  class="w-full h-[43px] bg-gray-300 rounded-lg px-3 text-[18px] font-medium focus:outline-none focus:ring-2 focus:ring-primary">
+            {% for treatment in treatments %}
+              <option value="{{ treatment.kode_perawatan }}">{{ treatment.kode_perawatan }} - {{ treatment.nama_perawatan }}</option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <div class="mb-8 w-full">
+          <label for="medicine" class="block text-[24px] font-medium text-black mb-3">Obat</label>
+          <select id="medicine" name="medicine" required
+                  class="w-full h-[43px] bg-gray-300 rounded-lg px-3 text-[18px] font-medium focus:outline-none focus:ring-2 focus:ring-primary">
+            {% for medicine in medicines %}
+              <option value="{{ medicine.kode }}">{{ medicine.kode }} - {{ medicine.nama }} [Stok: {{ medicine.stok }}]</option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <div class="mb-10 w-full">
+          <label for="quantity" class="block text-[24px] font-medium text-black mb-3">Kuantitas Obat</label>
+          <input id="quantity" name="quantity" type="number" min="1" placeholder="Enter Quantity"
+                 class="w-full h-[43px] bg-gray-300 rounded-lg px-3 text-[18px] font-medium focus:outline-none focus:ring-2 focus:ring-primary" required />
+        </div>
+
+        <div class="flex justify-between">
+          <a href="{% url 'biru:list_prescriptions' %}"
+             class="w-[150px] py-3 rounded-[20px] bg-blue-200 text-black font-medium hover:bg-blue-300 transition flex justify-center items-center">
+            Cancel
+          </a>
+          <button type="submit"
+                  class="w-[150px] py-3 rounded-[20px] bg-[#6FA6D0] text-white font-medium hover:bg-[#5d95bb] transition">
+            Create
+          </button>
+        </div>
+
+      </form>
+    </div>
+  </div>
+</section>
+{% endblock %}

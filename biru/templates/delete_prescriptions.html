@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Delete Prescription - Pet Clinic{% endblock %}
+
+{% block content %}
+<section class="py-20 bg-[#FBF9F1] min-h-screen flex items-center justify-center">
+  <div style="max-width: 580px; background: #FBF9F1; border-radius: 24px; padding: 30px; position: relative; overflow: hidden; margin: 0 auto; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+
+    <img src="{% static 'images/delete_bg.svg' %}" alt="Background pattern"
+         style="position: absolute; width: 718px; height: 718px; left: -0.5px; top: -226px; transform: rotate(180deg); opacity: 0.08; pointer-events: none; user-select: none;" />
+
+    <h1 class="font-poppins font-bold text-[36px] mb-6 text-black text-center">Delete Prescription</h1>
+
+    <p class="font-poppins text-lg mb-8 text-black text-center">
+      Apakah Anda yakin ingin menghapus Prescription untuk Jenis Perawatan
+      <span class="text-red-600">{{ prescription.kode_perawatan }}</span> dengan Obat
+      <span class="text-red-600">{{ prescription.kode_obat }}</span>?
+    </p>
+
+    <form method="POST" action="{% url 'biru:delete_prescriptions' index %}" class="flex justify-center gap-6">
+      {% csrf_token %}
+      <button type="submit"
+              class="px-8 py-3 bg-red-600 text-white rounded-xl font-medium hover:bg-red-700 transition">
+        Confirm Delete
+      </button>
+      <a href="{% url 'biru:list_prescriptions' %}" 
+         class="px-8 py-3 bg-[#C6E7FF] text-black rounded-xl font-medium hover:bg-[#B0D4FF] transition">
+         Cancel
+      </a>
+    </form>
+
+  </div>
+</section>
+{% endblock %}

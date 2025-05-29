@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Profile Perawat Hewan{% endblock %}
+
+{% block content %}
+<div class="min-h-screen bg-gray3 flex justify-center items-start pt-20 px-8">
+  <div class="w-full max-w-5xl bg-gray2/60 backdrop-blur-md rounded-[50px] shadow-xl
+              border-[6px] border-blue2 p-12">
+
+    <h2 class="text-3xl font-bold text-center mb-8">Profile Perawat Hewan</h2>
+
+    <!-- Info Grid -->
+    <div class="grid grid-cols-2 gap-x-10 gap-y-6 text-lg pb-8 text-black">
+      <div class="font-semibold space-y-3">
+        <p>Nomor Identitas</p>
+        <p>Email</p>
+        <p>Tanggal Diterima</p>
+        <p>Tanggal Akhir Kerja</p>
+        <p>Alamat</p>
+        <p>Nomor Telepon</p>
+      </div>
+      <div class="space-y-3">
+        <p>{{ identity }}</p>
+        <p>{{ email }}</p>
+        <p>{{ tgl_daftar }}</p>
+        <p>{{ tgl_akhir }}</p>
+        <p>{{ alamat }}</p>
+        <p>{{ telepon }}</p>
+      </div>
+    </div>
+
+    <!-- Daftar Sertifikat -->
+    <h3 class="text-2xl font-bold mb-6 text-center">Daftar Sertifikat</h3>
+    <table class="w-full mb-10 table-auto border border-gray-300 text-left">
+      <thead class="bg-gray-50">
+        <tr>
+          <th class="px-4 py-3 border-b">No</th>
+          <th class="px-4 py-3 border-b">Nomor Sertifikat</th>
+          <th class="px-4 py-3 border-b">Nama Sertifikat</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for s in sertifikat %}
+        <tr class="bg-white">
+          <td class="px-4 py-3 border-b">{{ s.no }}</td>
+          <td class="px-4 py-3 border-b">{{ s.kode }}</td>
+          <td class="px-4 py-3 border-b">{{ s.nama }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <!-- Tombol Aksi -->
+    <div class="flex justify-center gap-8">
+      <a href="{% url 'main:update_password' %}"
+         class="px-8 py-3 bg-blue4 text-black font-medium rounded-full hover:opacity-90 transition">
+        Update Password
+      </a>
+      <a href="{% url 'main:update_profile' %}"
+         class="px-8 py-3 bg-blue1 text-white font-medium rounded-full hover:opacity-90 transition">
+        Update Profile
+      </a>
+    </div>
+
+  </div>
+</div>
+{% endblock %}

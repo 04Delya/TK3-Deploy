@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% block title %}Update Vaccine Stock{% endblock %}
+
+{% block content %}
+<div class="bg-gray3 flex justify-center items-start pt-12 px-4">
+  <div class="w-full max-w-lg bg-gray2 p-8 rounded-3xl shadow-xl relative">
+
+    <!-- judul -->
+    <h2 class="text-3xl font-bold text-black mb-1">Update Vaccine Stock</h2>
+    <!-- contoh: VAC001 - Feline Panleukopenia -->
+    <p class="text-xl font-semibold text-black mb-6">{{ vaccine.id }} – {{ vaccine.name }}</p>
+
+    <form method="POST" class="space-y-6">
+      {% csrf_token %}
+
+      <!-- stok -->
+      <div>
+        <label for="stock" class="block text-xl font-medium text-black mb-2">Stok</label>
+        <input type="number"
+               id="stock"
+               name="stock"
+               min="0"
+               placeholder="Stok"
+               class="w-full bg-white p-3 rounded-lg text-black font-medium text-lg focus:outline-none"/>
+      </div>
+
+      <!-- tombol -->
+      <div class="flex justify-end gap-4 pt-4">
+        <a href="{% url 'vaccines:vaccine_list' %}"
+           class="px-6 py-3 bg-blue4 text-black font-medium rounded-xl outline outline-1 outline-primary hover:opacity-90 transition">
+          Cancel
+        </a>
+        <button type="submit"
+                class="px-6 py-3 bg-blue1 text-white font-medium rounded-xl outline outline-1 outline-blue1 hover:opacity-90 transition">
+          Update Stock
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

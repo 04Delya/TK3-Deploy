@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% load static %}
+{% load humanize %}
+
+{% block title %}List Treatment Types - Pet Clinic{% endblock %}
+
+{% block content %}
+<section class="bg-[#FBF9F1] min-h-screen py-10 px-6 lg:px-14">
+  <div class="max-w-5xl mx-auto">
+    <div class="mb-6 max-w-md mx-auto">
+      <input type="text" placeholder="Search Treatment Name"
+             class="w-full h-10 px-3 rounded-lg bg-gray-300 focus:outline-none font-poppins text-base" />
+    </div>
+
+    <h2 class="text-center text-3xl font-semibold font-poppins mb-8">List Treatment Types</h2>
+
+    {% if treatment_list %}
+    <div class="overflow-x-auto">
+      <table class="min-w-full border-collapse border border-gray-300 text-center font-poppins">
+        <thead>
+          <tr class="bg-gray-300">
+            <th class="border border-gray-300 px-4 py-3">No</th>
+            <th class="border border-gray-300 px-4 py-3">Kode Jenis Perawatan</th>
+            <th class="border border-gray-300 px-4 py-3">Nama Jenis Perawatan</th>
+            <th class="border border-gray-300 px-4 py-3">Biaya</th>
+            <th class="border border-gray-300 px-4 py-3">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for treatment in treatment_list %}
+          <tr class="hover:bg-gray-100">
+            <td class="border border-gray-300 px-4 py-3">{{ forloop.counter }}</td>
+            <td class="border border-gray-300 px-4 py-3">{{ treatment.kode_perawatan }}</td>
+            <td class="border border-gray-300 px-4 py-3">{{ treatment.nama_perawatan }}</td>
+            <td class="border border-gray-300 px-4 py-3">Rp{{ treatment.biaya_perawatan|intcomma }}</td>
+            <td class="border border-gray-300 px-4 py-3">
+              <div class="flex flex-wrap gap-2 justify-center">
+                <a href="{% url 'biru:update_treatment_type' treatment.kode_perawatan %}"
+                   class="bg-[#547792] hover:bg-[#446377] transition text-white px-3 py-1 rounded-md text-sm font-medium">
+                   Update
+                </a>
+                <a href="{% url 'biru:delete_treatment_type' treatment.kode_perawatan %}"
+                   class="bg-gray-200 hover:bg-gray-300 transition text-black px-3 py-1 rounded-md text-sm font-medium">
+                   Delete
+                </a>
+              </div>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+      <p class="text-center text-lg font-poppins text-gray-600">No treatments available.</p>
+    {% endif %}
+
+    <a href="{% url 'biru:create_treatment_type' %}"
+       class="block w-max mx-auto mt-8 px-6 py-3 bg-[#6FA6D0] text-white rounded-xl font-medium hover:bg-[#5d95bb] transition">
+      Add New Treatment Type
+    </a>
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% block title %}Create New Vaccination{% endblock %}
+
+{% block content %}
+<div class="bg-gray3 flex justify-center items-start pt-12 pb-12 px-4">
+  <div class="w-full max-w-xl bg-gray2 p-8 rounded-3xl shadow-xl">
+    <h2 class="text-3xl font-bold text-black mb-6">Create New Vaccination</h2>
+
+    <form method="POST" class="space-y-6">
+      {% csrf_token %}
+
+      <div>
+        <label for="kunjungan" class="block text-xl font-medium text-black mb-2">Kunjungan</label>
+        <select id="kunjungan" name="kunjungan"
+          class="w-full bg-gray1 p-3 rounded-lg text-black font-medium text-lg focus:outline-none">
+          {% for kunjungan_id in kunjungan_list %}
+            <option value="{{ kunjungan_id }}">{{ kunjungan_id }}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div>
+        <label for="vaksin" class="block text-xl font-medium text-black mb-2">Vaksin</label>
+        <select id="vaksin" name="vaksin"
+          class="w-full bg-gray1 p-3 rounded-lg text-black font-medium text-lg focus:outline-none">
+          {% for kode, nama, stok in vaksin_list %}
+            <option value="{{ kode }}">{{ kode }} - {{ nama }} [{{ stok }}]</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div class="flex justify-end space-x-4 pt-4">
+        <a href="{% url 'vaccinations:vaccination_list' %}"
+           class="px-6 py-3 bg-blue4 text-black font-medium rounded-xl outline outline-1 outline-primary hover:opacity-90 transition">
+          Cancel
+        </a>
+        <button type="submit"
+                class="px-6 py-3 bg-primary text-white font-medium rounded-xl outline outline-1 outline-blue1 hover:opacity-90 transition">
+          Create
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}
