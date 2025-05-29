@@ -5,6 +5,7 @@ from main.models import User, Pegawai, TenagaMedis, DokterHewan, PerawatHewan, F
 import uuid
 from datetime import date
 
+
 def login_view(request):
     if request.method == 'POST':
         email = request.POST.get('email')
