@@ -11,8 +11,8 @@ urlpatterns = [
 
     # Delete Views (delete_prescriptions butuh param index)
     path('delete_medicine/<str:kode>/', views.delete_medicine_view, name='delete_medicine'),
-    path('delete_prescriptions/<str:treatment_kode>/<str:medicine_kode>/', 
-         views.delete_prescriptions_view, name='delete_prescriptions'),
+    path('delete_prescriptions/<int:index>/', views.delete_prescriptions_view, name='delete_prescriptions'),
+
     path('delete_treatment_type/<str:kode_perawatan>/', views.delete_treatment_view, name='delete_treatment_type'),
 
     # List Views
