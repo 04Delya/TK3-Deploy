@@ -34,21 +34,22 @@
 
     <!-- Dokter Hewan -->
     <label class="block mb-1 text-gray-800 text-sm font-medium">Dokter Hewan</label>
-    <select name="no_dokter_hewan" required class="w-full bg-zinc-300 rounded-lg px-3 py-2 mb-4 text-black">
-      <option disabled selected>Pilih Dokter Hewan</option>
-      {% for dokter in dokter_list %}
-        <option value="{{ dokter.id }}">{{ dokter.email }}</option>
-      {% endfor %}
-    </select>
+<select name="no_dokter_hewan" required class="w-full bg-zinc-300 rounded-lg px-3 py-2 mb-4 text-black">
+  <option disabled selected>Pilih Dokter Hewan</option>
+  {% for dokter in dokter_list %}
+    <option value="{{ dokter.no_dokter_hewan }}">{{ dokter.nama }}</option>
+  {% endfor %}
+</select>
 
     <!-- Perawat Hewan -->
     <label class="block mb-1 text-gray-800 text-sm font-medium">Perawat Hewan</label>
-    <select name="no_perawat_hewan" required class="w-full bg-zinc-300 rounded-lg px-3 py-2 mb-4 text-black">
-      <option disabled selected>Pilih Perawat Hewan</option>
-      {% for perawat in perawat_list %}
-        <option value="{{ perawat.id }}">{{ perawat.email }}</option>
-      {% endfor %}
-    </select>
+<select name="no_perawat_hewan" required class="w-full bg-zinc-300 rounded-lg px-3 py-2 mb-4 text-black">
+  <option disabled selected>Pilih Perawat Hewan</option>
+  {% for perawat in perawat_list %}
+    <option value="{{ perawat.no_perawat_hewan }}">{{ perawat.nama }}</option>
+  {% endfor %}
+</select>
+
 
     <!-- Metode Kunjungan -->
     <label class="block mb-1 text-gray-800 text-sm font-medium">Metode Kunjungan</label>
