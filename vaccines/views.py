@@ -55,12 +55,10 @@ def vaccine_list(request):
 
 @require_http_methods(["GET", "POST"])
 def vaccine_create(request):
-    # Ambil sesi login perawat
     no_tenaga_medis = request.session.get('no_tenaga_medis')
     if not no_tenaga_medis:
         return redirect('authentication:login')
 
-    # Validasi user adalah perawat
     with connection.cursor() as cursor:
         cursor.execute("""
             SELECT COUNT(*) FROM pet_clinic."PERAWAT_HEWAN"
@@ -72,31 +70,35 @@ def vaccine_create(request):
         return redirect('authentication:login')
 
     if request.method == 'POST':
-        nama = request.POST.get('name')
+        nama  = request.POST.get('name')
         harga = request.POST.get('price')
-        stok = request.POST.get('stock')
+        stok  = request.POST.get('stock')
 
-        # Validasi field wajib
         if not nama or not harga or not stok:
             messages.error(request, "Semua field wajib diisi.")
-            return render(request, 'vaccines:vaccines_create.html')
+            return render(request, 'vaccines_create.html')
 
+        # Validasi harga
         try:
             harga = int(harga)
-            stok = int(stok)
-
             if harga < 0:
                 messages.error(request, "Harga tidak boleh bernilai negatif.")
-                return render(request, 'vaccines:vaccines_create.html')
+                return render(request, 'vaccines_create.html')
+        except ValueError:
+            messages.error(request, "Harga harus berupa angka bulat.")
+            return render(request, 'vaccines_create.html')
+
+        # Validasi stok
+        try:
+            stok = int(stok)
             if stok < 0:
                 messages.error(request, "Stok tidak boleh bernilai negatif.")
-                return render(request, 'vaccines:vaccines_create.html')
-
+                return render(request, 'vaccines_create.html')
         except ValueError:
-            messages.error(request, "Harga dan stok harus berupa angka.")
+            messages.error(request, "Stok harus berupa angka bulat.")
             return render(request, 'vaccines_create.html')
-        
-        # Cek duplikat nama
+
+        # Cek nama vaksin sudah ada
         with connection.cursor() as cursor:
             cursor.execute("""
                 SELECT 1 FROM pet_clinic."VAKSIN"
@@ -104,26 +106,21 @@ def vaccine_create(request):
                 LIMIT 1
             """, [nama.strip()])
             if cursor.fetchone():
-                messages.error(request, "Nama vaksin sudah digunakan. Gunakan nama lain.")
+                messages.error(request, "Nama vaksin sudah digunakan.")
                 return render(request, 'vaccines_create.html')
 
-        # Generate kode vaksin otomatis
+        # Generate kode baru
         with connection.cursor() as cursor:
             cursor.execute("""
-                SELECT kode
-                FROM pet_clinic."VAKSIN"
+                SELECT kode FROM pet_clinic."VAKSIN"
                 WHERE kode LIKE 'VAK%%'
                 ORDER BY kode DESC
                 LIMIT 1
             """)
             last = cursor.fetchone()
-            if last:
-                last_num = int(last[0][3:])
-                new_kode = f"VAK{last_num + 1:03}"
-            else:
-                new_kode = "VAK001"
+            new_kode = f"VAK{int(last[0][3:]) + 1:03}" if last else "VAK001"
 
-        # Insert ke tabel VAKSIN
+        # Insert
         with connection.cursor() as cursor:
             cursor.execute("""
                 INSERT INTO pet_clinic."VAKSIN"(kode, nama, harga, stok)
@@ -131,9 +128,10 @@ def vaccine_create(request):
             """, [new_kode, nama.strip(), harga, stok])
 
         messages.success(request, f"Vaksin {nama} berhasil ditambahkan.")
-        return redirect('vaccines:vaccine_list') 
+        return redirect('vaccines:vaccine_list')
 
     return render(request, 'vaccines_create.html')
+
 
 @require_http_methods(["GET", "POST"])
 def vaccine_update(request, kode):
