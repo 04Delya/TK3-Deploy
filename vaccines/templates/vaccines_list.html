@@ -7,7 +7,7 @@
 <div class="container mx-auto px-4 py-12">
   <div class="flex justify-between items-center mb-6">
     <h1 class="text-3xl font-bold">List Vaccines</h1>
-    <a href="{% url 'vaccine_create' %}" class="px-6 py-3 bg-primary text-white font-medium rounded-xl hover:opacity-90">
+    <a href="{% url 'vaccines:vaccine_create' %}" class="px-6 py-3 bg-primary text-white font-medium rounded-xl hover:opacity-90">
       + Add New Vaccine
     </a>
   </div>
@@ -47,8 +47,8 @@
           <td class="px-6 py-4">{{ v.stok }}</td>
           <td class="px-6 py-4 space-x-2">
             <!-- Update Buttons -->
-            <a href="{% url 'vaccine_update_stock' v.kode %}" class="px-4 py-2 bg-blue1 text-white rounded-xl">Update Stock</a>
-            <a href="{% url 'vaccine_update' v.kode %}" class="px-4 py-2 bg-secondary text-black rounded-xl">Update</a>
+            <a href="{% url 'vaccines:vaccine_update_stock' v.kode %}" class="px-4 py-2 bg-blue1 text-white rounded-xl">Update Stock</a>
+            <a href="{% url 'vaccines:vaccine_update' v.kode %}" class="px-4 py-2 bg-secondary text-black rounded-xl">Update</a>
 
             <!-- Delete Button -->
             <button onclick="document.getElementById('modal-delete-{{ v.kode }}').classList.remove('hidden')"
@@ -64,7 +64,7 @@
                   dengan <span class="font-semibold text-red-600">{{ v.kode }}</span>?
                 </p>
 
-                <form method="post" action="{% url 'vaccine_delete' v.kode %}" class="flex justify-end gap-4">
+                <form method="post" action="{% url 'vaccines:vaccine_delete' v.kode %}" class="flex justify-end gap-4">
                   {% csrf_token %}
                   <button type="button"
                           onclick="document.getElementById('modal-delete-{{ v.kode }}').classList.add('hidden')"

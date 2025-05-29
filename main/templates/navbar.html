@@ -45,14 +45,14 @@
           <a href="{% url 'biru:list_medicine' %}" class="hover:text-gray-300">Manajemen Obat</a>
           <a href="{% url 'biru:list_treatment_type' %}" class="hover:text-gray-300">Jenis Perawatan</a>
           <a href="{% url 'biru:list_prescriptions' %}" class="hover:text-gray-300">Pemberian Obat</a>
-          <a href="#">Vaksinasi Hewan</a>
+          <a href="{% url 'vaccinations:vaccination_list' %}" class="hover:text-gray-300">Manajemen Vaksinasi Hewan</a>
 
         {% elif request.session.role == 'perawat' %}
           <a href="{% url 'main:dashboard_perawat' %}" class="hover:text-gray-300">Dashboard</a>
           <a href="{% url 'biru:list_medicine' %}" class="hover:text-gray-300">Manajemen Obat</a>
           <a href="{% url 'biru:list_treatment_type' %}" class="hover:text-gray-300">Jenis Perawatan</a>
           <a href="{% url 'biru:list_prescriptions' %}" class="hover:text-gray-300">Pemberian Obat</a>
-          <a href="#">Manajemen Vaksin</a>
+          <a href="{% url 'vaccines:vaccine_list' %}" class="block text-white">Manajemen Vaksin</a>
         {% endif %}
         <a href="{% url 'authentication:logout' %}" class="hover:text-red-400 font-semibold">Logout</a>
       {% else %}
@@ -92,15 +92,14 @@
         <a href="{% url 'biru:list_medicine' %}" class="hover:text-gray-300">Manajemen Obat</a>
         <a href="{% url 'biru:list_treatment_type' %}" class="hover:text-gray-300">Jenis Perawatan</a>
         <a href="{% url 'biru:list_prescriptions' %}" class="hover:text-gray-300">Pemberian Obat</a>
-        <a href="#" class="block text-white">Vaksinasi</a>
+        <a href="{% url 'vaccinations:vaccination_list' %}" class="block text-white">Manajemen Vaksinasi Hewan</a>
 
       {% elif request.session.role == 'perawat' %}
         <a href="{% url 'main:dashboard_perawat' %}" class="block text-white">Dashboard</a>
         <a href="{% url 'biru:list_medicine' %}" class="hover:text-gray-300">Manajemen Obat</a>
         <a href="{% url 'biru:list_treatment_type' %}" class="hover:text-gray-300">Jenis Perawatan</a>
         <a href="{% url 'biru:list_prescriptions' %}" class="hover:text-gray-300">Pemberian Obat</a>
-        <a href="#" class="block text-white">Vaksinasi</a>
-
+        <a href="{% url 'vaccines:vaccine_list' %}" class="block text-white">Manajemen Vaksin</a>
       {% endif %}
       <a href="{% url 'authentication:logout' %}" class="block text-red-400 font-semibold">Logout</a>
     {% else %}
