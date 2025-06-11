@@ -6,6 +6,30 @@ DEBUG = False
 # Allow Koyeb hosts
 ALLOWED_HOSTS = ['*']  # For Koyeb deployment
 
+# Static files configuration for production
+STATIC_URL = '/static/'
+STATIC_ROOT = '/workspace/staticfiles'  # Koyeb workspace path
+
+# Use only main/static to avoid duplicate files
+STATICFILES_DIRS = [
+    BASE_DIR / 'main' / 'static',
+]
+
+# Add whitenoise middleware for serving static files in production
+MIDDLEWARE = [
+    'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',  # Add this for static files
+    'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.common.CommonMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware',
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+]
+
+# WhiteNoise configuration
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
 # Force PostgreSQL database for production - Use direct connection instead of pooler
 DATABASES = {
     'default': {
