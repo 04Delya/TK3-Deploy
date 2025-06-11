@@ -1,0 +1,1 @@
+web: python manage.py migrate --settings=pet_clinic.settings_production && python manage.py collectstatic --noinput --settings=pet_clinic.settings_production && gunicorn wsgi_production:application --bind 0.0.0.0:$PORT

@@ -3,6 +3,9 @@ from .settings import *
 # Production-specific settings
 DEBUG = False
 
+# Allow Koyeb hosts
+ALLOWED_HOSTS = ['*']  # For Koyeb deployment
+
 # Force PostgreSQL database for production - Use direct connection instead of pooler
 DATABASES = {
     'default': {
