@@ -29,6 +29,17 @@ def jenis_hewan_create(request):
                 
                 # Use raw SQL to insert into Supabase
                 with connection.cursor() as cursor:
+                    # Check for duplicates manually (bypass the problematic trigger)
+                    cursor.execute(
+                        'SELECT COUNT(*) FROM pet_clinic."JENIS_HEWAN" WHERE LOWER(nama_jenis) = LOWER(%s)',
+                        [nama]
+                    )
+                    
+                    if cursor.fetchone()[0] > 0:
+                        messages.error(request, f'Jenis hewan "{nama}" sudah ada!')
+                        return render(request, 'JenisHewan_create.html')
+                    
+                    # Insert directly without triggering the problematic function
                     cursor.execute(
                         'INSERT INTO pet_clinic."JENIS_HEWAN" (id, nama_jenis) VALUES (%s, %s)',
                         [str(new_id), nama]
@@ -56,12 +67,23 @@ def jenis_hewan_update(request, id):
     except JenisHewan.DoesNotExist:
         messages.error(request, 'Jenis hewan tidak ditemukan.')
         return redirect('jenis:JenisHewan_list')
+    
     if request.method == 'POST':
         nama = request.POST.get('nama')
         if nama:
             try:
                 # Use raw SQL to update in Supabase
                 with connection.cursor() as cursor:
+                    # Check for duplicates with other records (excluding current record)
+                    cursor.execute(
+                        'SELECT COUNT(*) FROM pet_clinic."JENIS_HEWAN" WHERE LOWER(nama_jenis) = LOWER(%s) AND id != %s',
+                        [nama, str(id)]
+                    )
+                    
+                    if cursor.fetchone()[0] > 0:
+                        messages.error(request, f'Jenis hewan "{nama}" sudah ada!')
+                        return render(request, 'JenisHewan_update.html', {'jenis_hewan': jenis_hewan})
+                    
                     cursor.execute(
                         'UPDATE pet_clinic."JENIS_HEWAN" SET nama_jenis = %s WHERE id = %s',
                         [nama, str(id)]
